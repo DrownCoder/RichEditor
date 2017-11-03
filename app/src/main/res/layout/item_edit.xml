@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<EditText xmlns:android="http://schemas.android.com/apk/res/android"
+          android:id="@+id/et_rich_edit"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:background="#00000000"
+          android:focusable="true"
+          android:gravity="left"
+          android:hint="这本书的内容、作者、文笔…给你留下了怎样的印象？是否值得推荐给其他书友？写下你的书评吧~"
+          android:lineSpacingMultiplier="1.3"
+          android:paddingBottom="12dp"
+          android:paddingTop="12dp"
+          android:textColor="#646464"
+          android:textColorHint="#969696"
+          android:textSize="13dp"
+    />

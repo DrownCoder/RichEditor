@@ -25,6 +25,7 @@ public class RichAdapter extends RecyclerView.Adapter {
     public static final int TYPE_EDIT = 0;
     public static final int TYPE_IMG = 1;
     private HashSet<EditText> mEtHolder;
+    private HashSet<ImageHolder> mHolderShow;
     private List<RichModel> mData;
     private Context mContext;
     public int index = 0;
@@ -43,6 +44,7 @@ public class RichAdapter extends RecyclerView.Adapter {
         this.mData = mData;
         this.mContext = mContext;
         mEtHolder = new HashSet<>();
+        mHolderShow = new HashSet<>();
     }
 
     @Override
@@ -72,17 +74,39 @@ public class RichAdapter extends RecyclerView.Adapter {
     /**
      * 图片组件
      */
-    private void bindImgComponent(RecyclerView.ViewHolder holder, int layoutPosition, RichModel
-            item) {
+    private void bindImgComponent(RecyclerView.ViewHolder holder, int pos, RichModel item) {
         if (holder instanceof ImageHolder) {
             final ImageHolder imageHolder = (ImageHolder) holder;
+            if (index == pos) {
+                mHolderShow.add(imageHolder);
+                imageHolder.mIvDelete.setVisibility(View.VISIBLE);
+                imageHolder.mIv.setTag("TRUE");
+                clearEditFocus();
+                imageHolder.mIv.requestFocus();
+            } else {
+                mHolderShow.remove(imageHolder);
+                imageHolder.mIvDelete.setVisibility(View.GONE);
+                imageHolder.mIv.clearFocus();
+                imageHolder.mIv.setTag("FALSE");
+            }
             imageHolder.mIv.setBackgroundResource(0);
-            imageHolder.mIvDelete.setVisibility(View.GONE);
-            imageHolder.mIvDelete.setTag(layoutPosition);
+            imageHolder.mIvDelete.setTag(pos);
             imageHolder.mIv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    imageHolder.mIvDelete.setVisibility(View.VISIBLE);
+                    clearEditFocus();
+                    if (v.getTag().toString().equals("TRUE")) {
+                        mHolderShow.remove(imageHolder);
+                        imageHolder.mIvDelete.setVisibility(View.GONE);
+                        imageHolder.mIv.clearFocus();
+                        v.setTag("FALSE");
+                    } else {
+                        mHolderShow.add(imageHolder);
+                        imageHolder.mIvDelete.setVisibility(View.VISIBLE);
+                        imageHolder.mIv.requestFocus();
+                        v.setTag("TRUE");
+                    }
+
                 }
             });
             imageHolder.mIvDelete.setOnClickListener(onClickListener);
@@ -96,10 +120,13 @@ public class RichAdapter extends RecyclerView.Adapter {
     RichModel item) {
         if (holder instanceof EditHolder) {
             final EditText mEdit = ((EditHolder) holder).mEt;
+            mEtHolder.add(mEdit);
             if (index == pos) {
+                mEdit.setFocusable(true);
+                mEdit.setFocusableInTouchMode(true);
                 mEdit.requestFocus();
             } else {
-                mEdit.clearFocus();
+                mEdit.setFocusable(false);
             }
             ((EditHolder) holder).textWatcher.updatePosition(pos);
             mEdit.setText(item.source);
@@ -117,18 +144,31 @@ public class RichAdapter extends RecyclerView.Adapter {
                 case R.id.iv_rich_delete:
                     mData.remove((Integer.parseInt(v.getTag().toString())));
                     index--;
-                    notifyDataSetChanged();
+                    notifyDataChanged();
                     break;
                 case R.id.et_rich_edit:
-                    for (EditText editText : mEtHolder) {
-                        editText.clearFocus();
-                    }
+                    clearImgFocus();
+                    v.setFocusableInTouchMode(true);
+                    v.setFocusable(true);
                     v.requestFocus();
                     index = (int) v.getTag();
                     break;
             }
         }
     };
+
+    private void clearImgFocus() {
+        for (ImageHolder holder : mHolderShow) {
+            holder.mIvDelete.setVisibility(View.GONE);
+            holder.mIv.setTag("FALSE");
+        }
+    }
+
+    private void clearEditFocus() {
+        for (EditText editText : mEtHolder) {
+            editText.setFocusable(false);
+        }
+    }
 
     private void doEnter(View view, int pos) {
         this.index = pos;
@@ -138,11 +178,12 @@ public class RichAdapter extends RecyclerView.Adapter {
             mData.add(pos + 1, new RichModel(TYPE_EDIT, "", false, ""));
         } else {
             String newStr = item.source.substring(cPos, item.source.length());
-            item.setSource(item.source.substring(0, cPos));
+            String oldStr = item.source.substring(0, cPos);
+            item.setSource(oldStr);
             mData.add(pos + 1, new RichModel(TYPE_EDIT, newStr, false, ""));
         }
         index++;
-        notifyDataSetChanged();
+        notifyDataChanged();
         if (mOnScollIndex != null) {
             mOnScollIndex.scroll(index);
         }
@@ -151,10 +192,12 @@ public class RichAdapter extends RecyclerView.Adapter {
     private void doDel(View view, int pos) {
         if (((EditText) view).getSelectionStart() == 0) {
             if (pos >= 1) {
-                mData.get(pos - 1).append(mData.get(pos).source);
-                mData.remove(pos);
+                if (mData.get(pos - 1).type == TYPE_EDIT) {
+                    mData.get(pos - 1).append(mData.get(pos).source);
+                    mData.remove(pos);
+                }
                 index--;
-                notifyDataSetChanged();
+                notifyDataChanged();
             }
         }
     }
@@ -169,6 +212,11 @@ public class RichAdapter extends RecyclerView.Adapter {
         return mData.get(position).type;
     }
 
+    public void notifyDataChanged() {
+        Log.i("index", index + "");
+        notifyDataSetChanged();
+    }
+
     class EditHolder extends RecyclerView.ViewHolder {
         private CustomEditTextListener textWatcher;
         private EditText mEt;
@@ -176,7 +224,7 @@ public class RichAdapter extends RecyclerView.Adapter {
         public EditHolder(View itemView) {
             super(itemView);
             mEt = (EditText) itemView;
-            mEtHolder.add(mEt);
+            //mEtHolder.add(mEt);
             mEt.setOnClickListener(onClickListener);
             textWatcher = new CustomEditTextListener();
             mEt.addTextChangedListener(textWatcher);

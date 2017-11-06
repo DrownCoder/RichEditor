@@ -1,5 +1,8 @@
 package com.study.xuan.richeditor;
 
+import android.support.annotation.NonNull;
+import android.text.TextUtils;
+
 /**
  * Author : xuan.
  * Date : 2017/11/3.
@@ -16,7 +19,18 @@ public class RichModel {
         this.type = type;
         this.source = s;
         this.hasFocus = hasfocus;
-        this.defaultSource = df;
+        this.defaultSource = changeEmpty(df);
+    }
+
+    /**
+     * 空文本需要空白符做占位符
+     */
+    @NonNull
+    private String changeEmpty(String s) {
+        if (TextUtils.isEmpty(s)) {
+            s = "                                                                                   ";
+        }
+        return s;
     }
 
     public void append(String s) {

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -62,15 +63,30 @@ public class MainActivity extends AppCompatActivity {
                     mAdapter.index = 0;
                 }
             }
-            if (mAdapter.index == (mDatas.size() - 1)) {//光标在结尾
+            removeEmptyLine();
+            if (mDatas.size() == 0 || mAdapter.index == (mDatas.size() - 1)) {//无文本或者图片在末尾添加
                 mDatas.add(new RichModel(TYPE_IMG, newFile, false, ""));
                 mDatas.add(new RichModel(TYPE_EDIT, "", false, ""));
-                mAdapter.index = mDatas.size() - 1;
-            } else {//光标在文中
-                mDatas.add(mAdapter.index, new RichModel(TYPE_IMG, newFile, false, ""));
-                mAdapter.index += 2;
+                mAdapter.index = mDatas.size() - 2;
+            } else {//图片在文中添加
+                mDatas.add(mAdapter.index + 1, new RichModel(TYPE_IMG, newFile, false, ""));
+                mAdapter.index++;
             }
-            mAdapter.notifyDataSetChanged();
+            mAdapter.notifyDataChanged();
+        }
+    }
+
+    /**
+     * 去除要增加图片上面的一行空行，多行只删除上面一行
+     */
+    private void removeEmptyLine() {
+        if (mDatas.size() > 0 & mAdapter.index < mDatas.size()) {
+            //空行表示长度为空，或者默认的一个空占位符
+            if (mDatas.get(mAdapter.index).source.length() == 0 ||
+                    TextUtils.equals(mDatas.get(mAdapter.index).source," ")) {
+                mDatas.remove(mAdapter.index);
+                mAdapter.index--;
+            }
         }
     }
 }

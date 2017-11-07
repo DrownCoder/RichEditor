@@ -5,13 +5,15 @@
              android:layout_height="wrap_content">
     <ImageView
         android:padding="2dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginTop="13dp"
+        android:layout_marginRight="13dp"
         android:id="@+id/iv_rich_img"
-        android:scaleType="fitXY"
+        android:adjustViewBounds="true"
+        android:layout_marginLeft="16dp"
+        android:maxWidth="500dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@mipmap/ic_launcher"
+        android:src="@drawable/pic"
         />
     <ImageView
         android:layout_width="30dp"
@@ -20,6 +22,5 @@
         android:layout_gravity="right|top"
         android:id="@+id/iv_rich_delete"
         android:visibility="visible"
-        android:background="#ffffff"
         />
 </FrameLayout>

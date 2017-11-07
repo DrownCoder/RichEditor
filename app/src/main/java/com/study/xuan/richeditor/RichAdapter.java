@@ -1,6 +1,8 @@
 package com.study.xuan.richeditor;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -12,7 +14,10 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.study.xuan.shapebuilder.shape.ShapeBuilder;
+
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -24,27 +29,47 @@ import java.util.List;
 public class RichAdapter extends RecyclerView.Adapter {
     public static final int TYPE_EDIT = 0;
     public static final int TYPE_IMG = 1;
+    private static final int TYPE_HEADER = -1;
+    private final int STYLE_IMG_FOCUS = 1;
+    private final int STYLE_IMG_NORMAL = 0;
     private HashSet<EditText> mEtHolder;
-    private HashSet<ImageHolder> mHolderShow;
+    private List<ImageHolder> mHolderShow;
     private List<RichModel> mData;
     private Context mContext;
     public int index = 0;
 
+    private View mHeader;
+
+    public void addHeaderView(View header) {
+        this.mHeader = header;
+        notifyItemInserted(0);
+    }
+
     public interface onScrollIndex {
         void scroll(int pos);
     }
+    public interface onPhotoDelete {
+        void onDelete(String path);
+    }
 
     private onScrollIndex mOnScollIndex;
+    private onPhotoDelete mOnPhotoDelete;
 
-    public void setmOnScollIndex(onScrollIndex mOnScollIndex) {
+    public void setOnScollIndex(onScrollIndex mOnScollIndex) {
         this.mOnScollIndex = mOnScollIndex;
     }
+
+    public void setOnPhotoDelete(onPhotoDelete onPhotoDelete) {
+        this.mOnPhotoDelete = onPhotoDelete;
+    }
+
+
 
     public RichAdapter(List<RichModel> mData, Context mContext) {
         this.mData = mData;
         this.mContext = mContext;
         mEtHolder = new HashSet<>();
-        mHolderShow = new HashSet<>();
+        mHolderShow = new LinkedList<>();
     }
 
     @Override
@@ -55,6 +80,8 @@ public class RichAdapter extends RecyclerView.Adapter {
                 return new EditHolder(inflater.inflate(R.layout.item_edit, null, false));
             case TYPE_IMG:
                 return new ImageHolder(inflater.inflate(R.layout.item_img, parent, false));
+            case TYPE_HEADER:
+                return new HeadHolder(mHeader);
         }
         return null;
     }
@@ -63,10 +90,12 @@ public class RichAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         switch (getItemViewType(position)) {
             case TYPE_EDIT://编辑框
-                bindEditComponent(holder, position, mData.get(position));
+                bindEditComponent(holder, position - 1, mData.get(position - 1));
                 break;
             case TYPE_IMG://图片
-                bindImgComponent(holder, position, mData.get(position));
+                bindImgComponent(holder, position - 1, mData.get(position - 1));
+                break;
+            case TYPE_HEADER://header
                 break;
         }
     }
@@ -78,17 +107,10 @@ public class RichAdapter extends RecyclerView.Adapter {
         if (holder instanceof ImageHolder) {
             final ImageHolder imageHolder = (ImageHolder) holder;
             if (index == pos) {
-                mHolderShow.add(imageHolder);
-                imageHolder.mIvDelete.setVisibility(View.VISIBLE);
-                imageHolder.mIv.setTag("TRUE");
-                imageHolder.mIv.requestFocus();
+                showImageBacSelected(imageHolder, STYLE_IMG_NORMAL);
             } else {
-                mHolderShow.remove(imageHolder);
-                imageHolder.mIvDelete.setVisibility(View.GONE);
-                imageHolder.mIv.clearFocus();
-                imageHolder.mIv.setTag("FALSE");
+                showImageBacSelected(imageHolder, STYLE_IMG_FOCUS);
             }
-            imageHolder.mIv.setBackgroundResource(0);
             imageHolder.mIvDelete.setTag(pos);
             imageHolder.mIv.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -96,18 +118,7 @@ public class RichAdapter extends RecyclerView.Adapter {
                     clearEditFocus();
                     index = (int) imageHolder.mIvDelete.getTag();
                     clearImgFocus(index);
-                    if (v.getTag().toString().equals("TRUE")) {
-                        mHolderShow.remove(imageHolder);
-                        imageHolder.mIvDelete.setVisibility(View.GONE);
-                        imageHolder.mIv.clearFocus();
-                        v.setTag("FALSE");
-                    } else {
-                        mHolderShow.add(imageHolder);
-                        imageHolder.mIvDelete.setVisibility(View.VISIBLE);
-                        imageHolder.mIv.requestFocus();
-                        v.setTag("TRUE");
-                    }
-
+                    showImageBacSelected(imageHolder, (Integer) v.getTag());
                 }
             });
             imageHolder.mIvDelete.setOnClickListener(onClickListener);
@@ -143,7 +154,11 @@ public class RichAdapter extends RecyclerView.Adapter {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.iv_rich_delete:
-                    mData.remove((Integer.parseInt(v.getTag().toString())));
+                    int pos = (int) v.getTag();
+                    if (mOnPhotoDelete != null) {
+                        mOnPhotoDelete.onDelete(mData.get(pos).source);
+                    }
+                    mData.remove(pos);
                     index--;
                     notifyDataChanged();
                     break;
@@ -153,16 +168,77 @@ public class RichAdapter extends RecyclerView.Adapter {
                     v.requestFocus();
                     index = (int) v.getTag();
                     clearImgFocus(index);
+
                     break;
             }
         }
     };
 
-    private void clearImgFocus(int index) {
-        for (ImageHolder holder : mHolderShow) {
-            if (!holder.mIvDelete.getTag().equals(String.valueOf(index))) {
+    View.OnKeyListener onKeyListener = new View.OnKeyListener() {
+        @Override
+        public boolean onKey(View view, int i, KeyEvent keyEvent) {
+            if (keyEvent != null && keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
+                switch (i) {
+                    case KeyEvent.KEYCODE_DEL:
+                        //删除
+                        doDel(view, (Integer) view.getTag());
+                        break;
+                    case KeyEvent.KEYCODE_ENTER:
+                        //回车
+                        doEnter(view, (Integer) view.getTag());
+                        return true;
+                }
+            }
+            return false;
+        }
+    };
+
+    /**
+     * 是否显示图片被选中
+     */
+    private void showImageBacSelected(ImageHolder holder, int show) {
+        switch (show) {
+            case STYLE_IMG_FOCUS:
+                mHolderShow.remove(holder);
                 holder.mIvDelete.setVisibility(View.GONE);
-                holder.mIv.setTag("FALSE");
+                holder.mIv.clearFocus();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    holder.mIv.setBackground(null);
+                } else {
+                    holder.mIv.setBackgroundDrawable(null);
+                }
+                holder.mIv.setTag(STYLE_IMG_NORMAL);
+                break;
+            case STYLE_IMG_NORMAL:
+                mHolderShow.add(holder);
+                holder.mIvDelete.setVisibility(View.VISIBLE);
+                holder.mIv.requestFocus();
+                ShapeBuilder.create()
+                        .Stroke(2, Color.parseColor("#000000"))
+                        .build(holder.mIv);
+                holder.mIv.setTag(STYLE_IMG_FOCUS);
+                break;
+        }
+    }
+
+
+    /**
+     * 清除所有选中的ImageView选中样式
+     */
+    private void clearImgFocus(int index) {
+        for (int i = 0; i < mHolderShow.size(); i++) {
+            ImageHolder holder = mHolderShow.get(i);
+            int ci = (int) holder.mIvDelete.getTag();
+            if (ci != index) {
+                mHolderShow.remove(i);
+                i--;
+                holder.mIvDelete.setVisibility(View.GONE);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    holder.mIv.setBackground(null);
+                } else {
+                    holder.mIv.setBackgroundDrawable(null);
+                }
+                holder.mIv.setTag(STYLE_IMG_NORMAL);
             }
         }
     }
@@ -188,7 +264,7 @@ public class RichAdapter extends RecyclerView.Adapter {
         index++;
         notifyDataChanged();
         if (mOnScollIndex != null) {
-            mOnScollIndex.scroll(index);
+            mOnScollIndex.scroll(index + 1);//header需要+1
         }
     }
 
@@ -198,6 +274,9 @@ public class RichAdapter extends RecyclerView.Adapter {
                 if (mData.get(pos - 1).type == TYPE_EDIT) {
                     mData.get(pos - 1).append(mData.get(pos).source);
                     mData.remove(pos);
+                    mEtHolder.remove(view);
+                } else {
+                    //KeyBoardUtils.hideSoftInputMethod(mContext);
                 }
                 index--;
                 notifyDataChanged();
@@ -207,12 +286,15 @@ public class RichAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        return mData.size();
+        return mData.size() + 1;
     }
 
     @Override
     public int getItemViewType(int position) {
-        return mData.get(position).type;
+        if (position == 0) {
+            return TYPE_HEADER;
+        }
+        return mData.get(position - 1).type;
     }
 
     public void notifyDataChanged() {
@@ -220,35 +302,18 @@ public class RichAdapter extends RecyclerView.Adapter {
         notifyDataSetChanged();
     }
 
-    class EditHolder extends RecyclerView.ViewHolder {
+    private class EditHolder extends RecyclerView.ViewHolder {
         private CustomEditTextListener textWatcher;
         private EditText mEt;
 
-        public EditHolder(View itemView) {
+        EditHolder(View itemView) {
             super(itemView);
             mEt = (EditText) itemView;
             //mEtHolder.add(mEt);
             mEt.setOnClickListener(onClickListener);
             textWatcher = new CustomEditTextListener();
             mEt.addTextChangedListener(textWatcher);
-            mEt.setOnKeyListener(new View.OnKeyListener() {
-                @Override
-                public boolean onKey(View view, int i, KeyEvent keyEvent) {
-                    if (keyEvent != null && keyEvent.getAction() == keyEvent.ACTION_DOWN) {
-                        switch (i) {
-                            case KeyEvent.KEYCODE_DEL:
-                                //删除
-                                doDel(view, (Integer) mEt.getTag());
-                                break;
-                            case KeyEvent.KEYCODE_ENTER:
-                                //回车
-                                doEnter(view, (Integer) mEt.getTag());
-                                return true;
-                        }
-                    }
-                    return false;
-                }
-            });
+            mEt.setOnKeyListener(onKeyListener);
 
         }
 
@@ -266,21 +331,21 @@ public class RichAdapter extends RecyclerView.Adapter {
         }
     }
 
-    class ImageHolder extends RecyclerView.ViewHolder {
+    private class ImageHolder extends RecyclerView.ViewHolder {
         private ImageView mIv;
         private ImageView mIvDelete;
 
-        public ImageHolder(View itemView) {
+        ImageHolder(View itemView) {
             super(itemView);
-            mIv = itemView.findViewById(R.id.iv_rich_img);
-            mIvDelete = itemView.findViewById(R.id.iv_rich_delete);
+            mIv = (ImageView) itemView.findViewById(R.id.iv_rich_img);
+            mIvDelete = (ImageView) itemView.findViewById(R.id.iv_rich_delete);
         }
     }
 
     private class CustomEditTextListener implements TextWatcher {
         private int position;
 
-        public void updatePosition(int position) {
+        void updatePosition(int position) {
             this.position = position;
         }
 
@@ -300,4 +365,9 @@ public class RichAdapter extends RecyclerView.Adapter {
         }
     }
 
+    private class HeadHolder extends RecyclerView.ViewHolder {
+        HeadHolder(View mHeader) {
+            super(mHeader);
+        }
+    }
 }

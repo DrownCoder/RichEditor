@@ -81,7 +81,6 @@ public class RichAdapter extends RecyclerView.Adapter {
                 mHolderShow.add(imageHolder);
                 imageHolder.mIvDelete.setVisibility(View.VISIBLE);
                 imageHolder.mIv.setTag("TRUE");
-                clearEditFocus();
                 imageHolder.mIv.requestFocus();
             } else {
                 mHolderShow.remove(imageHolder);
@@ -95,6 +94,8 @@ public class RichAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onClick(View v) {
                     clearEditFocus();
+                    index = (int) imageHolder.mIvDelete.getTag();
+                    clearImgFocus(index);
                     if (v.getTag().toString().equals("TRUE")) {
                         mHolderShow.remove(imageHolder);
                         imageHolder.mIvDelete.setVisibility(View.GONE);
@@ -147,20 +148,22 @@ public class RichAdapter extends RecyclerView.Adapter {
                     notifyDataChanged();
                     break;
                 case R.id.et_rich_edit:
-                    clearImgFocus();
                     v.setFocusableInTouchMode(true);
                     v.setFocusable(true);
                     v.requestFocus();
                     index = (int) v.getTag();
+                    clearImgFocus(index);
                     break;
             }
         }
     };
 
-    private void clearImgFocus() {
+    private void clearImgFocus(int index) {
         for (ImageHolder holder : mHolderShow) {
-            holder.mIvDelete.setVisibility(View.GONE);
-            holder.mIv.setTag("FALSE");
+            if (!holder.mIvDelete.getTag().equals(String.valueOf(index))) {
+                holder.mIvDelete.setVisibility(View.GONE);
+                holder.mIv.setTag("FALSE");
+            }
         }
     }
 

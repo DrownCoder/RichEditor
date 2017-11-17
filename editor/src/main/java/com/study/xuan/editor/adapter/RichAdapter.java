@@ -1,4 +1,4 @@
-package com.study.xuan.richeditor;
+package com.study.xuan.editor.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -6,7 +6,6 @@ import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,11 +13,16 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.study.xuan.editor.R;
+import com.study.xuan.editor.model.RichModel;
 import com.study.xuan.shapebuilder.shape.ShapeBuilder;
 
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+
+import static com.study.xuan.editor.model.RichModel.TYPE_EDIT;
+import static com.study.xuan.editor.model.RichModel.TYPE_IMG;
 
 /**
  * Author : xuan.
@@ -27,9 +31,8 @@ import java.util.List;
  */
 
 public class RichAdapter extends RecyclerView.Adapter {
-    public static final int TYPE_EDIT = 0;
-    public static final int TYPE_IMG = 1;
     private static final int TYPE_HEADER = -1;
+    public static final String DEFAULT_HINT = "文字输入区域";
     private final int STYLE_IMG_FOCUS = 1;
     private final int STYLE_IMG_NORMAL = 0;
     private HashSet<EditText> mEtHolder;
@@ -143,38 +146,36 @@ public class RichAdapter extends RecyclerView.Adapter {
             ((EditHolder) holder).textWatcher.updatePosition(pos);
             mEdit.setText(item.source);
             mEdit.setSelection(item.source.length());
-            mEdit.setHint(item.defaultSource);
+            mEdit.setHint(item.hint);
             mEdit.setTag(pos);
         }
 
     }
 
-    View.OnClickListener onClickListener = new View.OnClickListener() {
+    private View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            switch (v.getId()) {
-                case R.id.iv_rich_delete:
-                    int pos = (int) v.getTag();
-                    if (mOnPhotoDelete != null) {
-                        mOnPhotoDelete.onDelete(mData.get(pos).source);
-                    }
-                    mData.remove(pos);
-                    index--;
-                    notifyDataChanged();
-                    break;
-                case R.id.et_rich_edit:
-                    v.setFocusableInTouchMode(true);
-                    v.setFocusable(true);
-                    v.requestFocus();
-                    index = (int) v.getTag();
-                    clearImgFocus(index);
+            int i = v.getId();
+            if (i == R.id.iv_rich_delete) {
+                int pos = (int) v.getTag();
+                if (mOnPhotoDelete != null) {
+                    mOnPhotoDelete.onDelete(mData.get(pos).source);
+                }
+                mData.remove(pos);
+                index--;
+                notifyDataChanged();
 
-                    break;
+            } else if (i == R.id.et_rich_edit) {
+                v.setFocusableInTouchMode(true);
+                v.setFocusable(true);
+                v.requestFocus();
+                index = (int) v.getTag();
+                clearImgFocus(index);
             }
         }
     };
 
-    View.OnKeyListener onKeyListener = new View.OnKeyListener() {
+    private View.OnKeyListener onKeyListener = new View.OnKeyListener() {
         @Override
         public boolean onKey(View view, int i, KeyEvent keyEvent) {
             if (keyEvent != null && keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
@@ -214,7 +215,7 @@ public class RichAdapter extends RecyclerView.Adapter {
                 holder.mIvDelete.setVisibility(View.VISIBLE);
                 holder.mIv.requestFocus();
                 ShapeBuilder.create()
-                        .Stroke(2, Color.parseColor("#000000"))
+                        .Stroke(5, Color.parseColor("#000000"))
                         .build(holder.mIv);
                 holder.mIv.setTag(STYLE_IMG_FOCUS);
                 break;
@@ -251,15 +252,18 @@ public class RichAdapter extends RecyclerView.Adapter {
 
     private void doEnter(View view, int pos) {
         this.index = pos;
+        if (pos == 0 && mData.get(pos).type == TYPE_EDIT) {
+            mData.get(pos).hint = "";
+        }
         int cPos = ((EditText) view).getSelectionStart();
         RichModel item = mData.get(pos);
         if (cPos == ((EditText) view).getText().length()) {//光标在末尾
-            mData.add(pos + 1, new RichModel(TYPE_EDIT, "", false, ""));
+            mData.add(pos + 1, new RichModel(TYPE_EDIT, "", ""));
         } else {
             String newStr = item.source.substring(cPos, item.source.length());
             String oldStr = item.source.substring(0, cPos);
             item.setSource(oldStr);
-            mData.add(pos + 1, new RichModel(TYPE_EDIT, newStr, false, ""));
+            mData.add(pos + 1, new RichModel(TYPE_EDIT, newStr, ""));
         }
         index++;
         notifyDataChanged();
@@ -298,7 +302,9 @@ public class RichAdapter extends RecyclerView.Adapter {
     }
 
     public void notifyDataChanged() {
-        Log.i("index", index + "");
+        if (mData.size() == 1 && mData.get(0).type == TYPE_EDIT) {
+            mData.get(0).hint = DEFAULT_HINT;
+        }
         notifyDataSetChanged();
     }
 
@@ -327,7 +333,7 @@ public class RichAdapter extends RecyclerView.Adapter {
             mEt.setText(myData.source);
             mEt.setTag(pos);
             mEt.setSelection(myData.source.length());
-            mEt.setHint(myData.defaultSource);
+            mEt.setHint(myData.hint);
         }
     }
 

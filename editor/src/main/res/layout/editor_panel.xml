@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:orientation="vertical">
+
+    <com.study.xuan.editor.widget.RichEditor
+        android:id="@+id/rich_editor"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="bottom"
+        >
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:background="#ffffff"
+            android:layout_height="50dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                >
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/pic_unselected"
+                    />
+            </LinearLayout>
+            </HorizontalScrollView>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rcy_panel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+</FrameLayout>

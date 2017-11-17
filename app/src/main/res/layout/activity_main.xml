@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     >
 
-    <android.support.v7.widget.RecyclerView
+    <com.study.xuan.editor.widget.RichEditor
         android:id="@+id/rcy"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

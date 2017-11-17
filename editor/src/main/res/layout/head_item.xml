@@ -27,13 +27,6 @@
             android:text="文本文本文本"
             android:textSize="13dp"
             />
-        <ImageView
-            android:id="@+id/iv_switch"
-            android:layout_alignParentRight="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/ic_launcher"
-            />
     </RelativeLayout>
 
     <View

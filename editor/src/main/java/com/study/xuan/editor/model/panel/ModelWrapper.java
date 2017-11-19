@@ -1,4 +1,4 @@
-package com.study.xuan.editor.model;
+package com.study.xuan.editor.model.panel;
 
 /**
  * Author : xuan.

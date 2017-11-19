@@ -98,7 +98,7 @@ public class RichAdapter extends RecyclerView.Adapter {
             case TYPE_IMG://图片
                 bindImgComponent(holder, position - 1, mData.get(position - 1));
                 break;
-            case TYPE_HEADER://header
+            case TYPE_HEADER://SingleText
                 break;
         }
     }

@@ -14,4 +14,14 @@ public class ViewType {
     public static final int PANEL_FONT_SIZE = 1;                            //字体大小
     public static final int PANEL_FONT_COLOR = 2;                           //字体颜色
     public static final int PANEL_HEADER = 3;                               //标题样式
+
+    /**
+     * 具体字体样式
+     */
+    public static final int FONT_BOLD = 0;                                  //粗体
+    public static final int FONT_ITALICS = 1;                               //斜体
+    public static final int FONT_UNDERLINE = 2;                             //下划线
+    public static final int FONT_MIDLINE = 3;                               //中划线
+    public static final int FONT_BACKGROUND = 4;                            //背景色
+
 }

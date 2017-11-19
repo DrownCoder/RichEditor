@@ -2,5 +2,28 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="字号"
+        android:textSize="18dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="12pt"
+        android:id="@+id/tv_show"
+        android:layout_alignParentRight="true"
+        android:textSize="18dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
+        />
+    <HorizontalScrollView
+        android:layout_below="@id/tv_show"
+        android:id="@+id/hscorll_panel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
 </RelativeLayout>

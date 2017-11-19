@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.study.xuan.editor.R;
-import com.study.xuan.editor.model.ModelWrapper;
+import com.study.xuan.editor.model.panel.ModelWrapper;
 
 import java.util.List;
 
@@ -43,9 +43,10 @@ public class PanelAdapter extends RecyclerView.Adapter {
                 vh = new SizeHolder(inflater.inflate(R.layout.item_font_size, parent));
                 break;
             case PANEL_FONT_COLOR:
-                vh = new ColorHolder(inflater.inflate(R.layout.item_font_color, parent));
+                vh = new ColorHolder(inflater.inflate(R.layout.item_font_size, parent));
                 break;
             case PANEL_HEADER:
+                vh = new HeaderHolder(inflater.inflate(R.layout.item_header, parent));
                 break;
         }
         return vh;
@@ -100,6 +101,12 @@ public class PanelAdapter extends RecyclerView.Adapter {
 
     private class ColorHolder extends RecyclerView.ViewHolder {
         public ColorHolder(View root) {
+            super(root);
+        }
+    }
+
+    private class HeaderHolder extends RecyclerView.ViewHolder {
+        public HeaderHolder(View root) {
             super(root);
         }
     }

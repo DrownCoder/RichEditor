@@ -88,7 +88,7 @@ public class PanelFactory {
         fontColor.items = new ArrayList<>();
         for (int i = 0; i < FONT_SIZE.length; i++) {
             SingleText text = new SingleText();
-            text.desc = FONT_COLOR[i];
+            text.desc = FONT_SIZE[i];
             fontColor.items.add(text);
         }
         ModelWrapper wrapper = new ModelWrapper();

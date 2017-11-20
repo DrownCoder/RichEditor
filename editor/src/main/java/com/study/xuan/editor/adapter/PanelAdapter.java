@@ -5,9 +5,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.study.xuan.editor.R;
 import com.study.xuan.editor.model.panel.ModelWrapper;
+import com.study.xuan.editor.model.panel.SingleImg;
 
 import java.util.List;
 
@@ -64,7 +66,13 @@ public class PanelAdapter extends RecyclerView.Adapter {
             case PANEL_FONT_COLOR:
                 bindColorPanel(holder, position);
                 break;
+            case PANEL_HEADER:
+                bindHeaderPanel(holder, position);
         }
+    }
+
+    private void bindHeaderPanel(RecyclerView.ViewHolder holder, int position) {
+
     }
 
     private void bindSizePanel(RecyclerView.ViewHolder holder, int position) {
@@ -72,9 +80,22 @@ public class PanelAdapter extends RecyclerView.Adapter {
     }
 
     private void bindColorPanel(RecyclerView.ViewHolder holder, int position) {
+        ModelWrapper wrapper = mDatas.get(position);
+        if (wrapper.type == PANEL_FONT_COLOR) {
+
+        }
     }
 
+    /**
+     * 字样式
+     */
     private void bindStylePanel(RecyclerView.ViewHolder holder, int position) {
+        ModelWrapper wrapper = mDatas.get(position);
+        if (wrapper.type == PANEL_FONT_STYLE) {
+            SingleImg img = (SingleImg) wrapper.obj;
+            StyleHolder styleHolder = (StyleHolder) holder;
+            styleHolder.mIvStyle.setImageResource(img.drawablePath);
+        }
     }
 
     @Override
@@ -88,8 +109,10 @@ public class PanelAdapter extends RecyclerView.Adapter {
     }
 
     private class StyleHolder extends RecyclerView.ViewHolder {
+        ImageView mIvStyle;
         public StyleHolder(View root) {
             super(root);
+            mIvStyle = root.findViewById(R.id.iv_font_style);
         }
     }
 

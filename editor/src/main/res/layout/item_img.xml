@@ -13,7 +13,7 @@
         android:maxWidth="500dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@drawable/pic"
+        android:src="@drawable/pic_selected"
         />
     <ImageView
         android:layout_width="30dp"

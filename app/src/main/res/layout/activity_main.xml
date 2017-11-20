@@ -1,20 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
 
-    <com.study.xuan.editor.widget.RichEditor
+    <!--<com.study.xuan.editor.widget.RichEditor
         android:id="@+id/rcy"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingLeft="12dp"
         android:paddingRight="12dp"
         android:layout_marginBottom="40dp"
+        />-->
+    <ImageView
+        android:id="@+id/iv_test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/ic_launcher_round"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/tv_test"
         />
     <RelativeLayout
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
@@ -32,4 +44,4 @@
             android:src="@drawable/picture"
             />
     </RelativeLayout>
-</FrameLayout>
+</RelativeLayout>

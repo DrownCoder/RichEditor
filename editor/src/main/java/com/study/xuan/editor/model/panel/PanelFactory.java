@@ -23,10 +23,10 @@ import static com.study.xuan.editor.typeholder.ViewType.PANEL_FONT_STYLE;
 public class PanelFactory {
     private static int FONT_STYLE[] = new int[]{
             R.drawable.bold_select,
-            R.drawable.bold_select,
-            R.drawable.bold_select,
-            R.drawable.bold_select,
-            R.drawable.bold_select
+            R.drawable.italics_select,
+            R.drawable.underline_select,
+            R.drawable.centerline_select,
+            R.drawable.font_bac_select
     };
 
     private static int FONT_STYLE_TYPE[] = new int[]{
@@ -41,8 +41,9 @@ public class PanelFactory {
             "14", "15", "18", "20", "24", "26", "30"
     };
 
-    private static String FONT_COLOR[] = new String[]{
-            "#ffffff","#ffffff","#ffffff","#ffffff","#ffffff","#ffffff"
+    private static int FONT_COLOR[] = new int[]{
+            R.drawable.red,R.drawable.gray,R.drawable.green,R.drawable.blue,
+            R.drawable.purple,R.drawable.orange
     };
 
     /**
@@ -57,6 +58,7 @@ public class PanelFactory {
             img.drawablePath = FONT_STYLE[i];
             img.styleType = FONT_STYLE_TYPE[i];
             wrapper.type = PANEL_FONT_STYLE;
+            wrapper.obj = img;
             datas.add(wrapper);
         }
         return datas;
@@ -69,13 +71,14 @@ public class PanelFactory {
         FontScorll fontColor = new FontScorll();
         fontColor.floorName = "字色";
         fontColor.items = new ArrayList<>();
-        for (int i = 0; i < FONT_SIZE.length; i++) {
-            SingleText text = new SingleText();
-            text.desc = FONT_COLOR[i];
+        for (int aFONT_COLOR : FONT_COLOR) {
+            SingleImg text = new SingleImg();
+            text.drawablePath = aFONT_COLOR;
             fontColor.items.add(text);
         }
         ModelWrapper wrapper = new ModelWrapper();
         wrapper.type = PANEL_FONT_COLOR;
+        wrapper.obj = fontColor;
         return wrapper;
     }
 
@@ -86,13 +89,31 @@ public class PanelFactory {
         FontScorll fontColor = new FontScorll();
         fontColor.floorName = "字号";
         fontColor.items = new ArrayList<>();
-        for (int i = 0; i < FONT_SIZE.length; i++) {
+        for (String aFONT_SIZE : FONT_SIZE) {
             SingleText text = new SingleText();
-            text.desc = FONT_SIZE[i];
+            text.desc = aFONT_SIZE;
             fontColor.items.add(text);
         }
         ModelWrapper wrapper = new ModelWrapper();
         wrapper.type = PANEL_FONT_SIZE;
+        wrapper.obj = fontColor;
         return wrapper;
+    }
+
+    /**
+     * 字体相关
+     */
+    public static void createFontPanel(List<ModelWrapper> datas) {
+        datas.addAll(PanelFactory.initFontStyleFloor());
+        datas.add(PanelFactory.initFontSizeFloor());
+        datas.add(PanelFactory.initFontColorFloor());
+    }
+    /**
+     * header相关
+     */
+    public static void createHeaderPanel(List<ModelWrapper> datas) {
+        datas.addAll(PanelFactory.initFontStyleFloor());
+        datas.add(PanelFactory.initFontSizeFloor());
+        datas.add(PanelFactory.initFontColorFloor());
     }
 }

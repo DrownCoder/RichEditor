@@ -6,42 +6,9 @@
     android:layout_height="match_parent"
     >
 
-    <!--<com.study.xuan.editor.widget.RichEditor
-        android:id="@+id/rcy"
+    <com.study.xuan.editor.widget.EditorPanel
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingLeft="12dp"
-        android:paddingRight="12dp"
-        android:layout_marginBottom="40dp"
-        />-->
-    <ImageView
-        android:id="@+id/iv_test"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@mipmap/ic_launcher_round"
-        />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/tv_test"
-        />
-    <RelativeLayout
-        android:visibility="gone"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:background="#f5f5f5"
-        >
+        android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/iv_add"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_alignParentRight="true"
-            android:layout_marginBottom="5dp"
-            android:layout_marginRight="15dp"
-            android:layout_marginTop="5dp"
-            android:src="@drawable/picture"
-            />
-    </RelativeLayout>
+    </com.study.xuan.editor.widget.EditorPanel>
 </RelativeLayout>

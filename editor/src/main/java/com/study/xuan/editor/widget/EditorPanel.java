@@ -1,6 +1,7 @@
 package com.study.xuan.editor.widget;
 
 import android.content.Context;
+import android.graphics.Rect;
 import android.support.annotation.AttrRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -16,9 +17,15 @@ import com.study.xuan.editor.R;
 import com.study.xuan.editor.adapter.PanelAdapter;
 import com.study.xuan.editor.model.panel.ModelWrapper;
 import com.study.xuan.editor.model.panel.PanelFactory;
+import com.study.xuan.editor.util.DensityUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.study.xuan.editor.typeholder.ViewType.PANEL_FONT_COLOR;
+import static com.study.xuan.editor.typeholder.ViewType.PANEL_FONT_SIZE;
+import static com.study.xuan.editor.typeholder.ViewType.PANEL_FONT_STYLE;
+import static com.study.xuan.editor.typeholder.ViewType.PANEL_HEADER;
 
 /**
  * Author : xuan.
@@ -61,9 +68,7 @@ public class EditorPanel extends FrameLayout {
         public void onClick(View v) {
             int i = v.getId();
             if (i == R.id.iv_font) {
-                mFontDatas.addAll(PanelFactory.initFontStyleFloor());
-                mFontDatas.add(PanelFactory.initFontColorFloor());
-                mFontDatas.add(PanelFactory.initFontSizeFloor());
+                PanelFactory.createFontPanel(mFontDatas);
                 mPanelDatas.addAll(mFontDatas);
                 mPanelAdapter.notifyDataSetChanged();
             }
@@ -73,9 +78,16 @@ public class EditorPanel extends FrameLayout {
     private void initView(View root) {
         mIvFont = root.findViewById(R.id.iv_font);
         mPanel = root.findViewById(R.id.rcy_panel);
-        mPanel.setLayoutManager(new GridLayoutManager(mContext, 5));
+        GridLayoutManager manager = new GridLayoutManager(mContext, 5){
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        };
+        mPanel.setLayoutManager(manager);
         initDatas();
         mPanelAdapter = new PanelAdapter(mContext, mPanelDatas);
+        setSpanCount(manager, mPanelAdapter);
         mPanel.setAdapter(mPanelAdapter);
     }
 
@@ -83,5 +95,36 @@ public class EditorPanel extends FrameLayout {
         mPanelDatas = new ArrayList<>();
         mFontDatas = new ArrayList<>();
         mHeaderDatas = new ArrayList<>();
+    }
+
+    /**
+     * 将RecyclerView的网格布局中的某个item设置为独占一行、只占一列，只占两列、等等
+     */
+    protected void setSpanCount(final GridLayoutManager gridLayoutManager,
+                                final RecyclerView.Adapter mAdapter) {
+        gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                int type = mAdapter.getItemViewType(position);
+                if (type == PANEL_FONT_SIZE || type == PANEL_FONT_COLOR || type == PANEL_HEADER) {
+                    return gridLayoutManager.getSpanCount();//独占一行
+                } else {
+                    return 1;//只占一行中的一列
+                }
+            }
+        });
+    }
+
+    private class MarginDecoration extends RecyclerView.ItemDecoration {
+
+        private int margin;
+        MarginDecoration(Context context, int margin) {
+            this.margin = DensityUtil.dp2px(context, margin);
+        }
+
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+            outRect.set(0, margin, 0, margin);
+        }
     }
 }

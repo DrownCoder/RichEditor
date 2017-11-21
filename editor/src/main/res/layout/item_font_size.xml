@@ -1,29 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_marginTop="1px"
+                android:layout_marginBottom="1px"
+                android:background="#ffffff"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
     <TextView
+        android:paddingLeft="20dp"
+        android:id="@+id/tv_floor_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="字号"
-        android:textSize="18dp"
+        android:textSize="16dp"
         android:layout_marginTop="15dp"
         android:layout_marginBottom="15dp"
         />
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:text="12pt"
         android:id="@+id/tv_show"
+        android:gravity="center"
         android:layout_alignParentRight="true"
         android:textSize="18dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="15dp"
+        android:visibility="visible"
+        />
+    <ImageView
+        android:id="@+id/iv_show"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:visibility="gone"
+        android:padding="10dp"
+        android:layout_alignParentRight="true"
         />
     <HorizontalScrollView
-        android:layout_below="@id/tv_show"
-        android:id="@+id/hscorll_panel"
+        android:layout_below="@id/tv_floor_name"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:id="@+id/hscorll_panel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+
+        </LinearLayout>
+        </HorizontalScrollView>
 
 </RelativeLayout>

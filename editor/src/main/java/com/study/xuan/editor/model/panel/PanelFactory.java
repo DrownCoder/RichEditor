@@ -5,14 +5,14 @@ import com.study.xuan.editor.R;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.study.xuan.editor.typeholder.ViewType.FONT_BACKGROUND;
-import static com.study.xuan.editor.typeholder.ViewType.FONT_BOLD;
-import static com.study.xuan.editor.typeholder.ViewType.FONT_ITALICS;
-import static com.study.xuan.editor.typeholder.ViewType.FONT_MIDLINE;
-import static com.study.xuan.editor.typeholder.ViewType.FONT_UNDERLINE;
-import static com.study.xuan.editor.typeholder.ViewType.PANEL_FONT_COLOR;
-import static com.study.xuan.editor.typeholder.ViewType.PANEL_FONT_SIZE;
-import static com.study.xuan.editor.typeholder.ViewType.PANEL_FONT_STYLE;
+import static com.study.xuan.editor.constvalue.ViewType.FONT_BACKGROUND;
+import static com.study.xuan.editor.constvalue.ViewType.FONT_BOLD;
+import static com.study.xuan.editor.constvalue.ViewType.FONT_ITALICS;
+import static com.study.xuan.editor.constvalue.ViewType.FONT_MIDLINE;
+import static com.study.xuan.editor.constvalue.ViewType.FONT_UNDERLINE;
+import static com.study.xuan.editor.constvalue.ViewType.PANEL_FONT_COLOR;
+import static com.study.xuan.editor.constvalue.ViewType.PANEL_FONT_SIZE;
+import static com.study.xuan.editor.constvalue.ViewType.PANEL_FONT_STYLE;
 
 /**
  * Author : xuan.
@@ -41,9 +41,14 @@ public class PanelFactory {
             "14", "15", "18", "20", "24", "26", "30"
     };
 
+    private static int FONT_COLOR_SRC[] = new int[]{
+            R.drawable.red, R.drawable.gray, R.drawable.green, R.drawable.blue,
+            R.drawable.purple, R.drawable.orange
+    };
+
     private static int FONT_COLOR[] = new int[]{
-            R.drawable.red,R.drawable.gray,R.drawable.green,R.drawable.blue,
-            R.drawable.purple,R.drawable.orange
+            R.color.red, R.color.gray, R.color.green, R.color.blue,
+            R.color.purple, R.color.orange
     };
 
     /**
@@ -71,10 +76,11 @@ public class PanelFactory {
         FontScorll fontColor = new FontScorll();
         fontColor.floorName = "字色";
         fontColor.items = new ArrayList<>();
-        for (int aFONT_COLOR : FONT_COLOR) {
-            SingleImg text = new SingleImg();
-            text.drawablePath = aFONT_COLOR;
-            fontColor.items.add(text);
+        for (int i = 0; i < FONT_COLOR_SRC.length; i++) {
+            SingleImg img = new SingleImg();
+            img.drawablePath = FONT_COLOR_SRC[i];
+            img.styleType = FONT_COLOR[i];
+            fontColor.items.add(img);
         }
         ModelWrapper wrapper = new ModelWrapper();
         wrapper.type = PANEL_FONT_COLOR;

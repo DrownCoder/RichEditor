@@ -17,20 +17,20 @@ import com.study.xuan.editor.R;
 import com.study.xuan.editor.adapter.PanelAdapter;
 import com.study.xuan.editor.model.panel.ModelWrapper;
 import com.study.xuan.editor.model.panel.PanelFactory;
+import com.study.xuan.editor.operate.FontParamBuilder;
 import com.study.xuan.editor.util.DensityUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.study.xuan.editor.typeholder.ViewType.PANEL_FONT_COLOR;
-import static com.study.xuan.editor.typeholder.ViewType.PANEL_FONT_SIZE;
-import static com.study.xuan.editor.typeholder.ViewType.PANEL_FONT_STYLE;
-import static com.study.xuan.editor.typeholder.ViewType.PANEL_HEADER;
+import static com.study.xuan.editor.constvalue.ViewType.PANEL_FONT_COLOR;
+import static com.study.xuan.editor.constvalue.ViewType.PANEL_FONT_SIZE;
+import static com.study.xuan.editor.constvalue.ViewType.PANEL_HEADER;
 
 /**
  * Author : xuan.
  * Date : 2017/11/17.
- * Description :input the description of this file.
+ * Description :操作面板
  */
 
 public class EditorPanel extends FrameLayout {
@@ -41,6 +41,8 @@ public class EditorPanel extends FrameLayout {
     private List<ModelWrapper> mPanelDatas;
     private List<ModelWrapper> mFontDatas;
     private List<ModelWrapper> mHeaderDatas;
+
+    private FontParamBuilder paramBuilder;
 
     public EditorPanel(@NonNull Context context) {
         this(context, null);
@@ -86,7 +88,7 @@ public class EditorPanel extends FrameLayout {
         };
         mPanel.setLayoutManager(manager);
         initDatas();
-        mPanelAdapter = new PanelAdapter(mContext, mPanelDatas);
+        mPanelAdapter = new PanelAdapter(mContext, mPanelDatas, paramBuilder);
         setSpanCount(manager, mPanelAdapter);
         mPanel.setAdapter(mPanelAdapter);
     }
@@ -95,6 +97,7 @@ public class EditorPanel extends FrameLayout {
         mPanelDatas = new ArrayList<>();
         mFontDatas = new ArrayList<>();
         mHeaderDatas = new ArrayList<>();
+        paramBuilder = new FontParamBuilder();
     }
 
     /**

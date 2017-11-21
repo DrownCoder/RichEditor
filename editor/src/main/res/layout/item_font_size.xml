@@ -36,12 +36,14 @@
     <HorizontalScrollView
         android:layout_below="@id/tv_floor_name"
         android:layout_width="match_parent"
+        android:scrollbars="none"
         android:layout_height="wrap_content">
         <LinearLayout
             android:id="@+id/hscorll_panel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:layout_gravity="center_vertical"
             >
 
         </LinearLayout>

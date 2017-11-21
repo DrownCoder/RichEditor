@@ -1,6 +1,8 @@
 package com.study.xuan.editor.adapter;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,28 +17,56 @@ import com.study.xuan.editor.model.panel.ModelWrapper;
 import com.study.xuan.editor.model.panel.SingleComponent;
 import com.study.xuan.editor.model.panel.SingleImg;
 import com.study.xuan.editor.model.panel.SingleText;
+import com.study.xuan.editor.operate.FontParamBuilder;
 import com.study.xuan.editor.util.DensityUtil;
+import com.study.xuan.shapebuilder.shape.ShapeBuilder;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import static com.study.xuan.editor.typeholder.ViewType.PANEL_FONT_COLOR;
-import static com.study.xuan.editor.typeholder.ViewType.PANEL_FONT_SIZE;
-import static com.study.xuan.editor.typeholder.ViewType.PANEL_FONT_STYLE;
-import static com.study.xuan.editor.typeholder.ViewType.PANEL_HEADER;
+import static android.graphics.drawable.GradientDrawable.OVAL;
+import static com.study.xuan.editor.constvalue.ViewType.FONT_BACKGROUND;
+import static com.study.xuan.editor.constvalue.ViewType.FONT_BOLD;
+import static com.study.xuan.editor.constvalue.ViewType.FONT_ITALICS;
+import static com.study.xuan.editor.constvalue.ViewType.FONT_MIDLINE;
+import static com.study.xuan.editor.constvalue.ViewType.FONT_UNDERLINE;
+import static com.study.xuan.editor.constvalue.ViewType.PANEL_FONT_COLOR;
+import static com.study.xuan.editor.constvalue.ViewType.PANEL_FONT_SIZE;
+import static com.study.xuan.editor.constvalue.ViewType.PANEL_FONT_STYLE;
+import static com.study.xuan.editor.constvalue.ViewType.PANEL_HEADER;
 
 /**
  * Author : xuan.
  * Date : 2017/11/17.
- * Description :input the description of this file.
+ * Description :操作盘
  */
 
 public class PanelAdapter extends RecyclerView.Adapter {
     private List<ModelWrapper> mDatas;
     private Context mContext;
+    private FontParamBuilder builder;
 
-    public PanelAdapter(Context context, List<ModelWrapper> mDatas) {
+    private int FONT_SIZE_PADDING;
+    private int FONT_COLOR_PADDING;
+    private LinearLayout.LayoutParams colorParams;
+
+    private List<View> mColorViews;
+    private List<TextView> mSizeViews;
+
+
+    public PanelAdapter(Context context, List<ModelWrapper> mDatas, FontParamBuilder paramBuilder) {
         this.mDatas = mDatas;
         this.mContext = context;
+        builder = paramBuilder;
+        mColorViews = new ArrayList<>();
+        mSizeViews = new ArrayList<>();
+        FONT_SIZE_PADDING = DensityUtil.dp2px(mContext, 15);
+        FONT_COLOR_PADDING = DensityUtil.dp2px(mContext, 1.5f);
+        int FONT_COLOR_MARGINT = DensityUtil.dp2px(mContext, 5);
+        colorParams = new LinearLayout.LayoutParams(DensityUtil.dp2px(mContext, 35), DensityUtil
+                .dp2px(mContext, 35));
+        colorParams.setMargins(FONT_COLOR_MARGINT, FONT_COLOR_MARGINT, FONT_COLOR_MARGINT,
+                FONT_COLOR_MARGINT);
     }
 
     @Override
@@ -48,11 +78,12 @@ public class PanelAdapter extends RecyclerView.Adapter {
                 vh = new StyleHolder(inflater.inflate(R.layout.item_font_style, parent, false));
                 break;
             case PANEL_FONT_SIZE:
-                vh = new ScorllPanelHolder(inflater.inflate(R.layout.item_font_size, parent,
+                vh = new ScrollPanelHolder(inflater.inflate(R.layout.item_font_size, parent,
                         false));
                 break;
             case PANEL_FONT_COLOR:
-                vh = new ScorllPanelHolder(inflater.inflate(R.layout.item_font_size, parent, false));
+                vh = new ScrollPanelHolder(inflater.inflate(R.layout.item_font_size, parent,
+                        false));
                 break;
             case PANEL_HEADER:
                 vh = new HeaderHolder(inflater.inflate(R.layout.item_header, parent, false));
@@ -75,6 +106,7 @@ public class PanelAdapter extends RecyclerView.Adapter {
                 break;
             case PANEL_HEADER:
                 bindHeaderPanel(holder, position);
+                break;
         }
     }
 
@@ -92,19 +124,21 @@ public class PanelAdapter extends RecyclerView.Adapter {
         ModelWrapper wrapper = mDatas.get(position);
         if (wrapper.type == PANEL_FONT_SIZE) {
             FontScorll fontScorll = (FontScorll) wrapper.obj;
-            ScorllPanelHolder scorllPanelHolder = (ScorllPanelHolder) holder;
-            scorllPanelHolder.mTvFloorName.setText(fontScorll.floorName);
-            scorllPanelHolder.mTvShow.setVisibility(View.VISIBLE);
-            scorllPanelHolder.mIvShow.setVisibility(View.GONE);
-            scorllPanelHolder.mTvShow.setText(((SingleText) fontScorll.items.get(0)).desc);
-            ViewGroup.LayoutParams params = scorllPanelHolder.mTvShow.getLayoutParams();
+            ScrollPanelHolder scrollPanelHolder = (ScrollPanelHolder) holder;
+            scrollPanelHolder.mTvFloorName.setText(fontScorll.floorName);
+            scrollPanelHolder.mTvShow.setVisibility(View.VISIBLE);
+            scrollPanelHolder.mIvShow.setVisibility(View.GONE);
+            scrollPanelHolder.mTvShow.setText(((SingleText) fontScorll.items.get(0)).desc);
+            ViewGroup.LayoutParams params = scrollPanelHolder.mTvShow.getLayoutParams();
             for (SingleComponent component : fontScorll.items) {
                 TextView item = new TextView(mContext);
                 item.setText(((SingleText) component).desc);
-                int padding = DensityUtil.dp2px(mContext, 15);
-                item.setPadding(padding, padding, padding, padding);
+                item.setPadding(FONT_SIZE_PADDING, FONT_SIZE_PADDING, FONT_SIZE_PADDING,
+                        FONT_SIZE_PADDING);
                 item.setLayoutParams(params);
-                scorllPanelHolder.mScrollPanel.addView(item);
+                item.setTag(((SingleText) component).desc);
+                item.setOnClickListener(onClickListener);
+                scrollPanelHolder.mScrollPanel.addView(item);
             }
         }
     }
@@ -113,21 +147,22 @@ public class PanelAdapter extends RecyclerView.Adapter {
         ModelWrapper wrapper = mDatas.get(position);
         if (wrapper.type == PANEL_FONT_COLOR) {
             FontScorll fontScorll = (FontScorll) wrapper.obj;
-            ScorllPanelHolder scorllPanelHolder = (ScorllPanelHolder) holder;
-            scorllPanelHolder.mTvFloorName.setText(fontScorll.floorName);
-            scorllPanelHolder.mTvShow.setVisibility(View.GONE);
-            scorllPanelHolder.mIvShow.setVisibility(View.VISIBLE);
-            scorllPanelHolder.mIvShow.setImageResource(((SingleImg) fontScorll.items.get(0))
+            ScrollPanelHolder scrollPanelHolder = (ScrollPanelHolder) holder;
+            scrollPanelHolder.mTvFloorName.setText(fontScorll.floorName);
+            scrollPanelHolder.mTvShow.setVisibility(View.GONE);
+            scrollPanelHolder.mIvShow.setVisibility(View.VISIBLE);
+            scrollPanelHolder.mIvShow.setImageResource(((SingleImg) fontScorll.items.get(0))
                     .drawablePath);
 
-            ViewGroup.LayoutParams params = scorllPanelHolder.mIvShow.getLayoutParams();
             for (SingleComponent component : fontScorll.items) {
                 ImageView item = new ImageView(mContext);
                 item.setImageResource(((SingleImg) component).drawablePath);
-                item.setLayoutParams(params);
-                int padding = DensityUtil.dp2px(mContext, 10);
-                item.setPadding(padding, padding, padding, padding);
-                scorllPanelHolder.mScrollPanel.addView(item);
+                item.setLayoutParams(colorParams);
+                item.setPadding(0, 0, FONT_COLOR_PADDING / 2, FONT_COLOR_PADDING);
+                item.setScaleType(ImageView.ScaleType.FIT_XY);
+                item.setOnClickListener(onClickListener);
+                item.setTag(((SingleImg) component).styleType);
+                scrollPanelHolder.mScrollPanel.addView(item);
             }
         }
     }
@@ -141,6 +176,7 @@ public class PanelAdapter extends RecyclerView.Adapter {
             SingleImg img = (SingleImg) wrapper.obj;
             StyleHolder styleHolder = (StyleHolder) holder;
             styleHolder.mIvStyle.setImageResource(img.drawablePath);
+            styleHolder.mIvStyle.setTag(img.styleType);
         }
     }
 
@@ -156,19 +192,21 @@ public class PanelAdapter extends RecyclerView.Adapter {
 
     private class StyleHolder extends RecyclerView.ViewHolder {
         ImageView mIvStyle;
-        public StyleHolder(View root) {
+
+        StyleHolder(View root) {
             super(root);
             mIvStyle = root.findViewById(R.id.iv_font_style);
+            mIvStyle.setOnClickListener(onClickListener);
         }
     }
 
-    private class ScorllPanelHolder extends RecyclerView.ViewHolder {
+    private class ScrollPanelHolder extends RecyclerView.ViewHolder {
         TextView mTvFloorName;
         TextView mTvShow;
         ImageView mIvShow;
         LinearLayout mScrollPanel;
 
-        public ScorllPanelHolder(View root) {
+        ScrollPanelHolder(View root) {
             super(root);
             mTvFloorName = root.findViewById(R.id.tv_floor_name);
             mTvShow = root.findViewById(R.id.tv_show);
@@ -179,9 +217,99 @@ public class PanelAdapter extends RecyclerView.Adapter {
 
     private class HeaderHolder extends RecyclerView.ViewHolder {
         TextView mTvHeader;
-        public HeaderHolder(View root) {
+
+        HeaderHolder(View root) {
             super(root);
             mTvHeader = root.findViewById(R.id.tv_header);
+        }
+    }
+
+    private View.OnClickListener onClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            v.setSelected(!v.isSelected());
+            if (v.getId() == R.id.iv_font_style) {//字体样式
+                setSytleParam(Integer.parseInt(v.getTag().toString()), v.isSelected());
+            } else {
+                if (v instanceof TextView) {//字号
+                    if (v.isSelected()) {
+                        clearAllSizeSelected();
+                        v.setSelected(true);
+                        ((TextView) v).getPaint().setFakeBoldText(true);
+                        mSizeViews.add((TextView) v);
+                    }else{
+                        mSizeViews.remove(v);
+                        ((TextView) v).getPaint().setFakeBoldText(false);
+                    }
+                    builder.fontSize(Integer.valueOf(v.getTag().toString()));
+                } else {//字色
+                    if (v.isSelected()) {
+                        clearAllColorSelected();
+                        v.setSelected(true);
+                        ShapeBuilder.create()
+                                .Type(OVAL)
+                                .Stroke(4, Integer.valueOf(v.getTag().toString()))
+                                .build(v);
+                        mColorViews.add(v);
+                    } else {
+                        mColorViews.remove(v);
+                        setBactGround(v, null);
+                    }
+                    builder.fontColor(Integer.valueOf(v.getTag().toString()));
+                }
+            }
+        }
+    };
+
+    private void setBactGround(View v, Drawable drawable) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            v.setBackground(drawable);
+        } else {
+            v.setBackgroundDrawable(drawable);
+        }
+    }
+
+    /**
+     * 清除所有选中的color
+     */
+    private void clearAllColorSelected() {
+        for (View item : mColorViews) {
+            item.setSelected(false);
+            setBactGround(item, null);
+        }
+    }
+
+    /**
+     * 清楚所有选中的size
+     */
+    private void clearAllSizeSelected() {
+        for (TextView item : mSizeViews) {
+            item.setSelected(false);
+            item.getPaint().setFakeBoldText(false);
+        }
+    }
+
+
+    /**
+     * 设置字体样式
+     */
+    private void setSytleParam(int type, boolean selected) {
+        switch (type) {
+            case FONT_BOLD:
+                builder.isBold(selected);
+                break;
+            case FONT_ITALICS:
+                builder.isItalics(selected);
+                break;
+            case FONT_UNDERLINE:
+                builder.isUnderLine(selected);
+                break;
+            case FONT_MIDLINE:
+                builder.isCenterLine(selected);
+                break;
+            case FONT_BACKGROUND:
+                builder.isFontBac(selected);
+                break;
         }
     }
 }

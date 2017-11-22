@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.study.xuan.editor.R;
 import com.study.xuan.editor.adapter.PanelAdapter;
@@ -33,11 +34,13 @@ import static com.study.xuan.editor.constvalue.ViewType.PANEL_HEADER;
  * Description :操作面板
  */
 
-public class EditorPanel extends FrameLayout {
+public class EditorPanel extends LinearLayout {
     private Context mContext;
     private ImageView mIvFont;
+
     private RecyclerView mPanel;
     private PanelAdapter mPanelAdapter;
+
     private List<ModelWrapper> mPanelDatas;
     private List<ModelWrapper> mFontDatas;
     private List<ModelWrapper> mHeaderDatas;
@@ -68,11 +71,15 @@ public class EditorPanel extends FrameLayout {
     View.OnClickListener onClickListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
+            v.setSelected(!v.isSelected());
             int i = v.getId();
             if (i == R.id.iv_font) {
-                PanelFactory.createFontPanel(mFontDatas);
-                mPanelDatas.addAll(mFontDatas);
-                mPanelAdapter.notifyDataSetChanged();
+                if (mFontDatas.size() == 0) {
+                    PanelFactory.createFontPanel(mFontDatas);
+                    mPanelDatas.addAll(mFontDatas);
+                    mPanelAdapter.notifyDataSetChanged();
+                }
+                mPanel.setVisibility(v.isSelected() ? VISIBLE : GONE);
             }
         }
     };
@@ -118,16 +125,7 @@ public class EditorPanel extends FrameLayout {
         });
     }
 
-    private class MarginDecoration extends RecyclerView.ItemDecoration {
-
-        private int margin;
-        MarginDecoration(Context context, int margin) {
-            this.margin = DensityUtil.dp2px(context, margin);
-        }
-
-        @Override
-        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-            outRect.set(0, margin, 0, margin);
-        }
+    public FontParamBuilder getFontParams() {
+        return paramBuilder;
     }
 }

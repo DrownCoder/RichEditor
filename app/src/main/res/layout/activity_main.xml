@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
-
-    <com.study.xuan.editor.widget.EditorPanel
+    <com.study.xuan.editor.widget.RichEditor
+        android:id="@+id/editor"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"/>
+    <com.study.xuan.editor.widget.EditorPanel
+        android:id="@+id/panel"
+        android:layout_gravity="bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
-    </com.study.xuan.editor.widget.EditorPanel>
-</RelativeLayout>
+</FrameLayout>

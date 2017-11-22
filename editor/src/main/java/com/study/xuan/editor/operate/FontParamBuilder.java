@@ -6,7 +6,7 @@ package com.study.xuan.editor.operate;
  * Description :input the description of this file.
  */
 
-public class FontParamBuilder {
+public class FontParamBuilder{
     private FontParam param;
 
     public FontParamBuilder() {
@@ -71,4 +71,7 @@ public class FontParamBuilder {
         return this;
     }
 
+    public FontParam getParam() throws CloneNotSupportedException {
+        return (FontParam) param.clone();
+    }
 }

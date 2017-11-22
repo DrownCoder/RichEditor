@@ -17,8 +17,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static com.study.xuan.editor.adapter.RichAdapter.DEFAULT_HINT;
-import static com.study.xuan.editor.model.RichModel.TYPE_EDIT;
-import static com.study.xuan.editor.model.RichModel.TYPE_IMG;
+import static com.study.xuan.editor.constvalue.ViewType.TYPE_EDIT;
+import static com.study.xuan.editor.constvalue.ViewType.TYPE_IMG;
 
 /**
  * Author : xuan.

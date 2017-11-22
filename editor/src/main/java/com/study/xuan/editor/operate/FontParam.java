@@ -6,7 +6,7 @@ package com.study.xuan.editor.operate;
  * Description :字体参数
  */
 
-public class FontParam {
+public class FontParam implements Cloneable {
     //粗体
     public boolean isBold;
     //斜体
@@ -22,4 +22,26 @@ public class FontParam {
     public int fontSize;
     //字色
     public int fontColor;
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
+
+    /**
+     * 返回0101001类型的字符串用于比较参数是否变化
+     */
+    @Override
+    public String toString() {
+        return getBooleanString(isBold)+getBooleanString(isItalics)+
+                getBooleanString(isUnderLine)+getBooleanString(isCenterLine)+
+                getBooleanString(isFontBac)+fontSize+fontColor+"";
+    }
+
+    /**
+     * true返回1，false返回0
+     */
+    private int getBooleanString(boolean b) {
+        return b ? 1 : 0;
+    }
 }

@@ -24,4 +24,10 @@ public class ViewType {
     public static final int FONT_MIDLINE = 3;                               //中划线
     public static final int FONT_BACKGROUND = 4;                            //背景色
 
+    /**
+     * 数据样式
+     */
+    public static final int TYPE_EDIT = 0;                                   //普通编辑框
+    public static final int TYPE_IMG = 1;                                    //一行图片
+
 }

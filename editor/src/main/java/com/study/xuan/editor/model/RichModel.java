@@ -1,5 +1,7 @@
 package com.study.xuan.editor.model;
 
+import java.util.List;
+
 /**
  * Author : xuan.
  * Date : 2017/11/3.
@@ -7,12 +9,10 @@ package com.study.xuan.editor.model;
  */
 
 public class RichModel {
-    public static final int TYPE_EDIT = 0;
-    public static final int TYPE_IMG = 1;
-
     public int type;
     public String source;
     public String hint;
+    private List<SpanModel> mSpanList;
 
     public RichModel(int type, String s, String df) {
         this.type = type;

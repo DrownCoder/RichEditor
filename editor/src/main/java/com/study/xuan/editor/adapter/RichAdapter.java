@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.Spanned;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -15,6 +16,8 @@ import android.widget.ImageView;
 
 import com.study.xuan.editor.R;
 import com.study.xuan.editor.model.RichModel;
+import com.study.xuan.editor.model.SpanModel;
+import com.study.xuan.editor.widget.span.MultiSpannableString;
 import com.study.xuan.shapebuilder.shape.ShapeBuilder;
 
 import java.util.HashSet;
@@ -144,6 +147,7 @@ public class RichAdapter extends RecyclerView.Adapter {
                 mEdit.setFocusable(false);
             }
             ((EditHolder) holder).textWatcher.updatePosition(pos);
+            ((EditHolder) holder).factory.updatePosition(pos);
             mEdit.setText(item.source);
             mEdit.setSelection(item.source.length());
             mEdit.setHint(item.hint);
@@ -311,6 +315,7 @@ public class RichAdapter extends RecyclerView.Adapter {
     private class EditHolder extends RecyclerView.ViewHolder {
         private CustomEditTextListener textWatcher;
         private EditText mEt;
+        private CustomEditableFactory factory;
 
         EditHolder(View itemView) {
             super(itemView);
@@ -318,9 +323,10 @@ public class RichAdapter extends RecyclerView.Adapter {
             //mEtHolder.add(mEt);
             mEt.setOnClickListener(onClickListener);
             textWatcher = new CustomEditTextListener();
+            factory = new CustomEditableFactory();
             mEt.addTextChangedListener(textWatcher);
             mEt.setOnKeyListener(onKeyListener);
-
+            mEt.setEditableFactory(factory);
         }
 
         public void setData(int pos) {
@@ -356,12 +362,33 @@ public class RichAdapter extends RecyclerView.Adapter {
         }
 
         @Override
-        public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+        public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
             // no op
         }
 
         @Override
-        public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+        public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+            List<SpanModel> spanModels = mData.get(position).getSpanList();
+            if (spanModels.size() == 1) {
+                spanModels.get(0).start = 0;
+                spanModels.get(0).end = charSequence.length() - 1;
+            }
+            if (spanModels.size() > 1) {
+                for(int t = 1;t<spanModels.size();t++) {
+                    spanModels.get(t).start = spanModels.get(t - 1).end;
+                    spanModels.get(t).end = spanModels.get(t).start + count;
+                }
+                int i = 0;
+                for (; i < spanModels.size(); i++) {
+                    if (start >= spanModels.get(i).start && start < spanModels.get(i).end) {
+                        spanModels.get(i).end += count;
+                        break;
+                    }
+                }
+                for (; i < spanModels.size(); i++) {
+                    spanModels.get(i).end += count;
+                }
+            }
             mData.get(position).setSource(charSequence.toString());
         }
 
@@ -371,9 +398,28 @@ public class RichAdapter extends RecyclerView.Adapter {
         }
     }
 
+
     private class HeadHolder extends RecyclerView.ViewHolder {
         HeadHolder(View mHeader) {
             super(mHeader);
+        }
+    }
+
+    private class CustomEditableFactory extends Editable.Factory {
+        private int position;
+
+        void updatePosition(int position) {
+            this.position = position;
+        }
+
+        @Override
+        public Editable newEditable(CharSequence source) {
+            MultiSpannableString spannableString = new MultiSpannableString(source);
+            for (SpanModel item : mData.get(position).getSpanList()) {
+                spannableString.setMultiSpans(item.start, item.end, Spanned
+                        .SPAN_INCLUSIVE_INCLUSIVE, item.mSpans);
+            }
+            return spannableString;
         }
     }
 }

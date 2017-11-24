@@ -18,6 +18,7 @@ import com.study.xuan.editor.R;
 import com.study.xuan.editor.adapter.PanelAdapter;
 import com.study.xuan.editor.model.panel.ModelWrapper;
 import com.study.xuan.editor.model.panel.PanelFactory;
+import com.study.xuan.editor.operate.FontParam;
 import com.study.xuan.editor.operate.FontParamBuilder;
 import com.study.xuan.editor.util.DensityUtil;
 
@@ -125,7 +126,7 @@ public class EditorPanel extends LinearLayout {
         });
     }
 
-    public FontParamBuilder getFontParams() {
-        return paramBuilder;
+    public FontParam getFontParams() {
+        return paramBuilder.build();
     }
 }

@@ -30,4 +30,18 @@ public class ViewType {
     public static final int TYPE_EDIT = 0;                                   //普通编辑框
     public static final int TYPE_IMG = 1;                                    //一行图片
 
+    /**
+     * span样式
+     */
+    public static final float TYPE_SPAN_CHAR = 1.0f;                         //1.字符样式
+                                                                             // {
+    public static final float TYPE_SPAN_CHAR_BOLD = 1.01f;                   //1.01 粗体
+    public static final float TYPE_SPAN_CHAR_ITALICS = 1.02f;                //1.02 斜体
+    public static final float TYPE_SPAN_CHAR_UNDERLINE = 1.03f;              //1.03 下划线
+    public static final float TYPE_SPAN_CHAR_MIDLINE = 1.04f;                //1.04 删除线
+    public static final float TYPE_SPAN_CHAR_BACKGROUND = 1.05f;             //1.05 背景色
+    public static final float TYPE_SPAN_CHAR_SIZE = 1.06f;                   //1.06 字号
+    public static final float TYPE_SPAN_CHAR_COLOR = 1.07f;                  //1.07 字色
+                                                                             // }
+
 }

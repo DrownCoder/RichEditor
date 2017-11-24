@@ -1,5 +1,6 @@
 package com.study.xuan.editor.model;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -12,12 +13,13 @@ public class RichModel {
     public int type;
     public String source;
     public String hint;
-    private List<SpanModel> mSpanList;
+    private List<SpanModel> mParmas;
 
     public RichModel(int type, String s, String df) {
         this.type = type;
         this.source = s;
         this.hint = df;
+        this.mParmas = new LinkedList<>();
     }
 
     public RichModel(int type, String url) {
@@ -32,6 +34,10 @@ public class RichModel {
 
     public void setSource(String s) {
         this.source = s;
+    }
+
+    public List<SpanModel> getSpanList() {
+        return mParmas;
     }
 
 }

@@ -129,4 +129,8 @@ public class RichEditor extends RecyclerView {
             }
         }
     }
+
+    public RichModel getCurIndexModel() {
+        return mDatas.get(mAdapter.index);
+    }
 }

@@ -71,7 +71,7 @@ public class FontParamBuilder{
         return this;
     }
 
-    public FontParam getParam() throws CloneNotSupportedException {
-        return (FontParam) param.clone();
+    public FontParam build() {
+        return param;
     }
 }

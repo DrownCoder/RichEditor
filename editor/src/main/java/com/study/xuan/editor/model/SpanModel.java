@@ -21,5 +21,7 @@ public class SpanModel {
 
     public SpanModel(FontParam param) {
         this.param = param;
+        start = 0;
+        end = 0;
     }
 }

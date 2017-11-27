@@ -5,8 +5,10 @@ import android.graphics.Color;
 import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.Spanned;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,6 +56,7 @@ public class RichAdapter extends RecyclerView.Adapter {
     public interface onScrollIndex {
         void scroll(int pos);
     }
+
     public interface onPhotoDelete {
         void onDelete(String path);
     }
@@ -68,7 +71,6 @@ public class RichAdapter extends RecyclerView.Adapter {
     public void setOnPhotoDelete(onPhotoDelete onPhotoDelete) {
         this.mOnPhotoDelete = onPhotoDelete;
     }
-
 
 
     public RichAdapter(List<RichModel> mData, Context mContext) {
@@ -147,7 +149,7 @@ public class RichAdapter extends RecyclerView.Adapter {
                 mEdit.setFocusable(false);
             }
             ((EditHolder) holder).textWatcher.updatePosition(pos);
-            ((EditHolder) holder).factory.updatePosition(pos);
+            ((EditHolder) holder).filter.updatePosition(pos);
             mEdit.setText(item.source);
             mEdit.setSelection(item.source.length());
             mEdit.setHint(item.hint);
@@ -315,7 +317,7 @@ public class RichAdapter extends RecyclerView.Adapter {
     private class EditHolder extends RecyclerView.ViewHolder {
         private CustomEditTextListener textWatcher;
         private EditText mEt;
-        private CustomEditableFactory factory;
+        private CustomInputFilter filter;
 
         EditHolder(View itemView) {
             super(itemView);
@@ -323,10 +325,10 @@ public class RichAdapter extends RecyclerView.Adapter {
             //mEtHolder.add(mEt);
             mEt.setOnClickListener(onClickListener);
             textWatcher = new CustomEditTextListener();
-            factory = new CustomEditableFactory();
+            filter = new CustomInputFilter();
             mEt.addTextChangedListener(textWatcher);
             mEt.setOnKeyListener(onKeyListener);
-            mEt.setEditableFactory(factory);
+            mEt.setFilters(new InputFilter[]{filter});
         }
 
         public void setData(int pos) {
@@ -368,27 +370,6 @@ public class RichAdapter extends RecyclerView.Adapter {
 
         @Override
         public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
-            List<SpanModel> spanModels = mData.get(position).getSpanList();
-            if (spanModels.size() == 1) {
-                spanModels.get(0).start = 0;
-                spanModels.get(0).end = charSequence.length() - 1;
-            }
-            if (spanModels.size() > 1) {
-                for(int t = 1;t<spanModels.size();t++) {
-                    spanModels.get(t).start = spanModels.get(t - 1).end;
-                    spanModels.get(t).end = spanModels.get(t).start + count;
-                }
-                int i = 0;
-                for (; i < spanModels.size(); i++) {
-                    if (start >= spanModels.get(i).start && start < spanModels.get(i).end) {
-                        spanModels.get(i).end += count;
-                        break;
-                    }
-                }
-                for (; i < spanModels.size(); i++) {
-                    spanModels.get(i).end += count;
-                }
-            }
             mData.get(position).setSource(charSequence.toString());
         }
 
@@ -405,19 +386,92 @@ public class RichAdapter extends RecyclerView.Adapter {
         }
     }
 
-    private class CustomEditableFactory extends Editable.Factory {
+    private class CustomInputFilter implements InputFilter {
         private int position;
+        private StringBuilder builder;
+
+        public CustomInputFilter() {
+            builder = new StringBuilder();
+        }
 
         void updatePosition(int position) {
             this.position = position;
         }
 
+        /**
+         * @param charSequence 即将输入的字符串
+         * @param start        source的start
+         * @param end          source的end start为0，end也可理解为source长度
+         * @param dest         dest输入框中原来的内容
+         * @param dstart       要替换或者添加的起始位置，即光标所在的位置
+         * @param dend         要替换或者添加的终止始位置，若为选择一串字符串进行更改，则为选中字符串 最后一个字符在dest中的位置
+         */
         @Override
-        public Editable newEditable(CharSequence source) {
-            MultiSpannableString spannableString = new MultiSpannableString(source);
+        public CharSequence filter(CharSequence charSequence, int start, int end, Spanned dest, int
+                dstart, int dend) {
+            Log.i("tag", "char:" + charSequence + "-" + start + "-" + end + "-" + dest + "-" +
+                    dstart + "-" + dend);
+            List<SpanModel> spanModels = mData.get(position).getSpanList();
+            int i = 0;
+            if (mData.get(position).isNewSpan) {
+                //新建span样式
+                if (dstart == mData.get(position).source.length()) {
+                    //光标在文段末尾
+                    mData.get(position).newSpan.start = dstart;
+                    mData.get(position).newSpan.end = dstart + end - start;
+                    spanModels.add(mData.get(position).newSpan);
+                    mData.get(position).setNoNewSpan();
+                } else {
+                    //光标在文中
+                    for (; i < spanModels.size(); i++) {
+                        SpanModel spanModel = spanModels.get(i);
+                        if (start > spanModel.end) {
+                            continue;
+                        }
+                        if (start > spanModel.start && start < spanModel.end) {
+                            //光标位置类似：“这是一段文字|光标在中间”
+                            spanModel.end = start;
+                            mData.get(position).newSpan.start = start;
+                            mData.get(position).newSpan.end = start + end - start;
+                            spanModels.add(i, mData.get(position).newSpan);
+                            break;
+                        }
+
+                    }
+                }
+            } else {
+                //保持原有span样式，不进行插入操作
+                for (; i < spanModels.size(); i++) {
+                    SpanModel spanModel = spanModels.get(i);
+                    if (dstart > spanModel.end) {
+                        //光标在一段文字末尾修改，则到下一个span
+                        continue;
+                    }
+                    if (dstart > spanModel.start && dstart <= spanModel.end) {
+                        //光标位置类似：“这是一段文字|光标在中间”
+                        spanModel.end += end - start;
+                        i++;
+                        break;
+                    }
+                }
+                for (; i < spanModels.size(); i++) {
+                    spanModels.get(i).start += end - start;
+                    spanModels.get(i).end += end - start;
+                }
+            }
+            if (dend > dstart) {//字符串减少
+                builder.setLength(0);
+                builder.append(dend);
+                builder.delete(dstart, dend);
+            }else {
+                builder.setLength(0);
+                builder.append(dest);
+                builder.insert(dstart, charSequence);
+            }
+            MultiSpannableString spannableString = new MultiSpannableString(builder);
             for (SpanModel item : mData.get(position).getSpanList()) {
-                spannableString.setMultiSpans(item.start, item.end, Spanned
-                        .SPAN_INCLUSIVE_INCLUSIVE, item.mSpans);
+                spannableString.setMultiSpans(item.mSpans, item.start, item.end, Spanned
+                        .SPAN_EXCLUSIVE_INCLUSIVE);
             }
             return spannableString;
         }

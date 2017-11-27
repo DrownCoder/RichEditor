@@ -1,8 +1,6 @@
 package com.study.xuan.editor.widget.span.factory;
 
-import android.text.style.CharacterStyle;
-import android.text.style.ParagraphStyle;
-import android.text.style.UpdateAppearance;
+import com.study.xuan.editor.model.SpanModel;
 
 import java.util.List;
 
@@ -13,7 +11,7 @@ import java.util.List;
  */
 
 public interface IAbstractSpanFactory {
-    public List<Object> createSpan(String spanCode);
+    public List<Object> createSpan(SpanModel spanModel);
 
     public ICharacterStyleFactory createCharacterFactory();
 

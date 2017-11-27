@@ -6,11 +6,13 @@ import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StrikethroughSpan;
 import android.text.style.UnderlineSpan;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
 import com.study.xuan.editor.model.SpanModel;
 import com.study.xuan.editor.operate.FontParamManager;
+import com.study.xuan.editor.util.KeyboardUtil;
 import com.study.xuan.editor.widget.EditorPanel;
 import com.study.xuan.editor.widget.RichEditor;
 import com.study.xuan.editor.widget.span.factory.AbstractSpanFactory;
@@ -41,19 +43,22 @@ public class MainActivity extends AppCompatActivity {
         spannableString.setSpan(ForegroundColorSpan.wrap(colorSpan), 2, 3, Spanned
                 .SPAN_INCLUSIVE_INCLUSIVE);
         tv.setText(spannableString);*/
-        //mEditor.setOnClickListener(onClickListener);
-    }
-
-    View.OnClickListener onClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            if (paramManager.needNewSpan(mPanel.getFontParams())) {//需要新生产span样式
-                SpanModel spanModel = new SpanModel(paramManager.createNewParam());
-                mEditor.getCurIndexModel().getSpanList().add(spanModel);
-            } else {
-
+        mPanel.setmStateChange(new EditorPanel.onPanelStateChange() {
+            @Override
+            public void onStateChanged(boolean visiable) {
+                if (!visiable) {
+                    if (paramManager.needNewSpan(mPanel.getFontParams())) {//需要新生产span样式
+                        SpanModel spanModel = new SpanModel(paramManager.createNewParam());
+                        spanFactory.createSpan(spanModel);
+                        mEditor.getCurIndexModel().setNewSpan(spanModel);
+                    } else {
+                        mEditor.getCurIndexModel().setNoNewSpan();
+                    }
+                }else{
+                    KeyboardUtil.closeKeyboard(MainActivity.this);
+                }
             }
-        }
-    };
+        });
+    }
 
 }

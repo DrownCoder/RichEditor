@@ -48,6 +48,16 @@ public class EditorPanel extends LinearLayout {
 
     private FontParamBuilder paramBuilder;
 
+    public interface onPanelStateChange {
+        void onStateChanged(boolean state);
+    }
+
+    private onPanelStateChange mStateChange;
+
+    public void setmStateChange(onPanelStateChange mStateChange) {
+        this.mStateChange = mStateChange;
+    }
+
     public EditorPanel(@NonNull Context context) {
         this(context, null);
     }
@@ -73,6 +83,9 @@ public class EditorPanel extends LinearLayout {
         @Override
         public void onClick(View v) {
             v.setSelected(!v.isSelected());
+            if (mStateChange != null) {
+                mStateChange.onStateChanged(v.isSelected());
+            }
             int i = v.getId();
             if (i == R.id.iv_font) {
                 if (mFontDatas.size() == 0) {

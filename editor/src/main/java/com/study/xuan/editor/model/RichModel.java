@@ -14,6 +14,9 @@ public class RichModel {
     public String source;
     public String hint;
     private List<SpanModel> mParmas;
+    public boolean isNewSpan;//是否有新的span
+    public SpanModel newSpan;
+
 
     public RichModel(int type, String s, String df) {
         this.type = type;
@@ -38,6 +41,16 @@ public class RichModel {
 
     public List<SpanModel> getSpanList() {
         return mParmas;
+    }
+
+    public void setNewSpan(SpanModel model) {
+        this.isNewSpan = true;
+        this.newSpan = model;
+    }
+
+    public void setNoNewSpan() {
+        this.isNewSpan = false;
+        this.newSpan = null;
     }
 
 }

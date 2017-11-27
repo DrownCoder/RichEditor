@@ -1,5 +1,7 @@
 package com.study.xuan.editor.operate;
 
+import static com.study.xuan.editor.util.EditorUtil.getBooleanString;
+
 /**
  * Author : xuan.
  * Date : 2017/11/21.
@@ -38,10 +40,24 @@ public class FontParam implements Cloneable {
                 getBooleanString(isFontBac)+fontSize+fontColor+"";
     }
 
-    /**
-     * true返回1，false返回0
-     */
-    private int getBooleanString(boolean b) {
-        return b ? 1 : 0;
+    public String getParamCodes() {
+        return getCharCodes() + "|" + getParagraphCodes() + "|" + getUpdateCodes();
+    }
+
+    private String getUpdateCodes() {
+        return "";
+    }
+
+    private String getParagraphCodes() {
+        return "";
+    }
+
+    private String getCharCodes() {
+        return "1"
+                +getBooleanString(isBold)
+                +getBooleanString(isItalics)
+                +getBooleanString(isUnderLine)
+                +getBooleanString(isCenterLine)
+                +getBooleanString(isFontBac);
     }
 }

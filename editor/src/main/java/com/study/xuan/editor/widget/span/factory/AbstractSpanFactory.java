@@ -1,5 +1,7 @@
 package com.study.xuan.editor.widget.span.factory;
 
+import com.study.xuan.editor.model.SpanModel;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,9 +23,10 @@ public class AbstractSpanFactory implements IAbstractSpanFactory {
      * 3开头表示update类型
      */
     @Override
-    public List<Object> createSpan(String spanCode) {
+    public List<Object> createSpan(SpanModel spanModel) {
+        String spanCode = spanModel.param.getParamCodes();
         List<Object> spans = new ArrayList<>();
-        String[] codes = spanCode.split("|");
+        String[] codes = spanCode.split("\\|");
         for (String code : codes) {
             if (code.startsWith("1")) {
                 createCharacterFactory();
@@ -36,6 +39,7 @@ public class AbstractSpanFactory implements IAbstractSpanFactory {
                 spans.addAll(updateFatory.createUpdateSpans(code));
             }
         }
+        spanModel.mSpans = spans;
         return spans;
     }
 

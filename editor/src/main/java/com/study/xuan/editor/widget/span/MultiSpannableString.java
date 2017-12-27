@@ -11,6 +11,9 @@ import java.util.List;
  */
 
 public class MultiSpannableString extends SpannableStringBuilder {
+    public MultiSpannableString() {
+    }
+
     public MultiSpannableString(CharSequence source) {
         super(source);
     }

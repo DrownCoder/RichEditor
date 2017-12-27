@@ -25,15 +25,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static android.graphics.drawable.GradientDrawable.OVAL;
-import static com.study.xuan.editor.constvalue.ViewType.FONT_BACKGROUND;
-import static com.study.xuan.editor.constvalue.ViewType.FONT_BOLD;
-import static com.study.xuan.editor.constvalue.ViewType.FONT_ITALICS;
-import static com.study.xuan.editor.constvalue.ViewType.FONT_MIDLINE;
-import static com.study.xuan.editor.constvalue.ViewType.FONT_UNDERLINE;
-import static com.study.xuan.editor.constvalue.ViewType.PANEL_FONT_COLOR;
-import static com.study.xuan.editor.constvalue.ViewType.PANEL_FONT_SIZE;
-import static com.study.xuan.editor.constvalue.ViewType.PANEL_FONT_STYLE;
-import static com.study.xuan.editor.constvalue.ViewType.PANEL_HEADER;
+import static com.study.xuan.editor.app.ViewType.FONT_BACKGROUND;
+import static com.study.xuan.editor.app.ViewType.FONT_BOLD;
+import static com.study.xuan.editor.app.ViewType.FONT_ITALICS;
+import static com.study.xuan.editor.app.ViewType.FONT_MIDLINE;
+import static com.study.xuan.editor.app.ViewType.FONT_UNDERLINE;
+import static com.study.xuan.editor.app.ViewType.PANEL_FONT_COLOR;
+import static com.study.xuan.editor.app.ViewType.PANEL_FONT_SIZE;
+import static com.study.xuan.editor.app.ViewType.PANEL_FONT_STYLE;
+import static com.study.xuan.editor.app.ViewType.PANEL_HEADER;
 
 /**
  * Author : xuan.

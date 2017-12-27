@@ -26,8 +26,8 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.study.xuan.editor.constvalue.ViewType.TYPE_EDIT;
-import static com.study.xuan.editor.constvalue.ViewType.TYPE_IMG;
+import static com.study.xuan.editor.app.ViewType.TYPE_EDIT;
+import static com.study.xuan.editor.app.ViewType.TYPE_IMG;
 
 /**
  * Author : xuan.
@@ -388,14 +388,20 @@ public class RichAdapter extends RecyclerView.Adapter {
 
     private class CustomInputFilter implements InputFilter {
         private int position;
-        private StringBuilder builder;
+        private List<SpanModel> spanModels;
+        private RichModel richModel;
+        private MultiSpannableString spannableString;
+        //当前span样式
+        private SpanModel nowSpanModel;
 
         public CustomInputFilter() {
-            builder = new StringBuilder();
+            spannableString = new MultiSpannableString();
         }
 
         void updatePosition(int position) {
             this.position = position;
+            richModel = mData.get(position);
+            spanModels = richModel.getSpanList();
         }
 
         /**
@@ -409,18 +415,18 @@ public class RichAdapter extends RecyclerView.Adapter {
         @Override
         public CharSequence filter(CharSequence charSequence, int start, int end, Spanned dest, int
                 dstart, int dend) {
+            //输入后要做两步，1.保存新的样式2.设置新的样式
             Log.i("tag", "char:" + charSequence + "-" + start + "-" + end + "-" + dest + "-" +
                     dstart + "-" + dend);
-            List<SpanModel> spanModels = mData.get(position).getSpanList();
             int i = 0;
-            if (mData.get(position).isNewSpan) {
+            if (richModel.isNewSpan) {
                 //新建span样式
-                if (dstart == mData.get(position).source.length()) {
+                nowSpanModel = richModel.newSpan;
+                if (dstart == richModel.source.length()) {
                     //光标在文段末尾
-                    mData.get(position).newSpan.start = dstart;
-                    mData.get(position).newSpan.end = dstart + end - start;
-                    spanModels.add(mData.get(position).newSpan);
-                    mData.get(position).setNoNewSpan();
+                    nowSpanModel.start = dstart;
+                    nowSpanModel.end = dstart + end - start;
+                    spanModels.add(nowSpanModel);
                 } else {
                     //光标在文中
                     for (; i < spanModels.size(); i++) {
@@ -431,9 +437,9 @@ public class RichAdapter extends RecyclerView.Adapter {
                         if (start > spanModel.start && start < spanModel.end) {
                             //光标位置类似：“这是一段文字|光标在中间”
                             spanModel.end = start;
-                            mData.get(position).newSpan.start = start;
-                            mData.get(position).newSpan.end = start + end - start;
-                            spanModels.add(i, mData.get(position).newSpan);
+                            nowSpanModel.start = start;
+                            nowSpanModel.end = start + end - start;
+                            spanModels.add(i, nowSpanModel);
                             break;
                         }
 
@@ -449,6 +455,7 @@ public class RichAdapter extends RecyclerView.Adapter {
                     }
                     if (dstart > spanModel.start && dstart <= spanModel.end) {
                         //光标位置类似：“这是一段文字|光标在中间”
+                        nowSpanModel = spanModel;
                         spanModel.end += end - start;
                         i++;
                         break;
@@ -459,18 +466,11 @@ public class RichAdapter extends RecyclerView.Adapter {
                     spanModels.get(i).end += end - start;
                 }
             }
-            if (dend > dstart) {//字符串减少
-                builder.setLength(0);
-                builder.append(dend);
-                builder.delete(dstart, dend);
-            }else {
-                builder.setLength(0);
-                builder.append(dest);
-                builder.insert(dstart, charSequence);
-            }
-            MultiSpannableString spannableString = new MultiSpannableString(builder);
-            for (SpanModel item : mData.get(position).getSpanList()) {
-                spannableString.setMultiSpans(item.mSpans, item.start, item.end, Spanned
+            spannableString.clear();
+            spannableString.clearSpans();
+            spannableString.append(charSequence);
+            if (nowSpanModel != null) {
+                spannableString.setMultiSpans(nowSpanModel.mSpans, 0, charSequence.length(), Spanned
                         .SPAN_EXCLUSIVE_INCLUSIVE);
             }
             return spannableString;

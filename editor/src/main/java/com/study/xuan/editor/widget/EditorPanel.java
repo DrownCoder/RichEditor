@@ -1,7 +1,6 @@
 package com.study.xuan.editor.widget;
 
 import android.content.Context;
-import android.graphics.Rect;
 import android.support.annotation.AttrRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -20,14 +18,13 @@ import com.study.xuan.editor.model.panel.ModelWrapper;
 import com.study.xuan.editor.model.panel.PanelFactory;
 import com.study.xuan.editor.operate.FontParam;
 import com.study.xuan.editor.operate.FontParamBuilder;
-import com.study.xuan.editor.util.DensityUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.study.xuan.editor.constvalue.ViewType.PANEL_FONT_COLOR;
-import static com.study.xuan.editor.constvalue.ViewType.PANEL_FONT_SIZE;
-import static com.study.xuan.editor.constvalue.ViewType.PANEL_HEADER;
+import static com.study.xuan.editor.app.ViewType.PANEL_FONT_COLOR;
+import static com.study.xuan.editor.app.ViewType.PANEL_FONT_SIZE;
+import static com.study.xuan.editor.app.ViewType.PANEL_HEADER;
 
 /**
  * Author : xuan.

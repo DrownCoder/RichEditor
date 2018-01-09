@@ -1,5 +1,7 @@
 package com.study.xuan.editor.util;
 
+import android.content.Context;
+
 /**
  * Author : xuan.
  * Date : 2017/11/27.
@@ -19,5 +21,18 @@ public class EditorUtil {
      */
     public static boolean getCharBoolean(char c) {
         return c != '0';
+    }
+
+    /**
+     * 获取资源中的颜色
+     */
+    public static int getResourcesColor(Context context,int color) {
+
+        int ret = 0x00ffffff;
+        try {
+            ret = context.getResources().getColor(color);
+        } catch (Exception e) {
+        }
+        return ret;
     }
 }

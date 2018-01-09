@@ -66,6 +66,9 @@ public class FontParamBuilder{
         return this;
     }
 
+    /**
+     * 设置字的字色
+     */
     public FontParamBuilder fontColor(int fontColor) {
         param.fontColor = fontColor;
         return this;
@@ -73,5 +76,19 @@ public class FontParamBuilder{
 
     public FontParam build() {
         return param;
+    }
+
+    /**
+     * 获得字的颜色
+     */
+    public int getFontColor() {
+        return param.fontColor;
+    }
+
+    /**
+     * 获得字的字号
+     */
+    public int getFontSize() {
+        return param.fontSize;
     }
 }

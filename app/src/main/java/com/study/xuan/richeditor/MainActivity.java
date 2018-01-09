@@ -2,13 +2,6 @@ package com.study.xuan.richeditor;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Spanned;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.StrikethroughSpan;
-import android.text.style.UnderlineSpan;
-import android.view.MotionEvent;
-import android.view.View;
-import android.widget.TextView;
 
 import com.study.xuan.editor.model.SpanModel;
 import com.study.xuan.editor.operate.FontParamManager;
@@ -32,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
         mPanel = (EditorPanel) findViewById(R.id.panel);
         paramManager = new FontParamManager();
         spanFactory = new AbstractSpanFactory();
+
         /*TextView tv = (TextView) findViewById(R.id.tv_test);
         MultiSpannableString spannableString = new MultiSpannableString("测试测试");
         UnderlineSpan span = new UnderlineSpan();
@@ -43,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         spannableString.setSpan(ForegroundColorSpan.wrap(colorSpan), 2, 3, Spanned
                 .SPAN_INCLUSIVE_INCLUSIVE);
         tv.setText(spannableString);*/
-        mPanel.setmStateChange(new EditorPanel.onPanelStateChange() {
+        mPanel.setStateChange(new EditorPanel.onPanelStateChange() {
             @Override
             public void onStateChanged(boolean visiable) {
                 if (!visiable) {

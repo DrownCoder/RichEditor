@@ -1,4 +1,4 @@
-package com.study.xuan.editor.app;
+package com.study.xuan.editor.common;
 
 /**
  * Author : xuan.

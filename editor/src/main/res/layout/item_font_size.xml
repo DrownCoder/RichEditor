@@ -25,7 +25,7 @@
         android:textSize="18dp"
         android:visibility="visible"
         />
-    <ImageView
+    <com.study.xuan.editor.widget.CircleImageView
         android:id="@+id/iv_show"
         android:layout_width="50dp"
         android:layout_height="50dp"

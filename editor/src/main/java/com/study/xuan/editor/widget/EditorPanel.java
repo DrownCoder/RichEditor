@@ -22,9 +22,9 @@ import com.study.xuan.editor.operate.FontParamBuilder;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.study.xuan.editor.app.ViewType.PANEL_FONT_COLOR;
-import static com.study.xuan.editor.app.ViewType.PANEL_FONT_SIZE;
-import static com.study.xuan.editor.app.ViewType.PANEL_HEADER;
+import static com.study.xuan.editor.common.ViewType.PANEL_FONT_COLOR;
+import static com.study.xuan.editor.common.ViewType.PANEL_FONT_SIZE;
+import static com.study.xuan.editor.common.ViewType.PANEL_HEADER;
 
 /**
  * Author : xuan.
@@ -51,7 +51,7 @@ public class EditorPanel extends LinearLayout {
 
     private onPanelStateChange mStateChange;
 
-    public void setmStateChange(onPanelStateChange mStateChange) {
+    public void setStateChange(onPanelStateChange mStateChange) {
         this.mStateChange = mStateChange;
     }
 

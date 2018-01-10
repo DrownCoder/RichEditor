@@ -27,15 +27,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static android.graphics.drawable.GradientDrawable.OVAL;
-import static com.study.xuan.editor.common.ViewType.FONT_BACKGROUND;
-import static com.study.xuan.editor.common.ViewType.FONT_BOLD;
-import static com.study.xuan.editor.common.ViewType.FONT_ITALICS;
-import static com.study.xuan.editor.common.ViewType.FONT_MIDLINE;
-import static com.study.xuan.editor.common.ViewType.FONT_UNDERLINE;
-import static com.study.xuan.editor.common.ViewType.PANEL_FONT_COLOR;
-import static com.study.xuan.editor.common.ViewType.PANEL_FONT_SIZE;
-import static com.study.xuan.editor.common.ViewType.PANEL_FONT_STYLE;
-import static com.study.xuan.editor.common.ViewType.PANEL_HEADER;
+import static com.study.xuan.editor.common.Const.FONT_BACKGROUND;
+import static com.study.xuan.editor.common.Const.FONT_BOLD;
+import static com.study.xuan.editor.common.Const.FONT_ITALICS;
+import static com.study.xuan.editor.common.Const.FONT_MIDLINE;
+import static com.study.xuan.editor.common.Const.FONT_UNDERLINE;
+import static com.study.xuan.editor.common.Const.PANEL_FONT_COLOR;
+import static com.study.xuan.editor.common.Const.PANEL_FONT_SIZE;
+import static com.study.xuan.editor.common.Const.PANEL_FONT_STYLE;
+import static com.study.xuan.editor.common.Const.PANEL_HEADER;
 
 /**
  * Author : xuan.
@@ -259,7 +259,8 @@ public class PanelAdapter extends RecyclerView.Adapter {
                         mSizeViews.remove(v);
                         ((TextView) v).getPaint().setFakeBoldText(false);
                     }
-                    builder.fontSize(Integer.valueOf(v.getTag().toString()));
+                    builder.fontSize(DensityUtil.sp2px(mContext, Integer.valueOf(v.getTag()
+                            .toString())));
                 } else {//字色
                     if (v.isSelected()) {
                         clearAllColorSelected();

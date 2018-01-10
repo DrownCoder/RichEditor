@@ -6,7 +6,9 @@ package com.study.xuan.editor.common;
  * Description :全局类型
  */
 
-public class ViewType {
+public class Const {
+    public static final String BASE_LOG = "RichEditor";                     //Log信息
+
     /**
      * panel面板类型
      */
@@ -23,12 +25,17 @@ public class ViewType {
     public static final int FONT_UNDERLINE = 2;                             //下划线
     public static final int FONT_MIDLINE = 3;                               //中划线
     public static final int FONT_BACKGROUND = 4;                            //背景色
+    public static final int FONT_SIZE = 5;                                  //字号
+    public static final int FONT_FOREGROUND = 6;                            //字色
 
     /**
      * 数据样式
      */
     public static final int TYPE_EDIT = 0;                                   //普通编辑框
     public static final int TYPE_IMG = 1;                                    //一行图片
+
+    public static final String CODE_CHAR_SEPARATOR = "-";                    //char类型的code的分隔符
+    public static final String CODE_FONT_SEPARATOR = "|";                    //param的分隔符
 
     /**
      * span样式

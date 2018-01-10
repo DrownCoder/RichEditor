@@ -46,7 +46,7 @@ public class AbstractSpanFactory implements IAbstractSpanFactory {
     @Override
     public ICharacterStyleFactory createCharacterFactory() {
         if (charFactory == null) {
-            charFactory = new CharactorFactory();
+            charFactory = new CharacterFactory();
         }
         return charFactory;
     }

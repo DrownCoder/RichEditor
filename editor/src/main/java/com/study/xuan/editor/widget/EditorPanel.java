@@ -22,9 +22,9 @@ import com.study.xuan.editor.operate.FontParamBuilder;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.study.xuan.editor.common.ViewType.PANEL_FONT_COLOR;
-import static com.study.xuan.editor.common.ViewType.PANEL_FONT_SIZE;
-import static com.study.xuan.editor.common.ViewType.PANEL_HEADER;
+import static com.study.xuan.editor.common.Const.PANEL_FONT_COLOR;
+import static com.study.xuan.editor.common.Const.PANEL_FONT_SIZE;
+import static com.study.xuan.editor.common.Const.PANEL_HEADER;
 
 /**
  * Author : xuan.

@@ -1,5 +1,7 @@
 package com.study.xuan.editor.operate;
 
+import com.study.xuan.editor.common.Const;
+
 import static com.study.xuan.editor.util.EditorUtil.getBooleanString;
 
 /**
@@ -35,13 +37,14 @@ public class FontParam implements Cloneable {
      */
     @Override
     public String toString() {
-        return getBooleanString(isBold)+getBooleanString(isItalics)+
-                getBooleanString(isUnderLine)+getBooleanString(isCenterLine)+
-                getBooleanString(isFontBac)+fontSize+fontColor+"";
+        return getBooleanString(isBold) + getBooleanString(isItalics) +
+                getBooleanString(isUnderLine) + getBooleanString(isCenterLine) +
+                getBooleanString(isFontBac) + fontSize + fontColor;
     }
 
     public String getParamCodes() {
-        return getCharCodes() + "|" + getParagraphCodes() + "|" + getUpdateCodes();
+        return getCharCodes() + Const.CODE_FONT_SEPARATOR + getParagraphCodes() + Const
+                .CODE_FONT_SEPARATOR + getUpdateCodes();
     }
 
     private String getUpdateCodes() {
@@ -52,12 +55,17 @@ public class FontParam implements Cloneable {
         return "";
     }
 
+    /**
+     * 参数对应转换为code
+     */
     private String getCharCodes() {
         return "1"
-                +getBooleanString(isBold)
-                +getBooleanString(isItalics)
-                +getBooleanString(isUnderLine)
-                +getBooleanString(isCenterLine)
-                +getBooleanString(isFontBac);
+                + getBooleanString(isBold)
+                + getBooleanString(isItalics)
+                + getBooleanString(isUnderLine)
+                + getBooleanString(isCenterLine)
+                + getBooleanString(isFontBac)
+                + Const.CODE_CHAR_SEPARATOR + fontSize
+                + Const.CODE_CHAR_SEPARATOR + fontColor;
     }
 }

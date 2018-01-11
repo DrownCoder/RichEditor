@@ -1,8 +1,6 @@
 package com.study.xuan.editor.adapter;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +18,6 @@ import com.study.xuan.editor.model.panel.SingleText;
 import com.study.xuan.editor.operate.FontParamBuilder;
 import com.study.xuan.editor.util.DensityUtil;
 import com.study.xuan.editor.util.EditorUtil;
-import com.study.xuan.editor.widget.CircleImageView;
 import com.study.xuan.shapebuilder.shape.ShapeBuilder;
 
 import java.util.ArrayList;
@@ -44,6 +41,7 @@ import static com.study.xuan.editor.common.Const.PANEL_HEADER;
  */
 
 public class PanelAdapter extends RecyclerView.Adapter {
+    public static final String TAG = "PanelAdapter";
     private List<ModelWrapper> mDatas;
     private Context mContext;
     private FontParamBuilder builder;
@@ -52,7 +50,6 @@ public class PanelAdapter extends RecyclerView.Adapter {
     private int FONT_COLOR_PADDING;
     private LinearLayout.LayoutParams colorParams;
 
-    private List<View> mColorViews;
     private List<TextView> mSizeViews;
 
 
@@ -60,7 +57,6 @@ public class PanelAdapter extends RecyclerView.Adapter {
         this.mDatas = mDatas;
         this.mContext = context;
         builder = paramBuilder;
-        mColorViews = new ArrayList<>();
         mSizeViews = new ArrayList<>();
         FONT_SIZE_PADDING = DensityUtil.dp2px(mContext, 15);
         FONT_COLOR_PADDING = DensityUtil.dp2px(mContext, 1.5f);
@@ -147,7 +143,7 @@ public class PanelAdapter extends RecyclerView.Adapter {
                 scrollPanelHolder.mScrollPanel.addView(item);
             }
             if (builder.getFontSize() != 0) {
-                scrollPanelHolder.mTvShow.setText(String.valueOf(builder.getFontSize()));
+                scrollPanelHolder.mTvShow.setText(String.valueOf((int)DensityUtil.px2sp(mContext,builder.getFontSize())));
             }
         }
     }
@@ -163,24 +159,27 @@ public class PanelAdapter extends RecyclerView.Adapter {
 
             scrollPanelHolder.mScrollPanel.removeAllViews();
             for (SingleComponent component : fontScorll.items) {
+                int color = EditorUtil.getResourcesColor(mContext, ((SingleImg)component).styleType);
                 ImageView item = new ImageView(mContext);
                 item.setImageResource(((SingleImg) component).drawablePath);
                 item.setLayoutParams(colorParams);
                 item.setPadding(0, 0, FONT_COLOR_PADDING / 2, FONT_COLOR_PADDING);
                 item.setScaleType(ImageView.ScaleType.FIT_XY);
                 item.setOnClickListener(onClickListener);
-                item.setTag(((SingleImg) component).styleType);
-                if (((SingleImg) component).styleType == builder.getFontColor()) {
+                item.setTag(color);
+                if (color == builder.getFontColor()) {
                     ShapeBuilder.create()
                             .Type(OVAL)
-                            .Stroke(4, EditorUtil.getResourcesColor
-                                    (mContext, builder.getFontColor()))
+                            .Stroke(4, color)
                             .build(item);
                 }
                 scrollPanelHolder.mScrollPanel.addView(item);
             }
             if (builder.getFontColor() != 0) {
-                scrollPanelHolder.mIvShow.setImageResource(builder.getFontColor());
+                ShapeBuilder.create()
+                        .Type(OVAL)
+                        .Soild(builder.getFontColor())
+                        .build(scrollPanelHolder.mIvShow);
             }
         }
     }
@@ -221,7 +220,7 @@ public class PanelAdapter extends RecyclerView.Adapter {
     private class ScrollPanelHolder extends RecyclerView.ViewHolder {
         TextView mTvFloorName;
         TextView mTvShow;
-        CircleImageView mIvShow;
+        ImageView mIvShow;
         LinearLayout mScrollPanel;
 
         ScrollPanelHolder(View root) {
@@ -262,43 +261,12 @@ public class PanelAdapter extends RecyclerView.Adapter {
                     builder.fontSize(DensityUtil.sp2px(mContext, Integer.valueOf(v.getTag()
                             .toString())));
                 } else {//字色
-                    if (v.isSelected()) {
-                        clearAllColorSelected();
-                        v.setSelected(true);
-                        ShapeBuilder.create()
-                                .Type(OVAL)
-                                .Stroke(4, EditorUtil.getResourcesColor(mContext, Integer
-                                        .parseInt(v.getTag().toString())))
-                                .build(v);
-                        mColorViews.add(v);
-                    } else {
-                        mColorViews.remove(v);
-                        setBactGround(v, null);
-                    }
                     builder.fontColor(Integer.valueOf(v.getTag().toString()));
                 }
             }
             notifyDataSetChanged();
         }
     };
-
-    private void setBactGround(View v, Drawable drawable) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            v.setBackground(drawable);
-        } else {
-            v.setBackgroundDrawable(drawable);
-        }
-    }
-
-    /**
-     * 清除所有选中的color
-     */
-    private void clearAllColorSelected() {
-        for (View item : mColorViews) {
-            item.setSelected(false);
-            setBactGround(item, null);
-        }
-    }
 
     /**
      * 清楚所有选中的size

@@ -471,7 +471,7 @@ public class RichAdapter extends RecyclerView.Adapter {
             spannableString.append(charSequence);
             if (nowSpanModel != null) {
                 spannableString.setMultiSpans(nowSpanModel.mSpans, 0, charSequence.length(), Spanned
-                        .SPAN_EXCLUSIVE_INCLUSIVE);
+                        .SPAN_EXCLUSIVE_EXCLUSIVE);
             }
             return spannableString;
         }

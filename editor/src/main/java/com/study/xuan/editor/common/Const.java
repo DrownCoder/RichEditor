@@ -34,7 +34,7 @@ public class Const {
     public static final int TYPE_EDIT = 0;                                   //普通编辑框
     public static final int TYPE_IMG = 1;                                    //一行图片
 
-    public static final String CODE_CHAR_SEPARATOR = "-";                    //char类型的code的分隔符
+    public static final String CODE_CHAR_SEPARATOR = "%";                    //char类型的code的分隔符
     public static final String CODE_FONT_SEPARATOR = "|";                    //param的分隔符
 
     /**

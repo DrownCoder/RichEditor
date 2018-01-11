@@ -1,5 +1,6 @@
 package com.study.xuan.editor.widget.span.factory;
 
+import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.CharacterStyle;
 import android.text.style.ForegroundColorSpan;
@@ -25,8 +26,8 @@ import static android.graphics.Typeface.ITALIC;
 
 public class CharacterFactory implements ICharacterStyleFactory {
     /**
-     * code 类似于10101-932948-12
-     * 用'-'分隔
+     * code 类似于10101%932948%12
+     * 用'%'分隔
      * 1.第一个表示粗体、斜体、下划线、中划线、背景色对应于前五位01表示false/true
      * 2.第二个表示字色
      * 3.第三个表示字号
@@ -58,6 +59,7 @@ public class CharacterFactory implements ICharacterStyleFactory {
      */
     private void createSizeSpan(String code, List<CharacterStyle> characterStyles) {
         try {
+            if (TextUtils.isEmpty(code) || Integer.parseInt(code) <= 0) return;
             AbsoluteSizeSpan sizeSpan = new AbsoluteSizeSpan(Integer.parseInt(code));
             characterStyles.add(sizeSpan);
         } catch (NumberFormatException e) {
@@ -70,6 +72,7 @@ public class CharacterFactory implements ICharacterStyleFactory {
      */
     private void createColorSpan(String code, List<CharacterStyle> characterStyles) {
         try {
+            if (TextUtils.isEmpty(code) || Integer.parseInt(code) == 0) return;
             ForegroundColorSpan foregroundRightColor = new ForegroundColorSpan(Integer.parseInt
                     (code));
             characterStyles.add(foregroundRightColor);

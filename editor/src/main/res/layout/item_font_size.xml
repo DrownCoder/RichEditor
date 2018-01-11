@@ -25,12 +25,12 @@
         android:textSize="18dp"
         android:visibility="visible"
         />
-    <com.study.xuan.editor.widget.CircleImageView
+    <ImageView
         android:id="@+id/iv_show"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
         android:visibility="gone"
-        android:padding="10dp"
+        android:layout_margin="10dp"
         android:layout_alignParentRight="true"
         />
     <HorizontalScrollView

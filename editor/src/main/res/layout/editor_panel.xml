@@ -35,6 +35,15 @@
                 android:scaleType="centerInside"
                 android:src="@drawable/font_select"
                 />
+
+            <ImageView
+                android:id="@+id/iv_refer"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:padding="11.5dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/refer_select"
+                />
         </LinearLayout>
     </HorizontalScrollView>
 

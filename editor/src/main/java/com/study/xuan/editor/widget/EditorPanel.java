@@ -14,8 +14,12 @@ import android.widget.LinearLayout;
 
 import com.study.xuan.editor.R;
 import com.study.xuan.editor.adapter.PanelAdapter;
+import com.study.xuan.editor.common.Const;
 import com.study.xuan.editor.model.panel.ModelWrapper;
 import com.study.xuan.editor.model.panel.PanelFactory;
+import com.study.xuan.editor.model.panel.state.BasePanelEvent;
+import com.study.xuan.editor.model.panel.state.FontChangeEvent;
+import com.study.xuan.editor.model.panel.state.ParagraphChangeEvent;
 import com.study.xuan.editor.operate.FontParam;
 import com.study.xuan.editor.operate.FontParamBuilder;
 
@@ -35,6 +39,7 @@ import static com.study.xuan.editor.common.Const.PANEL_HEADER;
 public class EditorPanel extends LinearLayout {
     private Context mContext;
     private ImageView mIvFont;
+    private ImageView mIvRefer;
 
     private RecyclerView mPanel;
     private PanelAdapter mPanelAdapter;
@@ -46,7 +51,7 @@ public class EditorPanel extends LinearLayout {
     private FontParamBuilder paramBuilder;
 
     public interface onPanelStateChange {
-        void onStateChanged(boolean state);
+        void onStateChanged(BasePanelEvent state);
     }
 
     private onPanelStateChange mStateChange;
@@ -74,16 +79,15 @@ public class EditorPanel extends LinearLayout {
 
     private void initEvent() {
         mIvFont.setOnClickListener(onClickListener);
+        mIvRefer.setOnClickListener(onClickListener);
     }
 
     View.OnClickListener onClickListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
             v.setSelected(!v.isSelected());
-            if (mStateChange != null) {
-                mStateChange.onStateChanged(v.isSelected());
-            }
             int i = v.getId();
+            BasePanelEvent state = null;
             if (i == R.id.iv_font) {
                 if (mFontDatas.size() == 0) {
                     PanelFactory.createFontPanel(mFontDatas);
@@ -91,12 +95,20 @@ public class EditorPanel extends LinearLayout {
                     mPanelAdapter.notifyDataSetChanged();
                 }
                 mPanel.setVisibility(v.isSelected() ? VISIBLE : GONE);
+                state = new FontChangeEvent(v.isSelected());
+            } else if (i == R.id.iv_refer) {
+                state = new ParagraphChangeEvent(v.isSelected());
+                ((ParagraphChangeEvent)state).pType = Const.PARAGRAPH_REFER;
+            }
+            if (mStateChange != null) {
+                mStateChange.onStateChanged(state);
             }
         }
     };
 
     private void initView(View root) {
         mIvFont = root.findViewById(R.id.iv_font);
+        mIvRefer = root.findViewById(R.id.iv_refer);
         mPanel = root.findViewById(R.id.rcy_panel);
         GridLayoutManager manager = new GridLayoutManager(mContext, 5){
             @Override

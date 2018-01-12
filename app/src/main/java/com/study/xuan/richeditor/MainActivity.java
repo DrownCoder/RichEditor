@@ -2,8 +2,13 @@ package com.study.xuan.richeditor;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
+import com.study.xuan.editor.common.Const;
 import com.study.xuan.editor.model.SpanModel;
+import com.study.xuan.editor.model.panel.state.BasePanelEvent;
+import com.study.xuan.editor.model.panel.state.FontChangeEvent;
+import com.study.xuan.editor.model.panel.state.ParagraphChangeEvent;
 import com.study.xuan.editor.operate.FontParamManager;
 import com.study.xuan.editor.util.KeyboardUtil;
 import com.study.xuan.editor.widget.EditorPanel;
@@ -39,20 +44,38 @@ public class MainActivity extends AppCompatActivity {
         tv.setText(spannableString);*/
         mPanel.setStateChange(new EditorPanel.onPanelStateChange() {
             @Override
-            public void onStateChanged(boolean visiable) {
-                if (!visiable) {
-                    if (paramManager.needNewSpan(mPanel.getFontParams())) {//需要新生产span样式
-                        SpanModel spanModel = new SpanModel(paramManager.createNewParam());
-                        spanFactory.createSpan(spanModel);
-                        mEditor.getCurIndexModel().setNewSpan(spanModel);
-                    } else {
-                        mEditor.getCurIndexModel().setNoNewSpan();
-                    }
-                }else{
-                    KeyboardUtil.closeKeyboard(MainActivity.this);
+            public void onStateChanged(BasePanelEvent state) {
+                if (state instanceof FontChangeEvent) {
+                    onFontEVent(state.isSelected);
+                } else if (state instanceof ParagraphChangeEvent) {
+                    onParagraphEvent(((ParagraphChangeEvent) state).pType);
                 }
             }
         });
+    }
+
+    private void onParagraphEvent(int pType) {
+        switch (pType) {
+            case Const.PARAGRAPH_REFER:
+                //引用
+                Log.i(Const.BASE_LOG, "引用");
+                break;
+        }
+
+    }
+
+    private void onFontEVent(boolean isShow) {
+        if (!isShow) {
+            if (paramManager.needNewSpan(mPanel.getFontParams())) {//需要新生产span样式
+                SpanModel spanModel = new SpanModel(paramManager.createNewParam());
+                spanFactory.createSpan(spanModel);
+                mEditor.getCurIndexModel().setNewSpan(spanModel);
+            } else {
+                mEditor.getCurIndexModel().setNoNewSpan();
+            }
+        }else{
+            KeyboardUtil.closeKeyboard(MainActivity.this);
+        }
     }
 
 }

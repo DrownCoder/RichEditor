@@ -16,6 +16,7 @@ public class RichModel {
     private List<SpanModel> mParmas;
     public boolean isNewSpan;//是否有新的span
     public SpanModel newSpan;
+    public boolean isParagraphStyle;//是否有段落格式
 
 
     public RichModel(int type, String s, String df) {

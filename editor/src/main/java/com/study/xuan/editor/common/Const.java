@@ -18,6 +18,11 @@ public class Const {
     public static final int PANEL_HEADER = 3;                               //标题样式
 
     /**
+     * 段落类型
+     */
+    public static final int PARAGRAPH_REFER = 0;                            //引用类型
+
+    /**
      * 具体字体样式
      */
     public static final int FONT_BOLD = 0;                                  //粗体

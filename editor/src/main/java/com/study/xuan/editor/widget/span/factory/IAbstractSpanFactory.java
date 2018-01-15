@@ -13,6 +13,10 @@ import java.util.List;
 public interface IAbstractSpanFactory {
     public List<Object> createSpan(SpanModel spanModel);
 
+    public void createCharacterSpan(List<Object> data);
+
+    public void createParagraphSpan(List<Object> data);
+
     public ICharacterStyleFactory createCharacterFactory();
 
     public IParagraphFactory createParagraphFactory();

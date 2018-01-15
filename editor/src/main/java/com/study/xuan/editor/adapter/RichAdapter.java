@@ -6,6 +6,7 @@ import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.InputFilter;
+import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -150,7 +151,14 @@ public class RichAdapter extends RecyclerView.Adapter {
             }
             ((EditHolder) holder).textWatcher.updatePosition(pos);
             ((EditHolder) holder).filter.updatePosition(pos);
-            mEdit.setText(item.source);
+            if (item.isParagraphStyle) {
+                MultiSpannableString spannableString = new MultiSpannableString(item.source);
+                spannableString.setSpan(item.paragraphSpan.mSpans,0,item.source.length(),Spanned
+                        .SPAN_EXCLUSIVE_EXCLUSIVE);
+                mEdit.setText(spannableString);
+            }else{
+                mEdit.setText(item.source);
+            }
             mEdit.setSelection(item.source.length());
             mEdit.setHint(item.hint);
             mEdit.setTag(pos);
@@ -338,7 +346,14 @@ public class RichAdapter extends RecyclerView.Adapter {
                 mEt.clearFocus();
             }
             RichModel myData = mData.get(pos);
-            mEt.setText(myData.source);
+            if (myData.isParagraphStyle) {
+                SpannableString spannableString = new SpannableString(myData.source);
+                spannableString.setSpan(myData.paragraphSpan,0,myData.source.length(),Spanned
+                        .SPAN_EXCLUSIVE_EXCLUSIVE);
+                mEt.setText(spannableString);
+            }else{
+                mEt.setText(myData.source);
+            }
             mEt.setTag(pos);
             mEt.setSelection(myData.source.length());
             mEt.setHint(myData.hint);

@@ -1,5 +1,6 @@
 package com.study.xuan.editor.widget.span.factory;
 
+import com.study.xuan.editor.common.Const;
 import com.study.xuan.editor.model.SpanModel;
 
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import java.util.List;
  */
 
 public class AbstractSpanFactory implements IAbstractSpanFactory {
+    private SpanModel model;
     private ICharacterStyleFactory charFactory;
     private IParagraphFactory paragraphFactory;
     private IUpdateAppearanceFactory updateFatory;
@@ -24,23 +26,37 @@ public class AbstractSpanFactory implements IAbstractSpanFactory {
      */
     @Override
     public List<Object> createSpan(SpanModel spanModel) {
-        String spanCode = spanModel.param.getParamCodes();
+        this.model = spanModel;
         List<Object> spans = new ArrayList<>();
+
+        switch (spanModel.spanType) {
+            case Const.SPAN_TYPE_FONT:
+                createCharacterSpan(spans);
+                break;
+            case Const.SPAN_TYPE_PARAGRAPH:
+                createParagraphSpan(spans);
+                break;
+        }
+        spanModel.mSpans = spans;
+        return spans;
+    }
+
+    @Override
+    public void createCharacterSpan(List<Object> spans) {
+        String spanCode = model.param.getParamCodes();
         String[] codes = spanCode.split("\\|");
         for (String code : codes) {
             if (code.startsWith("1")) {
                 createCharacterFactory();
                 spans.addAll(charFactory.createCharSpans(code));
-            } else if (code.startsWith("2")) {
-                createParagraphFactory();
-                spans.addAll(paragraphFactory.createParagraphSpans(code));
-            } else if (code.startsWith("3")) {
-                createUpdateFactory();
-                spans.addAll(updateFatory.createUpdateSpans(code));
             }
         }
-        spanModel.mSpans = spans;
-        return spans;
+    }
+
+    @Override
+    public void createParagraphSpan(List<Object> spans) {
+        createParagraphFactory();
+        spans.add(paragraphFactory.createParagraphSpans(model.paragraphType));
     }
 
     @Override

@@ -8,9 +8,14 @@ package com.study.xuan.editor.common;
 
 public class Const {
     public static final String BASE_LOG = "RichEditor";                     //Log信息
-
     /**
      * panel面板类型
+     */
+    public static final int SPAN_TYPE_FONT = 0;                             //字符样式
+    public static final int SPAN_TYPE_PARAGRAPH = 1;                        //段落样式
+
+    /**
+     * 字符样式
      */
     public static final int PANEL_FONT_STYLE = 0;                           //字体样式
     public static final int PANEL_FONT_SIZE = 1;                            //字体大小

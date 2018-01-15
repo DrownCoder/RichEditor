@@ -2,7 +2,6 @@ package com.study.xuan.richeditor;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 import com.study.xuan.editor.common.Const;
 import com.study.xuan.editor.model.SpanModel;
@@ -48,20 +47,27 @@ public class MainActivity extends AppCompatActivity {
                 if (state instanceof FontChangeEvent) {
                     onFontEVent(state.isSelected);
                 } else if (state instanceof ParagraphChangeEvent) {
-                    onParagraphEvent(((ParagraphChangeEvent) state).pType);
+                    onParagraphEvent((ParagraphChangeEvent)state);
                 }
             }
         });
     }
 
-    private void onParagraphEvent(int pType) {
-        switch (pType) {
+    private void onParagraphEvent(ParagraphChangeEvent state) {
+        if (!state.isSelected) {
+            mEditor.getCurIndexModel().setNoParagraphSpan();
+            mEditor.notifyEvent();
+            return;
+        }
+        switch (state.pType) {
             case Const.PARAGRAPH_REFER:
                 //引用
-                Log.i(Const.BASE_LOG, "引用");
+                SpanModel model = new SpanModel(Const.PARAGRAPH_REFER);
+                spanFactory.createSpan(model);
+                mEditor.getCurIndexModel().setParagraphSpan(model);
                 break;
         }
-
+        mEditor.notifyEvent();
     }
 
     private void onFontEVent(boolean isShow) {

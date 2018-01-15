@@ -17,6 +17,7 @@ public class RichModel {
     public boolean isNewSpan;//是否有新的span
     public SpanModel newSpan;
     public boolean isParagraphStyle;//是否有段落格式
+    public SpanModel paragraphSpan;
 
 
     public RichModel(int type, String s, String df) {
@@ -52,6 +53,16 @@ public class RichModel {
     public void setNoNewSpan() {
         this.isNewSpan = false;
         this.newSpan = null;
+    }
+
+    public void setParagraphSpan(SpanModel model) {
+        this.isParagraphStyle = true;
+        this.paragraphSpan = model;
+    }
+
+    public void setNoParagraphSpan() {
+        this.isParagraphStyle = false;
+        this.paragraphSpan = null;
     }
 
 }

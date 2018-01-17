@@ -15,7 +15,7 @@ import com.study.xuan.editor.model.panel.ModelWrapper;
 import com.study.xuan.editor.model.panel.SingleComponent;
 import com.study.xuan.editor.model.panel.SingleImg;
 import com.study.xuan.editor.model.panel.SingleText;
-import com.study.xuan.editor.operate.FontParamBuilder;
+import com.study.xuan.editor.operate.font.FontParamBuilder;
 import com.study.xuan.editor.util.DensityUtil;
 import com.study.xuan.editor.util.EditorUtil;
 import com.study.xuan.shapebuilder.shape.ShapeBuilder;

@@ -1,7 +1,7 @@
 package com.study.xuan.editor.model;
 
 import com.study.xuan.editor.common.Const;
-import com.study.xuan.editor.operate.FontParam;
+import com.study.xuan.editor.operate.font.FontParam;
 
 import java.util.List;
 

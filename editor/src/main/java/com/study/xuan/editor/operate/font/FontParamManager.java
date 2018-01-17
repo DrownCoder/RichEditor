@@ -1,4 +1,4 @@
-package com.study.xuan.editor.operate;
+package com.study.xuan.editor.operate.font;
 
 /**
  * Author : xuan.

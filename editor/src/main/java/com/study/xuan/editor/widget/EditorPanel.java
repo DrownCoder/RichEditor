@@ -20,8 +20,8 @@ import com.study.xuan.editor.model.panel.PanelFactory;
 import com.study.xuan.editor.model.panel.state.BasePanelEvent;
 import com.study.xuan.editor.model.panel.state.FontChangeEvent;
 import com.study.xuan.editor.model.panel.state.ParagraphChangeEvent;
-import com.study.xuan.editor.operate.FontParam;
-import com.study.xuan.editor.operate.FontParamBuilder;
+import com.study.xuan.editor.operate.font.FontParam;
+import com.study.xuan.editor.operate.font.FontParamBuilder;
 
 import java.util.ArrayList;
 import java.util.List;

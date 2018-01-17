@@ -5,6 +5,7 @@ import android.text.style.ParagraphStyle;
 import android.text.style.QuoteSpan;
 
 import com.study.xuan.editor.common.Const;
+import com.study.xuan.editor.widget.span.ReferSpan;
 
 /**
  * Author : xuan.
@@ -18,7 +19,7 @@ public class ParagraphFactory implements IParagraphFactory {
         ParagraphStyle paragraphStyle = null;
         switch (type) {
             case Const.PARAGRAPH_REFER:
-                paragraphStyle = new QuoteSpan(Color.BLACK);
+                paragraphStyle = new ReferSpan(Color.parseColor("#b4b4b4"));
                 break;
         }
         return paragraphStyle;

@@ -8,7 +8,7 @@ import com.study.xuan.editor.model.SpanModel;
 import com.study.xuan.editor.model.panel.state.BasePanelEvent;
 import com.study.xuan.editor.model.panel.state.FontChangeEvent;
 import com.study.xuan.editor.model.panel.state.ParagraphChangeEvent;
-import com.study.xuan.editor.operate.FontParamManager;
+import com.study.xuan.editor.operate.font.FontParamManager;
 import com.study.xuan.editor.util.KeyboardUtil;
 import com.study.xuan.editor.widget.EditorPanel;
 import com.study.xuan.editor.widget.RichEditor;

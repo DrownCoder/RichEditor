@@ -1,7 +1,6 @@
-package com.study.xuan.editor.widget.span.factory;
+package com.study.xuan.editor.operate.span.factory;
 
 import com.study.xuan.editor.common.Const;
-import com.study.xuan.editor.model.SpanModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,10 +12,9 @@ import java.util.List;
  */
 
 public class AbstractSpanFactory implements IAbstractSpanFactory {
-    private SpanModel model;
     private ICharacterStyleFactory charFactory;
     private IParagraphFactory paragraphFactory;
-    private IUpdateAppearanceFactory updateFatory;
+    private IUpdateAppearanceFactory updateFactory;
 
     /**
      * 参数以1010101|20101010|301010形式存在
@@ -25,38 +23,29 @@ public class AbstractSpanFactory implements IAbstractSpanFactory {
      * 3开头表示update类型
      */
     @Override
-    public List<Object> createSpan(SpanModel spanModel) {
-        this.model = spanModel;
+    public List<Object> createSpan(String spanCode) {
         List<Object> spans = new ArrayList<>();
-
-        switch (spanModel.spanType) {
-            case Const.SPAN_TYPE_FONT:
-                createCharacterSpan(spans);
-                break;
-            case Const.SPAN_TYPE_PARAGRAPH:
-                createParagraphSpan(spans);
-                break;
+        String[] codes = spanCode.split("\\|");
+        for (String code : codes) {
+            if (code.startsWith(Const.SPAN_TYPE_FONT)) {
+                createCharacterSpan(code, spans);
+            } else if (code.startsWith(Const.SPAN_TYPE_PARAGRAPH)) {
+                createParagraphSpan(code, spans);
+            }
         }
-        spanModel.mSpans = spans;
         return spans;
     }
 
     @Override
-    public void createCharacterSpan(List<Object> spans) {
-        String spanCode = model.param.getParamCodes();
-        String[] codes = spanCode.split("\\|");
-        for (String code : codes) {
-            if (code.startsWith("1")) {
-                createCharacterFactory();
-                spans.addAll(charFactory.createCharSpans(code));
-            }
-        }
+    public void createCharacterSpan(String code, List<Object> spans) {
+        createCharacterFactory();
+        spans.addAll(charFactory.createCharSpans(code));
     }
 
     @Override
-    public void createParagraphSpan(List<Object> spans) {
+    public void createParagraphSpan(String code, List<Object> spans) {
         createParagraphFactory();
-        spans.add(paragraphFactory.createParagraphSpans(model.paragraphType));
+        spans.add(paragraphFactory.createParagraphSpans(code));
     }
 
     @Override
@@ -77,10 +66,10 @@ public class AbstractSpanFactory implements IAbstractSpanFactory {
 
     @Override
     public IUpdateAppearanceFactory createUpdateFactory() {
-        if (updateFatory == null) {
-            updateFatory = new UpdateFatory();
+        if (updateFactory == null) {
+            updateFactory = new UpdateFatory();
         }
-        return updateFatory;
+        return updateFactory;
     }
 
 }

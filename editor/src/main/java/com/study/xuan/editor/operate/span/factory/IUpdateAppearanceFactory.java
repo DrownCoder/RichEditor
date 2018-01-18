@@ -1,6 +1,5 @@
-package com.study.xuan.editor.widget.span.factory;
+package com.study.xuan.editor.operate.span.factory;
 
-import android.text.style.CharacterStyle;
 import android.text.style.UpdateAppearance;
 
 import java.util.List;

@@ -28,7 +28,7 @@ public class FontParam implements Cloneable {
     public int fontColor;
 
     @Override
-    protected Object clone() throws CloneNotSupportedException {
+    public Object clone() throws CloneNotSupportedException {
         return super.clone();
     }
 
@@ -42,24 +42,11 @@ public class FontParam implements Cloneable {
                 getBooleanString(isFontBac) + fontSize + fontColor;
     }
 
-    public String getParamCodes() {
-        return getCharCodes() + Const.CODE_FONT_SEPARATOR + getParagraphCodes() + Const
-                .CODE_FONT_SEPARATOR + getUpdateCodes();
-    }
-
-    private String getUpdateCodes() {
-        return "";
-    }
-
-    private String getParagraphCodes() {
-        return "";
-    }
-
     /**
      * 参数对应转换为code
      */
-    private String getCharCodes() {
-        return "1"
+    public String getCharCodes() {
+        return Const.SPAN_TYPE_FONT
                 + getBooleanString(isBold)
                 + getBooleanString(isItalics)
                 + getBooleanString(isUnderLine)

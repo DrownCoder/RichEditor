@@ -9,10 +9,10 @@ package com.study.xuan.editor.common;
 public class Const {
     public static final String BASE_LOG = "RichEditor";                     //Log信息
     /**
-     * panel面板类型
+     * span标志
      */
-    public static final int SPAN_TYPE_FONT = 0;                             //字符样式
-    public static final int SPAN_TYPE_PARAGRAPH = 1;                        //段落样式
+    public static final String SPAN_TYPE_FONT = "1";                             //字符样式
+    public static final String SPAN_TYPE_PARAGRAPH = "2";                        //段落样式
 
     /**
      * 字符样式
@@ -26,6 +26,11 @@ public class Const {
      * 段落类型
      */
     public static final int PARAGRAPH_REFER = 0;                            //引用类型
+    public static final int PARAGRAPH_T1 = 1;                               //标题1
+    public static final int PARAGRAPH_T2 = 2;                               //标题2
+    public static final int PARAGRAPH_T3 = 3;                               //标题3
+    public static final int PARAGRAPH_T4 = 4;                               //标题4
+
 
     /**
      * 具体字体样式

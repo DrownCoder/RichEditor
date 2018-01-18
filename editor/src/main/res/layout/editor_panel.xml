@@ -44,6 +44,50 @@
                 android:scaleType="centerInside"
                 android:src="@drawable/refer_select"
                 />
+            <TextView
+                android:id="@+id/tv_h1"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:text="H1"
+                android:gravity="center"
+                android:textSize="23dp"
+                android:textColor="#bfbfbf"
+                android:scaleType="centerInside"
+                android:src="@drawable/refer_select"
+                />
+            <TextView
+                android:id="@+id/tv_h2"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:text="H2"
+                android:gravity="center"
+                android:textSize="23dp"
+                android:textColor="#bfbfbf"
+                android:scaleType="centerInside"
+                android:src="@drawable/refer_select"
+                />
+            <TextView
+                android:id="@+id/tv_h3"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:text="H3"
+                android:gravity="center"
+                android:textSize="23dp"
+                android:textColor="#bfbfbf"
+                android:scaleType="centerInside"
+                android:src="@drawable/refer_select"
+                />
+            <TextView
+                android:id="@+id/tv_h4"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:text="H4"
+                android:gravity="center"
+                android:textSize="23dp"
+                android:textColor="#bfbfbf"
+                android:scaleType="centerInside"
+                android:src="@drawable/refer_select"
+                />
         </LinearLayout>
     </HorizontalScrollView>
 

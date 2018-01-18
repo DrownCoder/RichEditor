@@ -1,6 +1,4 @@
-package com.study.xuan.editor.widget.span.factory;
-
-import com.study.xuan.editor.model.SpanModel;
+package com.study.xuan.editor.operate.span.factory;
 
 import java.util.List;
 
@@ -11,11 +9,11 @@ import java.util.List;
  */
 
 public interface IAbstractSpanFactory {
-    public List<Object> createSpan(SpanModel spanModel);
+    public List<Object> createSpan(String code);
 
-    public void createCharacterSpan(List<Object> data);
+    public void createCharacterSpan(String code, List<Object> data);
 
-    public void createParagraphSpan(List<Object> data);
+    public void createParagraphSpan(String code, List<Object> data);
 
     public ICharacterStyleFactory createCharacterFactory();
 

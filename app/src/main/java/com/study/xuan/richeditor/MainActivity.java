@@ -3,23 +3,22 @@ package com.study.xuan.richeditor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import com.study.xuan.editor.common.Const;
 import com.study.xuan.editor.model.SpanModel;
 import com.study.xuan.editor.model.panel.state.BasePanelEvent;
 import com.study.xuan.editor.model.panel.state.FontChangeEvent;
 import com.study.xuan.editor.model.panel.state.ParagraphChangeEvent;
-import com.study.xuan.editor.operate.font.FontParamManager;
+import com.study.xuan.editor.operate.ParamManager;
 import com.study.xuan.editor.util.KeyboardUtil;
 import com.study.xuan.editor.widget.EditorPanel;
 import com.study.xuan.editor.widget.RichEditor;
-import com.study.xuan.editor.widget.span.factory.AbstractSpanFactory;
-import com.study.xuan.editor.widget.span.factory.IAbstractSpanFactory;
+import com.study.xuan.editor.operate.span.factory.AbstractSpanFactory;
+import com.study.xuan.editor.operate.span.factory.IAbstractSpanFactory;
 
 
 public class MainActivity extends AppCompatActivity {
     RichEditor mEditor;
     EditorPanel mPanel;
-    FontParamManager paramManager;
+    ParamManager paramManager;
     IAbstractSpanFactory spanFactory;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mEditor = (RichEditor) findViewById(R.id.editor);
         mPanel = (EditorPanel) findViewById(R.id.panel);
-        paramManager = new FontParamManager();
+        paramManager = new ParamManager();
         spanFactory = new AbstractSpanFactory();
 
         /*TextView tv = (TextView) findViewById(R.id.tv_test);
@@ -59,22 +58,24 @@ public class MainActivity extends AppCompatActivity {
             mEditor.notifyEvent();
             return;
         }
-        switch (state.pType) {
-            case Const.PARAGRAPH_REFER:
-                //引用
-                SpanModel model = new SpanModel(Const.PARAGRAPH_REFER);
-                spanFactory.createSpan(model);
-                mEditor.getCurIndexModel().setParagraphSpan(model);
-                break;
-        }
+        initParagraphSpan(state.pType);
         mEditor.notifyEvent();
+    }
+
+    private void initParagraphSpan(int pType) {
+        SpanModel model = new SpanModel(pType);
+        model.code = paramManager.getParamCode(pType);
+        model.mSpans = spanFactory.createSpan(model.code);
+        mEditor.getCurIndexModel().setParagraphSpan(model);
     }
 
     private void onFontEVent(boolean isShow) {
         if (!isShow) {
             if (paramManager.needNewSpan(mPanel.getFontParams())) {//需要新生产span样式
                 SpanModel spanModel = new SpanModel(paramManager.createNewParam());
-                spanFactory.createSpan(spanModel);
+                spanModel.code = paramManager.getParamCode(spanModel.paragraphType);
+                spanModel.mSpans = spanFactory.createSpan(spanModel.code);
+
                 mEditor.getCurIndexModel().setNewSpan(spanModel);
             } else {
                 mEditor.getCurIndexModel().setNoNewSpan();

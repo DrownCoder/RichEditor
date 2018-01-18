@@ -1,6 +1,7 @@
 package com.study.xuan.editor.widget;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.AttrRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.study.xuan.editor.R;
 import com.study.xuan.editor.adapter.PanelAdapter;
@@ -40,6 +42,10 @@ public class EditorPanel extends LinearLayout {
     private Context mContext;
     private ImageView mIvFont;
     private ImageView mIvRefer;
+    private TextView mTvH1;
+    private TextView mTvH2;
+    private TextView mTvH3;
+    private TextView mTvH4;
 
     private RecyclerView mPanel;
     private PanelAdapter mPanelAdapter;
@@ -80,6 +86,10 @@ public class EditorPanel extends LinearLayout {
     private void initEvent() {
         mIvFont.setOnClickListener(onClickListener);
         mIvRefer.setOnClickListener(onClickListener);
+        mTvH1.setOnClickListener(onClickListener);
+        mTvH2.setOnClickListener(onClickListener);
+        mTvH3.setOnClickListener(onClickListener);
+        mTvH4.setOnClickListener(onClickListener);
     }
 
     View.OnClickListener onClickListener = new OnClickListener() {
@@ -99,6 +109,22 @@ public class EditorPanel extends LinearLayout {
             } else if (i == R.id.iv_refer) {
                 state = new ParagraphChangeEvent(v.isSelected());
                 ((ParagraphChangeEvent)state).pType = Const.PARAGRAPH_REFER;
+            } else if (i == R.id.tv_h1) {
+                ((TextView)v).setTextColor(v.isSelected()? Color.parseColor("#7dc5eb"):Color.parseColor("#bfbfbf"));
+                state = new ParagraphChangeEvent(v.isSelected());
+                ((ParagraphChangeEvent)state).pType = Const.PARAGRAPH_T1;
+            } else if (i == R.id.tv_h2) {
+                ((TextView)v).setTextColor(v.isSelected()? Color.parseColor("#7dc5eb"):Color.parseColor("#bfbfbf"));
+                state = new ParagraphChangeEvent(v.isSelected());
+                ((ParagraphChangeEvent)state).pType = Const.PARAGRAPH_T2;
+            } else if (i == R.id.tv_h3) {
+                ((TextView)v).setTextColor(v.isSelected()? Color.parseColor("#7dc5eb"):Color.parseColor("#bfbfbf"));
+                state = new ParagraphChangeEvent(v.isSelected());
+                ((ParagraphChangeEvent)state).pType = Const.PARAGRAPH_T3;
+            } else if (i == R.id.tv_h4) {
+                ((TextView)v).setTextColor(v.isSelected()? Color.parseColor("#7dc5eb"):Color.parseColor("#bfbfbf"));
+                state = new ParagraphChangeEvent(v.isSelected());
+                ((ParagraphChangeEvent)state).pType = Const.PARAGRAPH_T4;
             }
             if (mStateChange != null) {
                 mStateChange.onStateChanged(state);
@@ -109,6 +135,11 @@ public class EditorPanel extends LinearLayout {
     private void initView(View root) {
         mIvFont = root.findViewById(R.id.iv_font);
         mIvRefer = root.findViewById(R.id.iv_refer);
+        mTvH1 = root.findViewById(R.id.tv_h1);
+        mTvH2 = root.findViewById(R.id.tv_h2);
+        mTvH3 = root.findViewById(R.id.tv_h3);
+        mTvH4 = root.findViewById(R.id.tv_h4);
+
         mPanel = root.findViewById(R.id.rcy_panel);
         GridLayoutManager manager = new GridLayoutManager(mContext, 5){
             @Override

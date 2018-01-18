@@ -20,7 +20,7 @@ import com.study.xuan.editor.R;
 import com.study.xuan.editor.model.RichModel;
 import com.study.xuan.editor.model.SpanModel;
 import com.study.xuan.editor.operate.paragraph.ParagraphHelper;
-import com.study.xuan.editor.widget.span.MultiSpannableString;
+import com.study.xuan.editor.operate.span.MultiSpannableString;
 import com.study.xuan.shapebuilder.shape.ShapeBuilder;
 
 import java.util.HashSet;

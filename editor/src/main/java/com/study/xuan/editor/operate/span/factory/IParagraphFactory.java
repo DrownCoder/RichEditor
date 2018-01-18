@@ -1,4 +1,4 @@
-package com.study.xuan.editor.widget.span.factory;
+package com.study.xuan.editor.operate.span.factory;
 
 import android.text.style.ParagraphStyle;
 
@@ -9,5 +9,5 @@ import android.text.style.ParagraphStyle;
  */
 
 public interface IParagraphFactory {
-    public ParagraphStyle createParagraphSpans(int type);
+    public ParagraphStyle createParagraphSpans(String code);
 }

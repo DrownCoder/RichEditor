@@ -1,4 +1,4 @@
-package com.study.xuan.editor.widget.span;
+package com.study.xuan.editor.operate.span;
 
 import android.text.SpannableStringBuilder;
 

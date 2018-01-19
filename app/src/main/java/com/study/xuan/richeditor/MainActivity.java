@@ -29,17 +29,6 @@ public class MainActivity extends AppCompatActivity {
         paramManager = new ParamManager();
         spanFactory = new AbstractSpanFactory();
 
-        /*TextView tv = (TextView) findViewById(R.id.tv_test);
-        MultiSpannableString spannableString = new MultiSpannableString("测试测试");
-        UnderlineSpan span = new UnderlineSpan();
-        StrikethroughSpan strikethroughSpan = new StrikethroughSpan();
-        ForegroundColorSpan colorSpan = new ForegroundColorSpan(getResources().getColor(R.color
-                .red));
-        spannableString.setMultiSpans(0, 1, Spanned.SPAN_INCLUSIVE_INCLUSIVE, span,
-                strikethroughSpan, colorSpan);
-        spannableString.setSpan(ForegroundColorSpan.wrap(colorSpan), 2, 3, Spanned
-                .SPAN_INCLUSIVE_INCLUSIVE);
-        tv.setText(spannableString);*/
         mPanel.setStateChange(new EditorPanel.onPanelStateChange() {
             @Override
             public void onStateChanged(BasePanelEvent state) {

@@ -26,6 +26,8 @@ public class FontParam implements Cloneable {
     public int fontSize;
     //字色
     public int fontColor;
+    //超链接
+    public String url;
 
     @Override
     public Object clone() throws CloneNotSupportedException {
@@ -39,7 +41,7 @@ public class FontParam implements Cloneable {
     public String toString() {
         return getBooleanString(isBold) + getBooleanString(isItalics) +
                 getBooleanString(isUnderLine) + getBooleanString(isCenterLine) +
-                getBooleanString(isFontBac) + fontSize + fontColor;
+                getBooleanString(isFontBac) + fontSize + fontColor + url;
     }
 
     /**
@@ -53,6 +55,19 @@ public class FontParam implements Cloneable {
                 + getBooleanString(isCenterLine)
                 + getBooleanString(isFontBac)
                 + Const.CODE_CHAR_SEPARATOR + fontSize
-                + Const.CODE_CHAR_SEPARATOR + fontColor;
+                + Const.CODE_CHAR_SEPARATOR + fontColor
+                + Const.CODE_CHAR_SEPARATOR + url;
+    }
+
+    public void reset() {
+        isBold = false;
+        isCenterLine = false;
+        isFontBac = false;
+        isItalics = false;
+        isUnderLine = false;
+        fontSize = 0;
+        fontBacColor = 0;
+        fontColor = 0;
+        url = "";
     }
 }

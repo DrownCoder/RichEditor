@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Spanned;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,6 +47,7 @@ public class EditorPanel extends LinearLayout {
     private TextView mTvH2;
     private TextView mTvH3;
     private TextView mTvH4;
+    private ImageView mIvLink;
 
     private RecyclerView mPanel;
     private PanelAdapter mPanelAdapter;
@@ -90,6 +92,7 @@ public class EditorPanel extends LinearLayout {
         mTvH2.setOnClickListener(onClickListener);
         mTvH3.setOnClickListener(onClickListener);
         mTvH4.setOnClickListener(onClickListener);
+        mIvLink.setOnClickListener(onClickListener);
     }
 
     View.OnClickListener onClickListener = new OnClickListener() {
@@ -105,6 +108,9 @@ public class EditorPanel extends LinearLayout {
                     mPanelAdapter.notifyDataSetChanged();
                 }
                 mPanel.setVisibility(v.isSelected() ? VISIBLE : GONE);
+                state = new FontChangeEvent(v.isSelected());
+            } else if (i == R.id.iv_link) {
+                paramBuilder.url("www.baidu.com");
                 state = new FontChangeEvent(v.isSelected());
             } else if (i == R.id.iv_refer) {
                 state = new ParagraphChangeEvent(v.isSelected());
@@ -139,6 +145,7 @@ public class EditorPanel extends LinearLayout {
         mTvH2 = root.findViewById(R.id.tv_h2);
         mTvH3 = root.findViewById(R.id.tv_h3);
         mTvH4 = root.findViewById(R.id.tv_h4);
+        mIvLink = root.findViewById(R.id.iv_link);
 
         mPanel = root.findViewById(R.id.rcy_panel);
         GridLayoutManager manager = new GridLayoutManager(mContext, 5){

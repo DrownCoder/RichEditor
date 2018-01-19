@@ -10,6 +10,7 @@ import android.text.style.UnderlineSpan;
 import android.util.Log;
 
 import com.study.xuan.editor.common.Const;
+import com.study.xuan.editor.operate.span.URLSpanNoUnderline;
 import com.study.xuan.editor.util.EditorUtil;
 
 import java.util.ArrayList;
@@ -49,9 +50,26 @@ public class CharacterFactory implements ICharacterStyleFactory {
                 case 2:
                     createColorSpan(codes[i], characterStyles);
                     break;
+                case 3:
+                    createUrlSpan(codes[i], characterStyles);
+                    break;
+
             }
         }
         return characterStyles;
+    }
+
+    /**
+     * 超链接无下划线
+     */
+    private void createUrlSpan(String code, List<CharacterStyle> characterStyles) {
+        try {
+            if (TextUtils.isEmpty(code)) return;
+            URLSpanNoUnderline urlSpan = new URLSpanNoUnderline(code);
+            characterStyles.add(urlSpan);
+        } catch (NumberFormatException e) {
+            Log.e(Const.BASE_LOG, "font size value is not true!");
+        }
     }
 
     /**
@@ -85,6 +103,7 @@ public class CharacterFactory implements ICharacterStyleFactory {
      * 第一层，根据位置创建span
      */
     private void createFontStyleSpan(String code, List<CharacterStyle> characterStyles) {
+        CharacterStyle cSpan;
         for (int i = 0;i<code.toCharArray().length;i++) {
             char c = code.toCharArray()[i];
             if (!EditorUtil.getCharBoolean(c)) {
@@ -92,22 +111,22 @@ public class CharacterFactory implements ICharacterStyleFactory {
             }
             switch (i) {
                 case 0://bold
-                    StyleSpan bold = new StyleSpan(BOLD);
-                    characterStyles.add(bold);
+                    cSpan = new StyleSpan(BOLD);
+                    characterStyles.add(cSpan);
                     break;
                 case 1://isItalics
-                    StyleSpan italics = new StyleSpan(ITALIC);
-                    characterStyles.add(italics);
+                    cSpan = new StyleSpan(ITALIC);
+                    characterStyles.add(cSpan);
                     break;
                 case 2://isUnderLine
-                    UnderlineSpan underline = new UnderlineSpan();
-                    characterStyles.add(underline);
+                    cSpan = new UnderlineSpan();
+                    characterStyles.add(cSpan);
                     break;
                 case 3://isCenterLine
-                    StrikethroughSpan strikethroughSpan = new StrikethroughSpan();
-                    characterStyles.add(strikethroughSpan);
+                    cSpan = new StrikethroughSpan();
+                    characterStyles.add(cSpan);
                     break;
-                case 4:
+                case 4://bacColor
                     break;
             }
         }

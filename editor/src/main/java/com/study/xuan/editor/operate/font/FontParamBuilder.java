@@ -74,6 +74,22 @@ public class FontParamBuilder{
         return this;
     }
 
+    /**
+     * 设置超链接
+     */
+    public FontParamBuilder url(String url) {
+        param.url = url;
+        return this;
+    }
+
+    /**
+     * 重置所有参数
+     */
+    public FontParamBuilder reset() {
+        param.reset();
+        return this;
+    }
+
     public FontParam build() {
         return param;
     }

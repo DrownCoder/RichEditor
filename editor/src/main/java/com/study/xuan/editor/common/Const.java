@@ -31,7 +31,6 @@ public class Const {
     public static final int PARAGRAPH_T3 = 3;                               //标题3
     public static final int PARAGRAPH_T4 = 4;                               //标题4
 
-
     /**
      * 具体字体样式
      */

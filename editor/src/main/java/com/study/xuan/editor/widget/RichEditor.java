@@ -135,6 +135,6 @@ public class RichEditor extends RecyclerView {
     }
 
     public void notifyEvent() {
-        mAdapter.notifyDataSetChanged();
+        mAdapter.notifyDataChanged();
     }
 }

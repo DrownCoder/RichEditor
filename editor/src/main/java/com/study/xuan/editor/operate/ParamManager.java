@@ -65,6 +65,11 @@ public class ParamManager implements IParamManger {
                         + Const.CODE_FONT_SEPARATOR + Const.SPAN_TYPE_PARAGRAPH
                         + pType;
         }
-        return curParams.toString();
+        return curParams.getCharCodes();
+    }
+
+    public void reset() {
+        curParams.reset();
+        newParams.reset();
     }
 }

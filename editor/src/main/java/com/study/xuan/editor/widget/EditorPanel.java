@@ -7,7 +7,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Spanned;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +21,7 @@ import com.study.xuan.editor.model.panel.ModelWrapper;
 import com.study.xuan.editor.model.panel.PanelFactory;
 import com.study.xuan.editor.model.panel.state.BasePanelEvent;
 import com.study.xuan.editor.model.panel.state.FontChangeEvent;
+import com.study.xuan.editor.model.panel.state.LinkChangeEvent;
 import com.study.xuan.editor.model.panel.state.ParagraphChangeEvent;
 import com.study.xuan.editor.operate.font.FontParam;
 import com.study.xuan.editor.operate.font.FontParamBuilder;
@@ -110,8 +110,9 @@ public class EditorPanel extends LinearLayout {
                 mPanel.setVisibility(v.isSelected() ? VISIBLE : GONE);
                 state = new FontChangeEvent(v.isSelected());
             } else if (i == R.id.iv_link) {
-                paramBuilder.url("www.baidu.com");
-                state = new FontChangeEvent(v.isSelected());
+                String url = "www.baidu.com";
+                paramBuilder.reset().fontColor(Color.parseColor("#3194D0")).url(url);
+                state = new LinkChangeEvent(v.isSelected(), "百度", url);
             } else if (i == R.id.iv_refer) {
                 state = new ParagraphChangeEvent(v.isSelected());
                 ((ParagraphChangeEvent)state).pType = Const.PARAGRAPH_REFER;
@@ -188,5 +189,9 @@ public class EditorPanel extends LinearLayout {
 
     public FontParam getFontParams() {
         return paramBuilder.build();
+    }
+
+    public void reset() {
+        paramBuilder.reset();
     }
 }

@@ -46,6 +46,7 @@ public class RichAdapter extends RecyclerView.Adapter {
     private List<RichModel> mData;
     private Context mContext;
     public int index = 0;
+    private boolean isNotify;
 
     private View mHeader;
 
@@ -189,6 +190,7 @@ public class RichAdapter extends RecyclerView.Adapter {
                 v.setFocusableInTouchMode(true);
                 v.setFocusable(true);
                 v.requestFocus();
+                isNotify = false;
                 index = (int) v.getTag();
                 clearImgFocus(index);
             }
@@ -325,6 +327,7 @@ public class RichAdapter extends RecyclerView.Adapter {
         if (mData.size() == 1 && mData.get(0).type == TYPE_EDIT) {
             mData.get(0).hint = DEFAULT_HINT;
         }
+        isNotify = true;
         notifyDataSetChanged();
     }
 
@@ -415,6 +418,16 @@ public class RichAdapter extends RecyclerView.Adapter {
         @Override
         public CharSequence filter(CharSequence charSequence, int start, int end, Spanned dest, int
                 dstart, int dend) {
+            if (isNotify) {
+                spannableString.clear();
+                spannableString.clearSpans();
+                spannableString.append(charSequence);
+                for (SpanModel model : spanModels) {
+                    spannableString.setMultiSpans(model.mSpans, model.start, model.end, Spanned
+                            .SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
+                return spannableString;
+            }
             //输入后要做两步，1.保存新的样式2.设置新的样式
             Log.i("tag", "char:" + charSequence + "-" + start + "-" + end + "-" + dest + "-" +
                     dstart + "-" + dend);
@@ -476,4 +489,5 @@ public class RichAdapter extends RecyclerView.Adapter {
             return spannableString;
         }
     }
+
 }

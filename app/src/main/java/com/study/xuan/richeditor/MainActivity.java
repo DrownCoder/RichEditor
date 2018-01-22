@@ -6,13 +6,14 @@ import android.support.v7.app.AppCompatActivity;
 import com.study.xuan.editor.model.SpanModel;
 import com.study.xuan.editor.model.panel.state.BasePanelEvent;
 import com.study.xuan.editor.model.panel.state.FontChangeEvent;
+import com.study.xuan.editor.model.panel.state.LinkChangeEvent;
 import com.study.xuan.editor.model.panel.state.ParagraphChangeEvent;
 import com.study.xuan.editor.operate.ParamManager;
+import com.study.xuan.editor.operate.span.factory.AbstractSpanFactory;
+import com.study.xuan.editor.operate.span.factory.IAbstractSpanFactory;
 import com.study.xuan.editor.util.KeyboardUtil;
 import com.study.xuan.editor.widget.EditorPanel;
 import com.study.xuan.editor.widget.RichEditor;
-import com.study.xuan.editor.operate.span.factory.AbstractSpanFactory;
-import com.study.xuan.editor.operate.span.factory.IAbstractSpanFactory;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -36,11 +37,29 @@ public class MainActivity extends AppCompatActivity {
                     onFontEVent(state.isSelected);
                 } else if (state instanceof ParagraphChangeEvent) {
                     onParagraphEvent((ParagraphChangeEvent)state);
+                } else if (state instanceof LinkChangeEvent) {
+                    onLinkEvent((LinkChangeEvent) state);
                 }
             }
         });
     }
 
+    /**
+     * 链接事件
+     */
+    private void onLinkEvent(LinkChangeEvent state) {
+        SpanModel spanModel = new SpanModel(mPanel.getFontParams());
+        spanModel.code = spanModel.param.getCharCodes();
+        spanModel.mSpans = spanFactory.createSpan(spanModel.code);
+
+        mEditor.getCurIndexModel().addLink(state.title, spanModel);
+        mEditor.notifyEvent();
+        mPanel.reset();
+    }
+
+    /**
+     * 段落样式改变事件
+     */
     private void onParagraphEvent(ParagraphChangeEvent state) {
         if (!state.isSelected) {
             mEditor.getCurIndexModel().setNoParagraphSpan();
@@ -58,6 +77,9 @@ public class MainActivity extends AppCompatActivity {
         mEditor.getCurIndexModel().setParagraphSpan(model);
     }
 
+    /**
+     * 字体样式改变事件
+     */
     private void onFontEVent(boolean isShow) {
         if (!isShow) {
             if (paramManager.needNewSpan(mPanel.getFontParams())) {//需要新生产span样式

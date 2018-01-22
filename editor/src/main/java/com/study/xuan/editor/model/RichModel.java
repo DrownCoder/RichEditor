@@ -65,4 +65,14 @@ public class RichModel {
         this.paragraphSpan = null;
     }
 
+    /**
+     * 增加链接
+     */
+    public void addLink(String title, SpanModel model) {
+        model.start = source.length();
+        source += title;
+        model.end = source.length();
+        mParmas.add(model);
+    }
+
 }

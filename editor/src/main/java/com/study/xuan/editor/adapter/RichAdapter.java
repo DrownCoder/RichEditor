@@ -27,6 +27,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.study.xuan.editor.common.Const.BASE_LOG;
 import static com.study.xuan.editor.common.Const.TYPE_EDIT;
 import static com.study.xuan.editor.common.Const.TYPE_IMG;
 
@@ -46,7 +47,7 @@ public class RichAdapter extends RecyclerView.Adapter {
     private List<RichModel> mData;
     private Context mContext;
     public int index = 0;
-    private boolean isNotify;
+    public boolean isNotify;
 
     private View mHeader;
 
@@ -65,11 +66,11 @@ public class RichAdapter extends RecyclerView.Adapter {
         void onDelete(String path);
     }
 
-    private onScrollIndex mOnScollIndex;
+    private onScrollIndex mOnScrollIndex;
     private onPhotoDelete mOnPhotoDelete;
 
-    public void setOnScollIndex(onScrollIndex mOnScollIndex) {
-        this.mOnScollIndex = mOnScollIndex;
+    public void setOnScrollIndex(onScrollIndex mOnScrollIndex) {
+        this.mOnScrollIndex = mOnScrollIndex;
     }
 
     public void setOnPhotoDelete(onPhotoDelete onPhotoDelete) {
@@ -200,6 +201,7 @@ public class RichAdapter extends RecyclerView.Adapter {
     private View.OnKeyListener onKeyListener = new View.OnKeyListener() {
         @Override
         public boolean onKey(View view, int i, KeyEvent keyEvent) {
+            isNotify = false;
             if (keyEvent != null && keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
                 switch (i) {
                     case KeyEvent.KEYCODE_DEL:
@@ -289,8 +291,8 @@ public class RichAdapter extends RecyclerView.Adapter {
         }
         index++;
         notifyDataChanged();
-        if (mOnScollIndex != null) {
-            mOnScollIndex.scroll(index + 1);//header需要+1
+        if (mOnScrollIndex != null) {
+            mOnScrollIndex.scroll(index + 1);//header需要+1
         }
     }
 
@@ -418,10 +420,13 @@ public class RichAdapter extends RecyclerView.Adapter {
         @Override
         public CharSequence filter(CharSequence charSequence, int start, int end, Spanned dest, int
                 dstart, int dend) {
+            Log.i("tag", "char:" + charSequence + "-" + start + "-" + end + "-" + dest + "-" +
+                    dstart + "-" + dend);
             if (isNotify) {
                 spannableString.clear();
                 spannableString.clearSpans();
                 spannableString.append(charSequence);
+                Log.i(BASE_LOG, spannableString.toString());
                 for (SpanModel model : spanModels) {
                     spannableString.setMultiSpans(model.mSpans, model.start, model.end, Spanned
                             .SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -429,8 +434,6 @@ public class RichAdapter extends RecyclerView.Adapter {
                 return spannableString;
             }
             //输入后要做两步，1.保存新的样式2.设置新的样式
-            Log.i("tag", "char:" + charSequence + "-" + start + "-" + end + "-" + dest + "-" +
-                    dstart + "-" + dend);
             int i = 0;
             if (richModel.isNewSpan) {
                 //新建span样式

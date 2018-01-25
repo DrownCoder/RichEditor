@@ -6,7 +6,9 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.ViewTreeObserver;
 
 import com.study.xuan.editor.R;
 import com.study.xuan.editor.adapter.RichAdapter;
@@ -17,6 +19,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static com.study.xuan.editor.adapter.RichAdapter.DEFAULT_HINT;
+import static com.study.xuan.editor.common.Const.BASE_LOG;
 import static com.study.xuan.editor.common.Const.TYPE_EDIT;
 import static com.study.xuan.editor.common.Const.TYPE_IMG;
 
@@ -26,7 +29,7 @@ import static com.study.xuan.editor.common.Const.TYPE_IMG;
  * Description :input the description of this file.
  */
 
-public class RichEditor extends RecyclerView {
+public class RichEditor extends RecyclerView implements ViewTreeObserver.OnGlobalLayoutListener {
     private Context mContext;
     private RichAdapter mAdapter;
     private List<RichModel> mDatas;
@@ -61,16 +64,18 @@ public class RichEditor extends RecyclerView {
     }
 
     private void initEvent() {
-        mAdapter.setOnScollIndex(new RichAdapter.onScrollIndex() {
+        mAdapter.setOnScrollIndex(new RichAdapter.onScrollIndex() {
             @Override
             public void scroll(int pos) {
                 scrollToPosition(pos);
             }
         });
         //添加文本滑动自动滑动
-        mAdapter.setOnScollIndex(onScrollIndex);
+        mAdapter.setOnScrollIndex(onScrollIndex);
         //删除图片
         mAdapter.setOnPhotoDelete(onPhotoDelete);
+
+        getViewTreeObserver().addOnGlobalLayoutListener(this);
     }
 
     RichAdapter.onScrollIndex onScrollIndex = new RichAdapter.onScrollIndex() {
@@ -136,5 +141,10 @@ public class RichEditor extends RecyclerView {
 
     public void notifyEvent() {
         mAdapter.notifyDataChanged();
+    }
+
+    @Override
+    public void onGlobalLayout() {
+        mAdapter.isNotify = false;
     }
 }

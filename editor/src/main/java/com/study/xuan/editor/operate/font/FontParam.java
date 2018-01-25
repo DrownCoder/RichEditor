@@ -27,7 +27,7 @@ public class FontParam implements Cloneable {
     //字色
     public int fontColor;
     //超链接
-    public String url;
+    public String url = "";
 
     @Override
     public Object clone() throws CloneNotSupportedException {

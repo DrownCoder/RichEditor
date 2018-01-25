@@ -1,8 +1,11 @@
 package com.study.xuan.editor.operate.span;
 
 import android.text.SpannableStringBuilder;
+import android.util.Log;
 
 import java.util.List;
+
+import static com.study.xuan.editor.common.Const.BASE_LOG;
 
 /**
  * Author : xuan.
@@ -28,8 +31,11 @@ public class MultiSpannableString extends SpannableStringBuilder {
     }
 
     public void setMultiSpans(List<Object> objects, int start, int end, int flags) {
+        StringBuilder builder = new StringBuilder();
         for (Object item : objects) {
+            builder.append(item.getClass().toString());
             setSpan(item, start, end, flags);
         }
+        Log.i(BASE_LOG, builder + "start:" + start + "end:" + end);
     }
 }

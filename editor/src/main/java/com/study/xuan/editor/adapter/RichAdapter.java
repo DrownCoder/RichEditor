@@ -48,6 +48,7 @@ public class RichAdapter extends RecyclerView.Adapter {
     private Context mContext;
     public int index = 0;
     public boolean isNotify;
+    private boolean hasRefresh;
 
     private View mHeader;
 
@@ -164,6 +165,9 @@ public class RichAdapter extends RecyclerView.Adapter {
                 mEdit.setText(spannableString);
                 paragraphHelper.handleTextStyle(mEdit, item.paragraphSpan.paragraphType);
             }else{
+                if (!hasRefresh) {
+                    //// TODO: 2018/2/1 刷新
+                }
                 mEdit.setText(item.source);
                 paragraphHelper.handleTextStyle(mEdit, -1);
             }
@@ -275,6 +279,7 @@ public class RichAdapter extends RecyclerView.Adapter {
     }
 
     private void doEnter(View view, int pos) {
+        hasRefresh = false;
         this.index = pos;
         if (pos == 0 && mData.get(pos).type == TYPE_EDIT) {
             mData.get(pos).hint = "";
@@ -423,11 +428,13 @@ public class RichAdapter extends RecyclerView.Adapter {
             Log.i("tag", "char:" + charSequence + "-" + start + "-" + end + "-" + dest + "-" +
                     dstart + "-" + dend);
             if (isNotify) {
+                hasRefresh = true;
                 spannableString.clear();
                 spannableString.clearSpans();
                 spannableString.append(charSequence);
                 Log.i(BASE_LOG, spannableString.toString());
                 for (SpanModel model : spanModels) {
+                    Log.i(BASE_LOG, model.mSpans + "start:" + model.start + "end:" + model.end);
                     spannableString.setMultiSpans(model.mSpans, model.start, model.end, Spanned
                             .SPAN_EXCLUSIVE_EXCLUSIVE);
                 }
@@ -436,6 +443,8 @@ public class RichAdapter extends RecyclerView.Adapter {
             //输入后要做两步，1.保存新的样式2.设置新的样式
             int i = 0;
             if (richModel.isNewSpan) {
+                //使用过后，变成false
+                richModel.isNewSpan = false;
                 //新建span样式
                 nowSpanModel = richModel.newSpan;
                 if (dstart == richModel.source.length()) {
@@ -486,8 +495,11 @@ public class RichAdapter extends RecyclerView.Adapter {
             spannableString.clearSpans();
             spannableString.append(charSequence);
             if (nowSpanModel != null) {
+                for (SpanModel model : spanModels) {
+                    Log.i(BASE_LOG, model.mSpans + "start:" + model.start + "end:" + model.end);
+                }
                 spannableString.setMultiSpans(nowSpanModel.mSpans, 0, charSequence.length(), Spanned
-                        .SPAN_EXCLUSIVE_EXCLUSIVE);
+                        .SPAN_EXCLUSIVE_INCLUSIVE);
             }
             return spannableString;
         }

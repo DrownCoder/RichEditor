@@ -48,13 +48,17 @@ public class MainActivity extends AppCompatActivity {
      * 链接事件
      */
     private void onLinkEvent(LinkChangeEvent state) {
-        SpanModel spanModel = new SpanModel(mPanel.getFontParams());
-        spanModel.code = spanModel.param.getCharCodes();
-        spanModel.mSpans = spanFactory.createSpan(spanModel.code);
+        SpanModel linkModel = new SpanModel(state.linkParam);
+        linkModel.code = linkModel.param.getCharCodes();
+        linkModel.mSpans = spanFactory.createSpan(linkModel.code);
 
-        mEditor.getCurIndexModel().addLink(state.title, spanModel);
+        mEditor.getCurIndexModel().addLink(state.title, linkModel);
         mEditor.notifyEvent();
-        mPanel.reset();
+
+        SpanModel spanModel = new SpanModel(paramManager.createNewParam());
+        spanModel.code = paramManager.getParamCode(spanModel.paragraphType);
+        spanModel.mSpans = spanFactory.createSpan(spanModel.code);
+        mEditor.getCurIndexModel().setNewSpan(spanModel);
     }
 
     /**
@@ -86,7 +90,6 @@ public class MainActivity extends AppCompatActivity {
                 SpanModel spanModel = new SpanModel(paramManager.createNewParam());
                 spanModel.code = paramManager.getParamCode(spanModel.paragraphType);
                 spanModel.mSpans = spanFactory.createSpan(spanModel.code);
-
                 mEditor.getCurIndexModel().setNewSpan(spanModel);
             } else {
                 mEditor.getCurIndexModel().setNoNewSpan();

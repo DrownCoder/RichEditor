@@ -1,5 +1,7 @@
 package com.study.xuan.editor.model.panel.state;
 
+import com.study.xuan.editor.operate.font.FontParam;
+
 /**
  * Author : xuan.
  * Date : 2018/1/22.
@@ -7,11 +9,12 @@ package com.study.xuan.editor.model.panel.state;
  */
 
 public class LinkChangeEvent extends BasePanelEvent {
-    public String linkUrl;
     public String title;
-    public LinkChangeEvent(boolean isSelected, String name, String url) {
+    public FontParam linkParam;
+
+    public LinkChangeEvent(boolean isSelected, FontParam param, String title) {
         super(isSelected);
-        this.title = name;
-        this.linkUrl = url;
+        linkParam = param;
+        this.title = title;
     }
 }

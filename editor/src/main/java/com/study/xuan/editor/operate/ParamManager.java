@@ -69,7 +69,11 @@ public class ParamManager implements IParamManger {
     }
 
     public void reset() {
-        curParams.reset();
-        newParams.reset();
+        if (curParams != null) {
+            curParams.reset();
+        }
+        if (newParams != null) {
+            newParams.reset();
+        }
     }
 }

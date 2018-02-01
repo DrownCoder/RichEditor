@@ -111,8 +111,10 @@ public class EditorPanel extends LinearLayout {
                 state = new FontChangeEvent(v.isSelected());
             } else if (i == R.id.iv_link) {
                 String url = "www.baidu.com";
-                paramBuilder.reset().fontColor(Color.parseColor("#3194D0")).url(url);
-                state = new LinkChangeEvent(v.isSelected(), "百度", url);
+                FontParam param = new FontParam();
+                param.url = url;
+                param.fontColor = Color.parseColor("#3194D0");
+                state = new LinkChangeEvent(v.isSelected(), param, "百度");
             } else if (i == R.id.iv_refer) {
                 state = new ParagraphChangeEvent(v.isSelected());
                 ((ParagraphChangeEvent)state).pType = Const.PARAGRAPH_REFER;

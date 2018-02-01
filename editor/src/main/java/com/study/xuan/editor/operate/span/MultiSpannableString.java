@@ -36,6 +36,5 @@ public class MultiSpannableString extends SpannableStringBuilder {
             builder.append(item.getClass().toString());
             setSpan(item, start, end, flags);
         }
-        Log.i(BASE_LOG, builder + "start:" + start + "end:" + end);
     }
 }

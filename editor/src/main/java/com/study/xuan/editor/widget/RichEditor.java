@@ -145,6 +145,6 @@ public class RichEditor extends RecyclerView implements ViewTreeObserver.OnGloba
 
     @Override
     public void onGlobalLayout() {
-        mAdapter.isNotify = false;
+        mAdapter.isEnter = false;
     }
 }

@@ -47,12 +47,14 @@ public class RichAdapter extends RecyclerView.Adapter {
     private List<RichModel> mData;
     private Context mContext;
     public int index = 0;
-    public boolean isNotify;
-    private boolean hasRefresh;
+    private MultiSpannableString mSpanString;
 
     private View mHeader;
 
     private ParagraphHelper paragraphHelper;
+
+    private boolean isNotify;
+    public boolean isEnter;
 
     public void addHeaderView(View header) {
         this.mHeader = header;
@@ -85,6 +87,7 @@ public class RichAdapter extends RecyclerView.Adapter {
         mEtHolder = new HashSet<>();
         mHolderShow = new LinkedList<>();
         paragraphHelper = new ParagraphHelper(mContext);
+        mSpanString = new MultiSpannableString();
     }
 
     @Override
@@ -165,10 +168,17 @@ public class RichAdapter extends RecyclerView.Adapter {
                 mEdit.setText(spannableString);
                 paragraphHelper.handleTextStyle(mEdit, item.paragraphSpan.paragraphType);
             }else{
-                if (!hasRefresh) {
+                mSpanString.clear();
+                mSpanString.clearSpans();
+                mSpanString.append(item.source);
+                if (isEnter) {
                     //// TODO: 2018/2/1 刷新
+                    for (SpanModel span : item.getSpanList()) {
+                        mSpanString.setMultiSpans(span.mSpans, span.start, span.end, Spanned
+                                .SPAN_EXCLUSIVE_EXCLUSIVE);
+                    }
                 }
-                mEdit.setText(item.source);
+                mEdit.setText(mSpanString);
                 paragraphHelper.handleTextStyle(mEdit, -1);
             }
             mEdit.setSelection(item.source.length());
@@ -195,7 +205,6 @@ public class RichAdapter extends RecyclerView.Adapter {
                 v.setFocusableInTouchMode(true);
                 v.setFocusable(true);
                 v.requestFocus();
-                isNotify = false;
                 index = (int) v.getTag();
                 clearImgFocus(index);
             }
@@ -205,7 +214,6 @@ public class RichAdapter extends RecyclerView.Adapter {
     private View.OnKeyListener onKeyListener = new View.OnKeyListener() {
         @Override
         public boolean onKey(View view, int i, KeyEvent keyEvent) {
-            isNotify = false;
             if (keyEvent != null && keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
                 switch (i) {
                     case KeyEvent.KEYCODE_DEL:
@@ -279,7 +287,7 @@ public class RichAdapter extends RecyclerView.Adapter {
     }
 
     private void doEnter(View view, int pos) {
-        hasRefresh = false;
+        isEnter = true;
         this.index = pos;
         if (pos == 0 && mData.get(pos).type == TYPE_EDIT) {
             mData.get(pos).hint = "";
@@ -425,10 +433,11 @@ public class RichAdapter extends RecyclerView.Adapter {
         @Override
         public CharSequence filter(CharSequence charSequence, int start, int end, Spanned dest, int
                 dstart, int dend) {
-            Log.i("tag", "char:" + charSequence + "-" + start + "-" + end + "-" + dest + "-" +
-                    dstart + "-" + dend);
+            if (isEnter) {
+                return charSequence;
+            }
             if (isNotify) {
-                hasRefresh = true;
+                isNotify = false;
                 spannableString.clear();
                 spannableString.clearSpans();
                 spannableString.append(charSequence);

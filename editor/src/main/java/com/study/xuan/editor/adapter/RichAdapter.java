@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -411,6 +412,7 @@ public class RichAdapter extends RecyclerView.Adapter {
         private MultiSpannableString spannableString;
         //当前span样式
         private SpanModel nowSpanModel;
+        boolean isDelete;//增加文字还是删除文字
 
         public CustomInputFilter() {
             spannableString = new MultiSpannableString();
@@ -433,9 +435,9 @@ public class RichAdapter extends RecyclerView.Adapter {
         @Override
         public CharSequence filter(CharSequence charSequence, int start, int end, Spanned dest, int
                 dstart, int dend) {
-            if (isEnter) {
-                return charSequence;
-            }
+            Log.i(BASE_LOG, "char:" + charSequence + "-" + start + "-" + end + "-" + dest + "-" +
+                    dstart + "-" + dend);
+            isDelete = TextUtils.isEmpty(charSequence);
             if (isNotify) {
                 isNotify = false;
                 spannableString.clear();

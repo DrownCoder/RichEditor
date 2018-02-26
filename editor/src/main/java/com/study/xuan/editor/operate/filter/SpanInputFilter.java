@@ -61,6 +61,10 @@ public class SpanInputFilter implements InputFilter {
             }
             return spannableString;
         }
+        if (isDelete) {
+            sortOnDelete(dstart, dend);
+            return charSequence;
+        }
         //输入后要做两步，1.保存新的样式2.设置新的样式
         int i = 0;
         if (richModel.isNewSpan) {
@@ -92,10 +96,6 @@ public class SpanInputFilter implements InputFilter {
                 }
             }
         } else {
-            if (isDelete) {
-                sortOnDelete(dstart, dend);
-                return charSequence;
-            }
             //保持原有span样式，不进行插入操作
             for (; i < spanModels.size(); i++) {
                 SpanModel spanModel = spanModels.get(i);
@@ -129,16 +129,25 @@ public class SpanInputFilter implements InputFilter {
 
     /**
      * 删除，重新排列数据算法
+     * [0,3)[3,5)
+     * 1)从末尾删除,5开始删
+     * 2)从中间删除,3开始删
+     * 3)从一个范围中开始删,从4开始删
      */
     private void sortOnDelete(int start, int end) {
+        //todo 1.更改范围受影响的区间，2.后面未受影响的区间前移
         int size = end - start;
         for (int i = 0; i < spanModels.size(); i++) {
             SpanModel model = spanModels.get(i);
-            if (start >= model.start && start <= model.end) {
-                while (i < spanModels.size() - 1 && end > model.end) {
+            //找到当前光标所属的坐标范围，前取后不取，类似[0,3)，[3,5)
+            if (start >= model.start && start < model.end) {
+                //删除区域跨范围，[0,3)，[3,5),[5,6),删除3-5，则移除中间
+                while (i < spanModels.size() - 1
+                        && start <= model.start && end > model.end) {
                     spanModels.remove(i + 1);
                     model = spanModels.get(i + 1);
                 }
+                //删除后，后面范围未受影响的，前移size
                 for (; i < spanModels.size(); i++) {
                     SpanModel item = spanModels.get(i);
                     if (item.start > start) {

@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
                 mEditor.getCurIndexModel().setNoNewSpan();
             }
         }else{
-            KeyboardUtil.closeKeyboard(MainActivity.this);
+            KeyboardUtil.closeKeyboard(this);
         }
     }
 

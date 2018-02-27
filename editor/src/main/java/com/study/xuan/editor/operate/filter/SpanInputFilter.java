@@ -62,7 +62,8 @@ public class SpanInputFilter implements InputFilter {
             return spannableString;
         }
         if (isDelete) {
-            sortOnDelete(dstart, dend);
+            //sortOnDelete(dstart, dend);
+            sortAfterDelete(dstart, dend);
             return charSequence;
         }
         //输入后要做两步，1.保存新的样式2.设置新的样式
@@ -139,13 +140,63 @@ public class SpanInputFilter implements InputFilter {
         int size = end - start;
         for (int i = 0; i < spanModels.size(); i++) {
             SpanModel model = spanModels.get(i);
-            //找到当前光标所属的坐标范围，前取后不取，类似[0,3)，[3,5)
+            //找到当前光标所属的区间范围，前取后不取，类似[0,3)，[3,5)
             if (start >= model.start && start < model.end) {
                 //删除区域跨范围，[0,3)，[3,5),[5,6),删除3-5，则移除中间
                 while (i < spanModels.size() - 1
                         && start <= model.start && end > model.end) {
                     spanModels.remove(i + 1);
                     model = spanModels.get(i + 1);
+                }
+                //删除后，后面范围未受影响的，前移size
+                for (; i < spanModels.size(); i++) {
+                    SpanModel item = spanModels.get(i);
+                    if (item.start > start) {
+                        item.start -= size;
+                    }
+                    item.end -= size;
+                    if (item.start == item.end) {
+                        spanModels.remove(i);
+                    }
+                }
+                logModel();
+                return;
+            }
+        }
+    }
+
+    private void sortAfterDelete(int start, int end) {
+        final int fsize = end - start;
+        int size = fsize;
+        for (int i = 0; i < spanModels.size(); i++) {
+            SpanModel model = spanModels.get(i);
+            //找到当前光标所属的区间范围，前取后不取，类似[0,3)，[3,5)
+            if (start >= model.start && start < model.end) {
+                //删除区域跨范围，[0,3)，[3,5),[5,6),删除3-5，则移除中间
+                while (i < spanModels.size()) {
+                    if (model.start >= end || model.end <= start) {
+                        //删除区间和当前区间无交集
+                        break;
+                    } else {
+                        //删除区间和当前区间有交集
+                        if (end <= model.end) {
+                            int modesize = model.end - model.start;
+                            model.start -= fsize - size;
+                            model.end = model.start + (modesize - size + 1);
+                        } else {
+                            model.end -= (model.end - start);
+                            size -= (model.end - start + 1);
+                        }
+                        if (model.start == model.end) {
+                            spanModels.remove(i);
+                            model = spanModels.get(i);
+                        } else {
+                            i++;
+                            if (i < spanModels.size()) {
+                                model = spanModels.get(i);
+                            }
+                        }
+                    }
                 }
                 //删除后，后面范围未受影响的，前移size
                 for (; i < spanModels.size(); i++) {

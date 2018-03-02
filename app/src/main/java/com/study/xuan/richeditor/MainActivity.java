@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onStateChanged(BasePanelEvent state) {
                 if (state instanceof FontChangeEvent) {
-                    onFontEVent(state.isSelected);
+                    onFontEvent(state.isSelected);
                 } else if (state instanceof ParagraphChangeEvent) {
                     onParagraphEvent((ParagraphChangeEvent)state);
                 } else if (state instanceof LinkChangeEvent) {
@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * 字体样式改变事件
      */
-    private void onFontEVent(boolean isShow) {
+    private void onFontEvent(boolean isShow) {
         if (!isShow) {
             if (paramManager.needNewSpan(mPanel.getFontParams())) {//需要新生产span样式
                 SpanModel spanModel = new SpanModel(paramManager.createNewParam());

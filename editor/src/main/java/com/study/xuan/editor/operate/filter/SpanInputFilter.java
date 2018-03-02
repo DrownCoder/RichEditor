@@ -135,6 +135,7 @@ public class SpanInputFilter implements InputFilter {
      * 2)从中间删除,3开始删
      * 3)从一个范围中开始删,从4开始删
      */
+    @Deprecated
     private void sortOnDelete(int start, int end) {
         //todo 1.更改范围受影响的区间，2.后面未受影响的区间前移
         int size = end - start;
@@ -180,6 +181,7 @@ public class SpanInputFilter implements InputFilter {
                     } else {
                         //删除区间和当前区间有交集
                         if (end <= model.end) {
+                            //todo 删除交集属于子集，不影响start
                             int modesize = model.end - model.start;
                             model.start -= fsize - size;
                             model.end = model.start + (modesize - size + 1);

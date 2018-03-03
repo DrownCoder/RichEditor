@@ -19,10 +19,10 @@ import com.study.xuan.editor.adapter.PanelAdapter;
 import com.study.xuan.editor.common.Const;
 import com.study.xuan.editor.model.panel.ModelWrapper;
 import com.study.xuan.editor.model.panel.PanelFactory;
-import com.study.xuan.editor.model.panel.event.BasePanelEvent;
-import com.study.xuan.editor.model.panel.event.FontChangeEvent;
-import com.study.xuan.editor.model.panel.event.LinkChangeEvent;
-import com.study.xuan.editor.model.panel.event.ParagraphChangeEvent;
+import com.study.xuan.editor.model.panel.state.BasePanelEvent;
+import com.study.xuan.editor.model.panel.state.FontChangeEvent;
+import com.study.xuan.editor.model.panel.state.LinkChangeEvent;
+import com.study.xuan.editor.model.panel.state.ParagraphChangeEvent;
 import com.study.xuan.editor.operate.font.FontParam;
 import com.study.xuan.editor.operate.font.FontParamBuilder;
 

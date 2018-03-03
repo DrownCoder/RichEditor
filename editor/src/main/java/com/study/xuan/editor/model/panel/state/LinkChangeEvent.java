@@ -1,4 +1,4 @@
-package com.study.xuan.editor.model.panel.event;
+package com.study.xuan.editor.model.panel.state;
 
 import com.study.xuan.editor.operate.font.FontParam;
 

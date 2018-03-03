@@ -4,10 +4,10 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.study.xuan.editor.model.SpanModel;
-import com.study.xuan.editor.model.panel.event.BasePanelEvent;
-import com.study.xuan.editor.model.panel.event.FontChangeEvent;
-import com.study.xuan.editor.model.panel.event.LinkChangeEvent;
-import com.study.xuan.editor.model.panel.event.ParagraphChangeEvent;
+import com.study.xuan.editor.model.panel.state.BasePanelEvent;
+import com.study.xuan.editor.model.panel.state.FontChangeEvent;
+import com.study.xuan.editor.model.panel.state.LinkChangeEvent;
+import com.study.xuan.editor.model.panel.state.ParagraphChangeEvent;
 import com.study.xuan.editor.operate.ParamManager;
 import com.study.xuan.editor.operate.span.factory.AbstractSpanFactory;
 import com.study.xuan.editor.operate.span.factory.IAbstractSpanFactory;

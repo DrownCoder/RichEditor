@@ -15,6 +15,11 @@ import java.util.List;
 
 import static com.study.xuan.editor.common.Const.BASE_LOG;
 
+/**
+ * Author : xuan.
+ * Date : 2017/3/3.
+ * Description :InputFilter过滤器，第一步过滤
+ */
 public class SpanStep1Filter implements InputFilter,ISpanFilter{
     private List<SpanModel> spanModels;
     private RichModel richModel;

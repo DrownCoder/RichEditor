@@ -1,4 +1,4 @@
-package com.study.xuan.editor.model.panel.state;
+package com.study.xuan.editor.model.panel.event;
 
 /**
  * Author : xuan.

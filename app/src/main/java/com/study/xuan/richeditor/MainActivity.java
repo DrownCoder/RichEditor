@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
      */
     private void onLinkEvent(LinkChangeEvent state) {
         SpanModel linkModel = new SpanModel(state.linkParam);
-        linkModel.code = linkModel.param.getCharCodes();
+        linkModel.code = state.linkParam.getCharCodes();
         linkModel.mSpans = spanFactory.createSpan(linkModel.code);
 
         mEditor.getCurIndexModel().addLink(state.title, linkModel);

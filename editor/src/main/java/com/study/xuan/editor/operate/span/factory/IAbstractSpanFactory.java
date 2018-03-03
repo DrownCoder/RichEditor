@@ -9,15 +9,15 @@ import java.util.List;
  */
 
 public interface IAbstractSpanFactory {
-    public List<Object> createSpan(String code);
+    List<Object> createSpan(String code);
 
-    public void createCharacterSpan(String code, List<Object> data);
+    void createCharacterSpan(String code, List<Object> data);
 
-    public void createParagraphSpan(String code, List<Object> data);
+    void createParagraphSpan(String code, List<Object> data);
 
-    public ICharacterStyleFactory createCharacterFactory();
+    ICharacterStyleFactory createCharacterFactory();
 
-    public IParagraphFactory createParagraphFactory();
+    IParagraphFactory createParagraphFactory();
 
-    public IUpdateAppearanceFactory createUpdateFactory();
+    IUpdateAppearanceFactory createUpdateFactory();
 }

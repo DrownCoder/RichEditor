@@ -1,8 +1,8 @@
 package com.study.xuan.editor.model;
 
-import com.study.xuan.editor.common.Const;
 import com.study.xuan.editor.operate.font.FontParam;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -12,7 +12,6 @@ import java.util.List;
  */
 
 public class SpanModel {
-    public FontParam param;//span参数
     public List<Object> mSpans;//span样式
     public int paragraphType = -1;
     public String spanString;//字符
@@ -22,7 +21,12 @@ public class SpanModel {
     public String code;
 
     public SpanModel(FontParam param) {
-        this.param = param;
+        start = 0;
+        end = 0;
+    }
+
+    public SpanModel() {
+        mSpans = new ArrayList<>();
         start = 0;
         end = 0;
     }

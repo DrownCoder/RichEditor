@@ -4,12 +4,8 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
 import android.text.InputFilter;
 import android.text.Spanned;
-import android.text.TextUtils;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +16,8 @@ import android.widget.ImageView;
 import com.study.xuan.editor.R;
 import com.study.xuan.editor.model.RichModel;
 import com.study.xuan.editor.model.SpanModel;
-import com.study.xuan.editor.operate.filter.SpanInputFilter;
+import com.study.xuan.editor.operate.filter.SpanStep1Filter;
+import com.study.xuan.editor.operate.filter.SpanStep2Filter;
 import com.study.xuan.editor.operate.paragraph.ParagraphHelper;
 import com.study.xuan.editor.operate.span.MultiSpannableString;
 import com.study.xuan.shapebuilder.shape.ShapeBuilder;
@@ -29,7 +26,6 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.study.xuan.editor.common.Const.BASE_LOG;
 import static com.study.xuan.editor.common.Const.TYPE_EDIT;
 import static com.study.xuan.editor.common.Const.TYPE_IMG;
 
@@ -165,10 +161,10 @@ public class RichAdapter extends RecyclerView.Adapter {
                 MultiSpannableString spannableString = new MultiSpannableString(item.source);
                 spannableString.setMultiSpans(item.paragraphSpan.mSpans, 0, item.source.length(),
                         Spanned
-                        .SPAN_EXCLUSIVE_EXCLUSIVE);
+                                .SPAN_EXCLUSIVE_EXCLUSIVE);
                 mEdit.setText(spannableString);
                 paragraphHelper.handleTextStyle(mEdit, item.paragraphSpan.paragraphType);
-            }else{
+            } else {
                 mSpanString.clear();
                 mSpanString.clearSpans();
                 mSpanString.append(item.source);
@@ -347,16 +343,16 @@ public class RichAdapter extends RecyclerView.Adapter {
     }
 
     private class EditHolder extends RecyclerView.ViewHolder {
-        private CustomEditTextListener textWatcher;
+        private SpanStep2Filter textWatcher;
         private EditText mEt;
-        private SpanInputFilter filter;
+        private SpanStep1Filter filter;
 
         EditHolder(View itemView) {
             super(itemView);
             mEt = (EditText) itemView;
             mEt.setOnClickListener(onClickListener);
-            textWatcher = new CustomEditTextListener();
-            filter = new SpanInputFilter(mData);
+            textWatcher = new SpanStep2Filter(mData);
+            filter = new SpanStep1Filter(mData);
             mEt.addTextChangedListener(textWatcher);
             mEt.setOnKeyListener(onKeyListener);
             mEt.setFilters(new InputFilter[]{filter});
@@ -373,30 +369,6 @@ public class RichAdapter extends RecyclerView.Adapter {
             mIvDelete = (ImageView) itemView.findViewById(R.id.iv_rich_delete);
         }
     }
-
-    private class CustomEditTextListener implements TextWatcher {
-        private int position;
-
-        void updatePosition(int position) {
-            this.position = position;
-        }
-
-        @Override
-        public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
-            // no op
-        }
-
-        @Override
-        public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
-            mData.get(position).setSource(charSequence.toString());
-        }
-
-        @Override
-        public void afterTextChanged(Editable editable) {
-            // no op
-        }
-    }
-
 
     private class HeadHolder extends RecyclerView.ViewHolder {
         HeadHolder(View mHeader) {

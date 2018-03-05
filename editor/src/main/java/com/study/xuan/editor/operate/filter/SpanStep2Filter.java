@@ -42,9 +42,9 @@ public class SpanStep2Filter implements TextWatcher, ISpanFilter {
             if (mData.get(position).getSpanList() != null) {
                 iterator = mData.get(position).getSpanList().iterator();
             }
+            boolean needAdd = false;
             for (int i = 0; i < spans.length; i++) {
                 SpanModel model;
-                boolean needAdd = false;
                 if (iterator != null && iterator.hasNext()) {
                     //复用原本的Model，防止重复New
                     model = (SpanModel) iterator.next();
@@ -72,7 +72,7 @@ public class SpanStep2Filter implements TextWatcher, ISpanFilter {
                     mData.get(position).getSpanList().add(model);
                 }
             }
-            while (iterator != null && iterator.hasNext()) {
+            while (!needAdd && iterator != null && iterator.hasNext()) {
                 iterator.next();
                 iterator.remove();
             }

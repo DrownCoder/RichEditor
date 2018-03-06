@@ -1,12 +1,30 @@
 package com.study.xuan.editor.widget.panel;
 
-import com.study.xuan.editor.operate.font.FontParamBuilder;
-
 /**
  * Author : xuan.
- * Date : 18-3-5.
- * Description : 操作面板
+ * Date : 18-3-6.
+ * Description : the file description
  */
 public interface IPanel {
-    FontParamBuilder getFontParam();
+    void change();
+
+    void reset();
+    
+    IPanel setBold(boolean isSelected);
+
+    IPanel setItalics(boolean isSelected);
+
+    IPanel setUnderLine(boolean isSelected);
+
+    IPanel setCenterLine(boolean isSelected);
+
+    IPanel setFontBac(int fontBac);
+
+    IPanel setFontSize(int fontSize);
+
+    IPanel setFontColor(int fontColor);
+
+    IPanel setUrl(String url);
+
+    IPanel setRefer(boolean isRefer);
 }

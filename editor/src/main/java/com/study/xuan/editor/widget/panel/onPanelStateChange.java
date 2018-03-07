@@ -6,5 +6,5 @@ package com.study.xuan.editor.widget.panel;
  * Description : the file description
  */
 public interface onPanelStateChange {
-    void onStateChanged(boolean isSelected);
+    void onStateChanged();
 }

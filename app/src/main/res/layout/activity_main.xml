@@ -10,12 +10,17 @@
         android:id="@+id/editor"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-    <com.study.xuan.editor.widget.EditorPanel
+    <!--<com.study.xuan.editor.widget.EditorPanel
         android:id="@+id/panel"
         android:layout_gravity="bottom"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"/>-->
 
+    <com.study.xuan.editor.widget.panel.EditorPanelAlpha
+        android:layout_gravity="bottom"
+        android:id="@+id/panel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
     <TextView
         android:id="@+id/tv_test"
         android:gravity="center"

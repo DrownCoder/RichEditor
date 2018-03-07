@@ -6,5 +6,10 @@ package com.study.xuan.editor.operate.paragraph;
  * Description :input the description of this file.
  */
 
-public class ParagraphParam {
+public class ParagraphBuilder {
+    public int type;
+
+    public void setType(int type) {
+        this.type = type;
+    }
 }

@@ -9,28 +9,48 @@ import com.study.xuan.editor.model.panel.state.FontChangeEvent;
 import com.study.xuan.editor.model.panel.state.LinkChangeEvent;
 import com.study.xuan.editor.model.panel.state.ParagraphChangeEvent;
 import com.study.xuan.editor.operate.ParamManager;
+import com.study.xuan.editor.operate.font.FontParam;
 import com.study.xuan.editor.operate.span.factory.AbstractSpanFactory;
 import com.study.xuan.editor.operate.span.factory.IAbstractSpanFactory;
 import com.study.xuan.editor.util.KeyboardUtil;
 import com.study.xuan.editor.widget.EditorPanel;
 import com.study.xuan.editor.widget.RichEditor;
+import com.study.xuan.editor.widget.panel.EditorPanelAlpha;
+import com.study.xuan.editor.widget.panel.PanelBuilder;
+import com.study.xuan.editor.widget.panel.onPanelStateChange;
+
+import static com.study.xuan.editor.widget.panel.PanelBuilder.TYPE_FONT;
+import static com.study.xuan.editor.widget.panel.PanelBuilder.TYPE_PARAGRAPH;
 
 
 public class MainActivity extends AppCompatActivity {
     RichEditor mEditor;
-    EditorPanel mPanel;
+    EditorPanelAlpha mPanel;
     ParamManager paramManager;
     IAbstractSpanFactory spanFactory;
+    private PanelBuilder panelBuilder;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mEditor = (RichEditor) findViewById(R.id.editor);
-        mPanel = (EditorPanel) findViewById(R.id.panel);
+        mPanel = (EditorPanelAlpha) findViewById(R.id.panel);
         paramManager = new ParamManager();
         spanFactory = new AbstractSpanFactory();
-
-        mPanel.setStateChange(new EditorPanel.onPanelStateChange() {
+        panelBuilder = mPanel.panelBuilder;
+        panelBuilder.setStateChange(new onPanelStateChange() {
+            @Override
+            public void onStateChanged() {
+                switch (panelBuilder.getType()) {
+                    case TYPE_FONT:
+                        onFontEvent(panelBuilder.getFontParam());
+                        break;
+                    case TYPE_PARAGRAPH:
+                        break;
+                }
+            }
+        });
+       /* mPanel.setStateChange(new EditorPanel.onPanelStateChange() {
             @Override
             public void onStateChanged(BasePanelEvent state) {
                 if (state instanceof FontChangeEvent) {
@@ -41,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
                     onLinkEvent((LinkChangeEvent) state);
                 }
             }
-        });
+        });*/
     }
 
     /**
@@ -84,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * 字体样式改变事件
      */
-    private void onFontEvent(boolean isShow) {
+    /*private void onFontEvent(boolean isShow) {
         if (!isShow) {
             if (paramManager.needNewSpan(mPanel.getFontParams())) {//需要新生产span样式
                 SpanModel spanModel = new SpanModel(paramManager.createNewParam());
@@ -97,6 +117,15 @@ public class MainActivity extends AppCompatActivity {
         }else{
             KeyboardUtil.closeKeyboard(this);
         }
+    }*/
+    private void onFontEvent(FontParam param) {
+        if (paramManager.needNewSpan(param)) {//需要新生产span样式
+            SpanModel spanModel = new SpanModel(paramManager.createNewParam());
+            spanModel.code = paramManager.getParamCode(spanModel.paragraphType);
+            spanModel.mSpans = spanFactory.createSpan(spanModel.code);
+            mEditor.getCurIndexModel().setNewSpan(spanModel);
+        } else {
+            mEditor.getCurIndexModel().setNoNewSpan();
+        }
     }
-
 }

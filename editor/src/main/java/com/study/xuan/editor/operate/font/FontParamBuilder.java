@@ -6,7 +6,7 @@ package com.study.xuan.editor.operate.font;
  * Description :input the description of this file.
  */
 
-public class FontParamBuilder{
+public class FontParamBuilder {
     private FontParam param;
 
     public FontParamBuilder() {
@@ -20,6 +20,7 @@ public class FontParamBuilder{
         param.isBold = isbold;
         return this;
     }
+
     /**
      * 斜体
      */
@@ -27,6 +28,7 @@ public class FontParamBuilder{
         param.isItalics = isItalics;
         return this;
     }
+
     /**
      * 下划线
      */
@@ -34,6 +36,7 @@ public class FontParamBuilder{
         param.isUnderLine = isUnderLine;
         return this;
     }
+
     /**
      * 中划线
      */
@@ -41,6 +44,7 @@ public class FontParamBuilder{
         param.isCenterLine = isCenterLine;
         return this;
     }
+
     /**
      * 是否显示字背景色
      */
@@ -48,6 +52,7 @@ public class FontParamBuilder{
         param.isFontBac = isFontBac;
         return this;
     }
+
     /**
      * 设置字背景色
      */
@@ -77,7 +82,8 @@ public class FontParamBuilder{
     /**
      * 设置超链接
      */
-    public FontParamBuilder url(String url) {
+    public FontParamBuilder url(String name, String url) {
+        param.name = name;
         param.url = url;
         return this;
     }

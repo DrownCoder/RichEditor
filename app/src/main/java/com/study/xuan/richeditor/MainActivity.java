@@ -20,6 +20,7 @@ import com.study.xuan.editor.widget.panel.PanelBuilder;
 import com.study.xuan.editor.widget.panel.onPanelStateChange;
 
 import static com.study.xuan.editor.widget.panel.PanelBuilder.TYPE_FONT;
+import static com.study.xuan.editor.widget.panel.PanelBuilder.TYPE_LINK;
 import static com.study.xuan.editor.widget.panel.PanelBuilder.TYPE_PARAGRAPH;
 
 
@@ -29,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     ParamManager paramManager;
     IAbstractSpanFactory spanFactory;
     private PanelBuilder panelBuilder;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,7 +47,10 @@ public class MainActivity extends AppCompatActivity {
                     case TYPE_FONT:
                         onFontEvent(panelBuilder.getFontParam());
                         break;
+                    case TYPE_LINK:
+                        onLinkEvent(panelBuilder.getFontParam());
                     case TYPE_PARAGRAPH:
+                        onParagraphEvent(panelBuilder.getParagraph().type);
                         break;
                 }
             }
@@ -67,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * 链接事件
      */
-    private void onLinkEvent(LinkChangeEvent state) {
+    /*private void onLinkEvent(LinkChangeEvent state) {
         SpanModel linkModel = new SpanModel(state.linkParam);
         linkModel.code = state.linkParam.getCharCodes();
         linkModel.mSpans = spanFactory.createSpan(linkModel.code);
@@ -79,11 +84,29 @@ public class MainActivity extends AppCompatActivity {
         spanModel.code = paramManager.getParamCode(spanModel.paragraphType);
         spanModel.mSpans = spanFactory.createSpan(spanModel.code);
         mEditor.getCurIndexModel().setNewSpan(spanModel);
+    }*/
+    private void onLinkEvent(FontParam param) {
+        SpanModel linkModel = new SpanModel(param);
+        linkModel.code = param.getCharCodes();
+        linkModel.mSpans = spanFactory.createSpan(linkModel.code);
+
+        mEditor.getCurIndexModel().addLink(param.name, linkModel);
+        mEditor.notifyEvent();
+
+        SpanModel spanModel = new SpanModel(paramManager.createNewParam());
+        spanModel.code = paramManager.getParamCode(spanModel.paragraphType);
+        spanModel.mSpans = spanFactory.createSpan(spanModel.code);
+        mEditor.getCurIndexModel().setNewSpan(spanModel);
     }
 
     /**
      * 段落样式改变事件
      */
+    private void onParagraphEvent(int pType) {
+        initParagraphSpan(pType);
+        mEditor.notifyEvent();
+    }
+
     private void onParagraphEvent(ParagraphChangeEvent state) {
         if (!state.isSelected) {
             mEditor.getCurIndexModel().setNoParagraphSpan();

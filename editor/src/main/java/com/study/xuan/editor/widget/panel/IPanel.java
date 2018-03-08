@@ -1,6 +1,9 @@
 package com.study.xuan.editor.widget.panel;
 
+import android.support.annotation.ColorInt;
+
 import com.study.xuan.editor.operate.font.FontParam;
+import com.study.xuan.editor.operate.paragraph.ParagraphBuilder;
 
 /**
  * Author : xuan.
@@ -15,6 +18,8 @@ public interface IPanel {
     String getType();
 
     FontParam getFontParam();
+
+    ParagraphBuilder getParagraph();
 
     IPanel setBold(boolean isSelected);
 
@@ -31,6 +36,8 @@ public interface IPanel {
     IPanel setFontColor(int fontColor);
 
     IPanel setUrl(String name, String url);
+
+    IPanel setUrl(String name, String url,@ColorInt int color);
 
     IPanel setRefer();
 

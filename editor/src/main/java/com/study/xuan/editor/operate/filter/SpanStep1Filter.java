@@ -20,7 +20,8 @@ import static com.study.xuan.editor.common.Const.BASE_LOG;
  * Date : 2017/3/3.
  * Description :InputFilter过滤器，第一步过滤
  */
-public class SpanStep1Filter implements InputFilter,ISpanFilter{
+public class SpanStep1Filter implements InputFilter, ISpanFilter {
+    private SpanModel preSpanModel;
     private List<SpanModel> spanModels;
     private RichModel richModel;
     private MultiSpannableString spannableString;
@@ -72,6 +73,10 @@ public class SpanStep1Filter implements InputFilter,ISpanFilter{
         if (richModel.isNewSpan) {
             //使用过后，变成false
             richModel.isNewSpan = false;
+            if (richModel.newSpan.mSpans.size() == 0) {
+                //todo 变粗后恢复常规
+                return spannableString;
+            }
             //新建span样式
             nowSpanModel = richModel.newSpan;
             if (dstart == richModel.source.length()) {
@@ -98,7 +103,7 @@ public class SpanStep1Filter implements InputFilter,ISpanFilter{
                 }
             }
         } else {
-            //保持原有span样式，不进行插入操作
+            //保持原有span样式，不进行插入操作,只改变data,不重新new span，优化
             for (; i < spanModels.size(); i++) {
                 SpanModel spanModel = spanModels.get(i);
                 if (dstart > spanModel.end) {
@@ -193,7 +198,7 @@ public class SpanStep1Filter implements InputFilter,ISpanFilter{
                         if (model.start <= start && model.end >= end) {
                             //删除区间是当前区间的子集
                             model.end -= fsize;
-                        }else{
+                        } else {
                             //删除区间跨区间
                             if (end <= model.end) {
                                 //前删法，后面前移

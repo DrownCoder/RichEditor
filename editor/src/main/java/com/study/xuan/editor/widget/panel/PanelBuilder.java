@@ -1,5 +1,8 @@
 package com.study.xuan.editor.widget.panel;
 
+import android.graphics.Color;
+import android.support.annotation.ColorInt;
+
 import com.study.xuan.editor.common.Const;
 import com.study.xuan.editor.operate.font.FontParam;
 import com.study.xuan.editor.operate.font.FontParamBuilder;
@@ -12,6 +15,7 @@ import com.study.xuan.editor.operate.paragraph.ParagraphBuilder;
  */
 public class PanelBuilder implements IPanel {
     public static final String TYPE_FONT = "FONT";
+    public static final String TYPE_LINK = "LINK";
     public static final String TYPE_PARAGRAPH = "PARAGRAPH";
     private String type;
 
@@ -49,6 +53,11 @@ public class PanelBuilder implements IPanel {
     @Override
     public FontParam getFontParam() {
         return fontParamBuilder.build();
+    }
+
+    @Override
+    public ParagraphBuilder getParagraph() {
+        return paragraphBuilder;
     }
 
     @Override
@@ -102,7 +111,16 @@ public class PanelBuilder implements IPanel {
 
     @Override
     public IPanel setUrl(String name, String url) {
-        type = TYPE_FONT;
+        type = TYPE_LINK;
+        fontParamBuilder.fontColor(Color.parseColor("#3194D0"));
+        fontParamBuilder.url(name, url);
+        return this;
+    }
+
+    @Override
+    public IPanel setUrl(String name, String url,@ColorInt int color) {
+        type = TYPE_LINK;
+        fontParamBuilder.fontColor(color);
         fontParamBuilder.url(name, url);
         return this;
     }

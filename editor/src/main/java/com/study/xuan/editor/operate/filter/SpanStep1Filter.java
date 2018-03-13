@@ -69,12 +69,19 @@ public class SpanStep1Filter implements InputFilter, ISpanFilter {
             return charSequence;
         }
         //输入后要做两步，1.保存新的样式2.设置新的样式
+        //todo 每次都new新的span，暂时没有找到能够复用span的方式
         int i = 0;
         if (richModel.isNewSpan) {
             //使用过后，变成false
             richModel.isNewSpan = false;
             if (richModel.newSpan.mSpans.size() == 0) {
                 //todo 变粗后恢复常规
+                if (dest instanceof SpannableStringBuilder) {
+                    SpannableStringBuilder sp = (SpannableStringBuilder) dest;
+                    for (SpanModel spanModel : richModel.getSpanList()) {
+                        sp.setSpan(spanModel.mSpans, spanModel.start, spanModel.end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    }
+                }
                 return spannableString;
             }
             //新建span样式

@@ -169,7 +169,6 @@ public class RichAdapter extends RecyclerView.Adapter {
                 mSpanString.clearSpans();
                 mSpanString.append(item.source);
                 if (isEnter) {
-                    //// TODO: 2018/2/1 刷新
                     for (SpanModel span : item.getSpanList()) {
                         mSpanString.setMultiSpans(span.mSpans, span.start, span.end, Spanned
                                 .SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -178,7 +177,8 @@ public class RichAdapter extends RecyclerView.Adapter {
                 mEdit.setText(mSpanString);
                 paragraphHelper.handleTextStyle(mEdit, -1);
             }
-            mEdit.setSelection(item.source.length());
+            mEdit.setSelection(item.curIndex);
+            //mEdit.setSelection(item.source.length());
             mEdit.setHint(item.hint);
             mEdit.setTag(pos);
         }

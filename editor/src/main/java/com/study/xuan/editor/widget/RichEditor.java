@@ -8,7 +8,9 @@ import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.EditText;
 
 import com.study.xuan.editor.R;
 import com.study.xuan.editor.adapter.RichAdapter;
@@ -137,6 +139,13 @@ public class RichEditor extends RecyclerView implements ViewTreeObserver.OnGloba
 
     public RichModel getCurIndexModel() {
         return mDatas.get(mAdapter.index);
+    }
+
+    public void saveInfo() {
+        View child = getFocusedChild();
+        if (child instanceof EditText) {
+            getCurIndexModel().curIndex = ((EditText) child).getSelectionEnd();
+        }
     }
 
     public void notifyEvent() {

@@ -19,10 +19,12 @@ public class SpanModel {
     public int start;//开始处
     public int end;//结束处
     public String code;
+    public FontParam param;
 
     public SpanModel(FontParam param) {
         start = 0;
         end = 0;
+        this.param = param;
     }
 
     public SpanModel() {

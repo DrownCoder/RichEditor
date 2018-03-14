@@ -18,15 +18,12 @@ import static com.study.xuan.editor.common.Const.BASE_LOG;
 /**
  * Author : xuan.
  * Date : 2017/3/3.
- * Description :InputFilter过滤器，第一步过滤
+ * Description :InputFilter过滤器，第一步过滤：主要用于设置span
  */
 public class SpanStep1Filter implements InputFilter, ISpanFilter {
-    private SpanModel preSpanModel;
     private List<SpanModel> spanModels;
     private RichModel richModel;
     private MultiSpannableString spannableString;
-    //当前span样式
-    private SpanModel nowSpanModel;
     private boolean isNotify;
     private List<RichModel> mData;
 
@@ -58,6 +55,7 @@ public class SpanStep1Filter implements InputFilter, ISpanFilter {
             Log.i(BASE_LOG, spannableString.toString());
             for (SpanModel model : spanModels) {
                 Log.i(BASE_LOG, model.mSpans + "start:" + model.start + "end:" + model.end);
+                //notify后重置为SPAN_EXCLUSIVE_EXCLUSIVE，后面的会受前面的影响
                 spannableString.setMultiSpans(model.mSpans, model.start, model.end, Spanned
                         .SPAN_EXCLUSIVE_EXCLUSIVE);
             }
@@ -68,74 +66,16 @@ public class SpanStep1Filter implements InputFilter, ISpanFilter {
             //sortAfterDelete(dstart, dend);
             return charSequence;
         }
-        //输入后要做两步，1.保存新的样式2.设置新的样式
-        //todo 每次都new新的span，暂时没有找到能够复用span的方式
-        int i = 0;
-        if (richModel.isNewSpan) {
-            //使用过后，变成false
-            richModel.isNewSpan = false;
-            if (richModel.newSpan.mSpans.size() == 0) {
-                //todo 变粗后恢复常规
-                if (dest instanceof SpannableStringBuilder) {
-                    SpannableStringBuilder sp = (SpannableStringBuilder) dest;
-                    for (SpanModel spanModel : richModel.getSpanList()) {
-                        sp.setSpan(spanModel.mSpans, spanModel.start, spanModel.end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    }
-                }
-                return spannableString;
-            }
-            //新建span样式
-            nowSpanModel = richModel.newSpan;
-            if (dstart == richModel.source.length()) {
-                //光标在文段末尾
-                nowSpanModel.start = dstart;
-                nowSpanModel.end = dstart + end - start;
-                spanModels.add(nowSpanModel);
-            } else {
-                //光标在文中
-                for (; i < spanModels.size(); i++) {
-                    SpanModel spanModel = spanModels.get(i);
-                    if (start > spanModel.end) {
-                        continue;
-                    }
-                    if (start > spanModel.start && start < spanModel.end) {
-                        //光标位置类似：“这是一段文字|光标在中间”
-                        spanModel.end = start;
-                        nowSpanModel.start = start;
-                        nowSpanModel.end = start + end - start;
-                        spanModels.add(i, nowSpanModel);
-                        break;
-                    }
-
-                }
-            }
-        } else {
-            //保持原有span样式，不进行插入操作,只改变data,不重新new span，优化
-            for (; i < spanModels.size(); i++) {
-                SpanModel spanModel = spanModels.get(i);
-                if (dstart > spanModel.end) {
-                    //光标在一段文字末尾修改，则到下一个span
-                    continue;
-                }
-                if (dstart > spanModel.start && dstart <= spanModel.end) {
-                    //光标位置类似：“这是一段文字|光标在中间”
-                    nowSpanModel = spanModel;
-                    spanModel.end += end - start;
-                    i++;
-                    break;
-                }
-            }
-            for (; i < spanModels.size(); i++) {
-                spanModels.get(i).start += end - start;
-                spanModels.get(i).end += end - start;
-            }
+        if (richModel.newSpan.mSpans.size() == 0) {
+            return charSequence;
         }
         spannableString.clear();
         spannableString.clearSpans();
         spannableString.append(charSequence);
-        if (nowSpanModel != null) {
+        if (richModel.newSpan != null) {
             //logModel();
-            spannableString.setMultiSpans(nowSpanModel.mSpans, 0, charSequence.length(), Spanned
+            //设置为SPAN_EXCLUSIVE_INCLUSIVE，后面的会受前面的影响
+            spannableString.setMultiSpans(richModel.newSpan.mSpans, 0, charSequence.length(), Spanned
                     .SPAN_EXCLUSIVE_INCLUSIVE);
         }
         return spannableString;

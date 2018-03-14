@@ -18,6 +18,7 @@ public class RichModel {
     public SpanModel newSpan;
     public boolean isParagraphStyle;//是否有段落格式
     public SpanModel paragraphSpan;
+    public int curIndex;//当前的光标
 
 
     public RichModel(int type, String s, String df) {

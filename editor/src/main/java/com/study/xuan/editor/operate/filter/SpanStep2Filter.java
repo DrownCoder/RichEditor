@@ -5,9 +5,11 @@ import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
 import android.text.style.CharacterStyle;
 import android.util.Log;
+import android.widget.EditText;
 
 import com.study.xuan.editor.model.RichModel;
 import com.study.xuan.editor.model.SpanModel;
+import com.study.xuan.editor.util.RichLog;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -18,14 +20,20 @@ import static com.study.xuan.editor.common.Const.BASE_LOG;
 public class SpanStep2Filter implements TextWatcher, ISpanFilter {
     private int position;
     private List<RichModel> mData;
+    private RichModel richModel;
+    private EditText etv;
+    private boolean isNotify;
 
-    public SpanStep2Filter(List<RichModel> mData) {
+    public SpanStep2Filter(EditText tv, List<RichModel> mData) {
+        this.etv = tv;
         this.mData = mData;
     }
 
     @Override
     public void updatePosition(int position) {
         this.position = position;
+        richModel = mData.get(position);
+        isNotify = true;
     }
 
     @Override
@@ -85,6 +93,11 @@ public class SpanStep2Filter implements TextWatcher, ISpanFilter {
 
     @Override
     public void afterTextChanged(Editable editable) {
-        // no op
+        if (!isNotify) {
+            richModel.curIndex = etv.getSelectionStart();
+            RichLog.log("index = " + richModel.curIndex);
+        }else{
+            isNotify = false;
+        }
     }
 }

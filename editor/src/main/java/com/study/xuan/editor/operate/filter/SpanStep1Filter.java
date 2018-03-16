@@ -66,7 +66,7 @@ public class SpanStep1Filter implements InputFilter, ISpanFilter {
             //sortAfterDelete(dstart, dend);
             return charSequence;
         }
-        if (richModel.newSpan.mSpans.size() == 0) {
+        if (richModel.newSpan != null && richModel.newSpan.mSpans.size() == 0) {
             return charSequence;
         }
         spannableString.clear();

@@ -351,7 +351,7 @@ public class RichAdapter extends RecyclerView.Adapter {
             super(itemView);
             mEt = (EditText) itemView;
             mEt.setOnClickListener(onClickListener);
-            textWatcher = new SpanStep2Filter(mData);
+            textWatcher = new SpanStep2Filter(mEt, mData);
             filter = new SpanStep1Filter(mData);
             mEt.addTextChangedListener(textWatcher);
             mEt.setOnKeyListener(onKeyListener);

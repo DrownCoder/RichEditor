@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputFilter;
+import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -20,6 +21,7 @@ import com.study.xuan.editor.operate.filter.SpanStep1Filter;
 import com.study.xuan.editor.operate.filter.SpanStep2Filter;
 import com.study.xuan.editor.operate.paragraph.ParagraphHelper;
 import com.study.xuan.editor.operate.span.MultiSpannableString;
+import com.study.xuan.editor.operate.span.factory.IAbstractSpanFactory;
 import com.study.xuan.shapebuilder.shape.ShapeBuilder;
 
 import java.util.HashSet;
@@ -48,14 +50,20 @@ public class RichAdapter extends RecyclerView.Adapter {
     private MultiSpannableString mSpanString;
 
     private View mHeader;
+    private RecyclerView mRcy;
 
     private ParagraphHelper paragraphHelper;
+    private IAbstractSpanFactory factory;
 
     public boolean isEnter;
 
     public void addHeaderView(View header) {
         this.mHeader = header;
         notifyItemInserted(0);
+    }
+
+    public void setFactory(IAbstractSpanFactory factory) {
+        this.factory = factory;
     }
 
     public interface onScrollIndex {
@@ -78,9 +86,10 @@ public class RichAdapter extends RecyclerView.Adapter {
     }
 
 
-    public RichAdapter(List<RichModel> mData, Context mContext) {
+    public RichAdapter(List<RichModel> mData, Context mContext, RecyclerView rcy) {
         this.mData = mData;
         this.mContext = mContext;
+        this.mRcy = rcy;
         mEtHolder = new HashSet<>();
         mHolderShow = new LinkedList<>();
         paragraphHelper = new ParagraphHelper(mContext);
@@ -297,8 +306,37 @@ public class RichAdapter extends RecyclerView.Adapter {
             String newStr = item.source.substring(cPos, item.source.length());
             String oldStr = item.source.substring(0, cPos);
             item.setSource(oldStr);
-            mData.add(pos + 1, new RichModel(TYPE_EDIT, newStr, ""));
+            RichModel newModel = new RichModel(TYPE_EDIT, newStr, "");
+            for (int i = 0; i < item.getSpanList().size(); i++) {
+                SpanModel span = item.getSpanList().get(i);
+                if (cPos == span.start) {
+                    //如果刚好在两种样式之间，将后面的样式从前一个移除，添加到后面一个样式中
+                    for (; i < item.getSpanList().size(); i++) {
+                        SpanModel model = item.getSpanList().remove(i);
+                        model.start -= cPos;
+                        model.end -= cPos;
+                        newModel.getSpanList().add(model);
+                    }
+                } else if (cPos > span.start && cPos < span.end) {
+                    //如果在一个样式之间，则需要将这个样式分割
+                    span.end = cPos;
+                    for (++i; i < item.getSpanList().size(); i++) {
+                        SpanModel model = item.getSpanList().remove(i);
+                        i--;
+                        model.start -= cPos;
+                        model.end -= cPos;
+                        newModel.getSpanList().add(model);
+                    }
+                    SpanModel model = new SpanModel(span.param);
+                    model.mSpans.addAll(factory.createSpan(span.param.getCharCodes()));
+                    model.start = 0;
+                    model.end = span.end - cPos;
+                    newModel.getSpanList().add(0, model);
+                }
+            }
+            mData.add(pos + 1, newModel);
         }
+        item.curIndex = item.source.length();
         index++;
         notifyDataChanged();
         if (mOnScrollIndex != null) {
@@ -338,6 +376,10 @@ public class RichAdapter extends RecyclerView.Adapter {
     public void notifyDataChanged() {
         if (mData.size() == 1 && mData.get(0).type == TYPE_EDIT) {
             mData.get(0).hint = DEFAULT_HINT;
+        }
+        View child = mRcy.getFocusedChild();
+        if (child instanceof EditText) {
+            mData.get(index).curIndex = ((EditText) child).getSelectionEnd();
         }
         notifyDataSetChanged();
     }

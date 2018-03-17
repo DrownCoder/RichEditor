@@ -2,6 +2,11 @@ package com.study.xuan.richeditor;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.StrikethroughSpan;
+import android.text.style.StyleSpan;
+import android.widget.TextView;
 
 import com.study.xuan.editor.model.SpanModel;
 import com.study.xuan.editor.model.panel.state.BasePanelEvent;
@@ -19,6 +24,8 @@ import com.study.xuan.editor.widget.panel.EditorPanelAlpha;
 import com.study.xuan.editor.widget.panel.PanelBuilder;
 import com.study.xuan.editor.widget.panel.onPanelStateChange;
 
+import static android.graphics.Typeface.BOLD;
+import static android.graphics.Typeface.ITALIC;
 import static com.study.xuan.editor.widget.panel.PanelBuilder.TYPE_FONT;
 import static com.study.xuan.editor.widget.panel.PanelBuilder.TYPE_LINK;
 import static com.study.xuan.editor.widget.panel.PanelBuilder.TYPE_PARAGRAPH;
@@ -37,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mEditor = (RichEditor) findViewById(R.id.editor);
         mPanel = (EditorPanelAlpha) findViewById(R.id.panel);
+
         paramManager = new ParamManager();
         spanFactory = new AbstractSpanFactory();
         panelBuilder = mPanel.panelBuilder;
@@ -142,7 +150,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }*/
     private void onFontEvent(FontParam param) {
-        mEditor.saveInfo();
         mEditor.notifyEvent();
         if (paramManager.needNewSpan(param)) {//需要新生产span样式
             SpanModel spanModel = new SpanModel(paramManager.createNewParam());

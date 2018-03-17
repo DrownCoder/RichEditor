@@ -62,6 +62,7 @@ public class SpanStep2Filter implements TextWatcher, ISpanFilter {
                         model.mSpans = new ArrayList<>();
                     }
                 } else {
+                    RichLog.log("NEW-------------");
                     needAdd = true;
                     model = new SpanModel();
                 }

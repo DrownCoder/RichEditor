@@ -15,6 +15,7 @@ import android.widget.EditText;
 import com.study.xuan.editor.R;
 import com.study.xuan.editor.adapter.RichAdapter;
 import com.study.xuan.editor.model.RichModel;
+import com.study.xuan.editor.operate.span.factory.IAbstractSpanFactory;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -36,12 +37,13 @@ public class RichEditor extends RecyclerView implements ViewTreeObserver.OnGloba
     private RichAdapter mAdapter;
     private List<RichModel> mDatas;
     private List<String> photoPaths;
+
     public RichEditor(Context context) {
-        this(context ,null);
+        this(context, null);
     }
 
     public RichEditor(Context context, @Nullable AttributeSet attrs) {
-        this(context, attrs , 0);
+        this(context, attrs, 0);
     }
 
     public RichEditor(Context context, @Nullable AttributeSet attrs, int defStyle) {
@@ -60,7 +62,7 @@ public class RichEditor extends RecyclerView implements ViewTreeObserver.OnGloba
     private void initAdapter() {
         setLayoutManager(new LinearLayoutManager(mContext));
         mDatas.add(new RichModel(TYPE_EDIT, "", DEFAULT_HINT));
-        mAdapter = new RichAdapter(mDatas, mContext);
+        mAdapter = new RichAdapter(mDatas, mContext, this);
         mAdapter.addHeaderView(LayoutInflater.from(mContext).inflate(R.layout.head_item, null));
         setAdapter(mAdapter);
     }
@@ -141,11 +143,8 @@ public class RichEditor extends RecyclerView implements ViewTreeObserver.OnGloba
         return mDatas.get(mAdapter.index);
     }
 
-    public void saveInfo() {
-        View child = getFocusedChild();
-        if (child instanceof EditText) {
-            getCurIndexModel().curIndex = ((EditText) child).getSelectionEnd();
-        }
+    public void setFactory(IAbstractSpanFactory factory) {
+        mAdapter.setFactory(factory);
     }
 
     public void notifyEvent() {

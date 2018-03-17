@@ -55,7 +55,7 @@ public class SpanStep1Filter implements InputFilter, ISpanFilter {
             Log.i(BASE_LOG, spannableString.toString());
             for (SpanModel model : spanModels) {
                 Log.i(BASE_LOG, model.mSpans + "start:" + model.start + "end:" + model.end);
-                //notify后重置为SPAN_EXCLUSIVE_EXCLUSIVE，后面的会受前面的影响
+                //notify后重置为SPAN_EXCLUSIVE_EXCLUSIVE，后面不受前面的影响
                 spannableString.setMultiSpans(model.mSpans, model.start, model.end, Spanned
                         .SPAN_EXCLUSIVE_EXCLUSIVE);
             }
@@ -73,6 +73,7 @@ public class SpanStep1Filter implements InputFilter, ISpanFilter {
         spannableString.clearSpans();
         spannableString.append(charSequence);
         if (richModel.newSpan != null) {
+            richModel.getSpanList().add(richModel.newSpan);
             //logModel();
             //设置为SPAN_EXCLUSIVE_INCLUSIVE，后面的会受前面的影响
             spannableString.setMultiSpans(richModel.newSpan.mSpans, 0, charSequence.length(), Spanned

@@ -313,24 +313,25 @@ public class RichAdapter extends RecyclerView.Adapter {
                     //如果刚好在两种样式之间，将后面的样式从前一个移除，添加到后面一个样式中
                     for (; i < item.getSpanList().size(); i++) {
                         SpanModel model = item.getSpanList().remove(i);
+                        i--;
                         model.start -= cPos;
                         model.end -= cPos;
                         newModel.getSpanList().add(model);
                     }
                 } else if (cPos > span.start && cPos < span.end) {
                     //如果在一个样式之间，则需要将这个样式分割
-                    span.end = cPos;
-                    for (++i; i < item.getSpanList().size(); i++) {
-                        SpanModel model = item.getSpanList().remove(i);
-                        i--;
-                        model.start -= cPos;
-                        model.end -= cPos;
-                        newModel.getSpanList().add(model);
-                    }
                     SpanModel model = new SpanModel(span.param);
                     model.mSpans.addAll(factory.createSpan(span.param.getCharCodes()));
                     model.start = 0;
                     model.end = span.end - cPos;
+                    span.end = cPos;
+                    for (++i; i < item.getSpanList().size(); i++) {
+                        SpanModel removeModel = item.getSpanList().remove(i);
+                        i--;
+                        removeModel.start -= cPos;
+                        removeModel.end -= cPos;
+                        newModel.getSpanList().add(removeModel);
+                    }
                     newModel.getSpanList().add(0, model);
                 }
             }
@@ -348,6 +349,12 @@ public class RichAdapter extends RecyclerView.Adapter {
         if (((EditText) view).getSelectionStart() == 0) {
             if (pos >= 1) {
                 if (mData.get(pos - 1).type == TYPE_EDIT) {
+                    RichModel removeModel = mData.get(pos);
+                    for (SpanModel spanModel : removeModel.getSpanList()) {
+                        spanModel.start += mData.get(pos - 1).source.length();
+                        spanModel.end += mData.get(pos - 1).source.length();
+                        mData.get(pos -1 ).getSpanList().add(spanModel);
+                    }
                     mData.get(pos - 1).append(mData.get(pos).source);
                     mData.remove(pos);
                     mEtHolder.remove(view);
@@ -376,10 +383,6 @@ public class RichAdapter extends RecyclerView.Adapter {
     public void notifyDataChanged() {
         if (mData.size() == 1 && mData.get(0).type == TYPE_EDIT) {
             mData.get(0).hint = DEFAULT_HINT;
-        }
-        View child = mRcy.getFocusedChild();
-        if (child instanceof EditText) {
-            mData.get(index).curIndex = ((EditText) child).getSelectionEnd();
         }
         notifyDataSetChanged();
     }

@@ -24,6 +24,7 @@ public class SpanModel {
     public SpanModel(FontParam param) {
         start = 0;
         end = 0;
+        mSpans = new ArrayList<>();
         this.param = param;
     }
 

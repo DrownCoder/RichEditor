@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
         paramManager = new ParamManager();
         spanFactory = new AbstractSpanFactory();
+        mEditor.setFactory(spanFactory);
         panelBuilder = mPanel.panelBuilder;
         panelBuilder.setStateChange(new onPanelStateChange() {
             @Override
@@ -150,6 +151,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }*/
     private void onFontEvent(FontParam param) {
+        mEditor.saveInfo();
         mEditor.notifyEvent();
         if (paramManager.needNewSpan(param)) {//需要新生产span样式
             SpanModel spanModel = new SpanModel(paramManager.createNewParam());

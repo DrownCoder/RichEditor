@@ -147,6 +147,13 @@ public class RichEditor extends RecyclerView implements ViewTreeObserver.OnGloba
         mAdapter.setFactory(factory);
     }
 
+    public void saveInfo() {
+        View child = getFocusedChild();
+        if (child instanceof EditText) {
+            getCurIndexModel().curIndex = ((EditText) child).getSelectionEnd();
+        }
+    }
+
     public void notifyEvent() {
         mAdapter.notifyDataChanged();
     }

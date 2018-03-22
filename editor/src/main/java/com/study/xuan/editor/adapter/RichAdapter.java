@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import com.study.xuan.editor.R;
 import com.study.xuan.editor.model.RichModel;
 import com.study.xuan.editor.model.SpanModel;
+import com.study.xuan.editor.operate.IParamManger;
 import com.study.xuan.editor.operate.filter.SpanStep1Filter;
 import com.study.xuan.editor.operate.filter.SpanStep2Filter;
 import com.study.xuan.editor.operate.paragraph.ParagraphHelper;
@@ -54,6 +55,7 @@ public class RichAdapter extends RecyclerView.Adapter {
 
     private ParagraphHelper paragraphHelper;
     private IAbstractSpanFactory factory;
+    private IParamManger paramManger;
 
     public boolean isEnter;
 
@@ -64,6 +66,10 @@ public class RichAdapter extends RecyclerView.Adapter {
 
     public void setFactory(IAbstractSpanFactory factory) {
         this.factory = factory;
+    }
+
+    public void setParamManger(IParamManger manger) {
+        this.paramManger = manger;
     }
 
     public interface onScrollIndex {
@@ -213,6 +219,7 @@ public class RichAdapter extends RecyclerView.Adapter {
                 v.requestFocus();
                 index = (int) v.getTag();
                 clearImgFocus(index);
+                //todo 实时更改样式，保证光标所处的样式和面板样式同步，插入就可以保证
             }
         }
     };
@@ -333,6 +340,15 @@ public class RichAdapter extends RecyclerView.Adapter {
                         newModel.getSpanList().add(removeModel);
                     }
                     newModel.getSpanList().add(0, model);
+                } else if (cPos < span.start) {
+                    //如果在样式的前面，则后面的样式全部搬到new里面，这种情况出现在光标定在没有样式的文字之间
+                    for (; i < item.getSpanList().size(); i++) {
+                        SpanModel removeModel = item.getSpanList().remove(i);
+                        i--;
+                        removeModel.start -= cPos;
+                        removeModel.end -= cPos;
+                        newModel.getSpanList().add(removeModel);
+                    }
                 }
             }
             mData.add(pos + 1, newModel);
@@ -353,7 +369,7 @@ public class RichAdapter extends RecyclerView.Adapter {
                     for (SpanModel spanModel : removeModel.getSpanList()) {
                         spanModel.start += mData.get(pos - 1).source.length();
                         spanModel.end += mData.get(pos - 1).source.length();
-                        mData.get(pos -1 ).getSpanList().add(spanModel);
+                        mData.get(pos - 1).getSpanList().add(spanModel);
                     }
                     mData.get(pos - 1).append(mData.get(pos).source);
                     mData.remove(pos);
@@ -397,7 +413,7 @@ public class RichAdapter extends RecyclerView.Adapter {
             mEt = (EditText) itemView;
             mEt.setOnClickListener(onClickListener);
             textWatcher = new SpanStep2Filter(mEt, mData);
-            filter = new SpanStep1Filter(mData);
+            filter = new SpanStep1Filter(mEt, mData, paramManger, factory);
             mEt.addTextChangedListener(textWatcher);
             mEt.setOnKeyListener(onKeyListener);
             mEt.setFilters(new InputFilter[]{filter});

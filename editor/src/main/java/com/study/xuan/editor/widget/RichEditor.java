@@ -15,6 +15,7 @@ import android.widget.EditText;
 import com.study.xuan.editor.R;
 import com.study.xuan.editor.adapter.RichAdapter;
 import com.study.xuan.editor.model.RichModel;
+import com.study.xuan.editor.operate.IParamManger;
 import com.study.xuan.editor.operate.span.factory.IAbstractSpanFactory;
 
 import java.util.ArrayList;
@@ -145,6 +146,10 @@ public class RichEditor extends RecyclerView implements ViewTreeObserver.OnGloba
 
     public void setFactory(IAbstractSpanFactory factory) {
         mAdapter.setFactory(factory);
+    }
+
+    public void setParamManager(IParamManger manager) {
+        mAdapter.setParamManger(manager);
     }
 
     public void saveInfo() {

@@ -6,10 +6,15 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.CharacterStyle;
 import android.util.Log;
+import android.widget.EditText;
 
 import com.study.xuan.editor.model.RichModel;
 import com.study.xuan.editor.model.SpanModel;
+import com.study.xuan.editor.operate.IParamManger;
+import com.study.xuan.editor.operate.ParamManager;
+import com.study.xuan.editor.operate.font.FontParam;
 import com.study.xuan.editor.operate.span.MultiSpannableString;
+import com.study.xuan.editor.operate.span.factory.IAbstractSpanFactory;
 
 import java.util.List;
 
@@ -26,10 +31,16 @@ public class SpanStep1Filter implements InputFilter, ISpanFilter {
     private MultiSpannableString spannableString;
     private boolean isNotify;
     private List<RichModel> mData;
+    private EditText etv;
+    private IParamManger paramManager;
+    private IAbstractSpanFactory factory;
 
-    public SpanStep1Filter(List<RichModel> data) {
+    public SpanStep1Filter(EditText mEt, List<RichModel> data, IParamManger paramManger, IAbstractSpanFactory factory) {
+        etv = mEt;
         spannableString = new MultiSpannableString();
         mData = data;
+        this.paramManager = paramManger;
+        this.factory = factory;
     }
 
     /**
@@ -66,6 +77,15 @@ public class SpanStep1Filter implements InputFilter, ISpanFilter {
             //sortAfterDelete(dstart, dend);
             return charSequence;
         }
+        /*int index = etv.getSelectionStart();
+        if (paramManager.needNewSpan(indexCurParam(index, charSequence.length()))) {
+            SpanModel spanModel = new SpanModel(paramManager.createNewParam());
+            spanModel.code = paramManager.getParamCode(spanModel.paragraphType);
+            spanModel.mSpans = factory.createSpan(spanModel.code);
+            richModel.setNewSpan(spanModel);
+        } else {
+
+        }*/
         if (richModel.newSpan != null && richModel.newSpan.mSpans.size() == 0) {
             return charSequence;
         }
@@ -80,6 +100,28 @@ public class SpanStep1Filter implements InputFilter, ISpanFilter {
                     .SPAN_EXCLUSIVE_INCLUSIVE);
         }
         return spannableString;
+    }
+
+    /**
+     *
+     * @param index 光标的位置
+     * @param length 插入字段的长度，后面的需要后移
+     * @return
+     */
+    private FontParam indexCurParam(int index, int length) {
+        for (SpanModel span : spanModels) {
+            if (index == span.start) {
+                //如果刚好在两种样式之间，将后面的样式从前一个移除，添加到后面一个样式中
+                return null;
+            } else if (index > span.start && index < span.end) {
+                //如果在一个样式之间，则需要将这个样式分割
+                return span.param;
+            } else if (index < span.start) {
+                //如果在样式的前面，则后面的样式全部搬到new里面，这种情况出现在光标定在没有样式的文字之间
+                return null;
+            }
+        }
+        return null;
     }
 
     /**

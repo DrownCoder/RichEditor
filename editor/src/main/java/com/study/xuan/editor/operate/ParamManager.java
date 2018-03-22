@@ -22,6 +22,9 @@ public class ParamManager implements IParamManger {
             this.newParams = param;
             return true;
         }
+        if (param == null) {
+            return true;
+        }
         if (curParams.toString().equals(param.toString())) {
             return false;
         }else{

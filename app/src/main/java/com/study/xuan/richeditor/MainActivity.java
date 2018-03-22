@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
         paramManager = new ParamManager();
         spanFactory = new AbstractSpanFactory();
         mEditor.setFactory(spanFactory);
+        mEditor.setParamManager(paramManager);
         panelBuilder = mPanel.panelBuilder;
         panelBuilder.setStateChange(new onPanelStateChange() {
             @Override

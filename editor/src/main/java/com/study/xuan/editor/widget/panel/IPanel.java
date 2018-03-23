@@ -11,6 +11,8 @@ import com.study.xuan.editor.operate.paragraph.ParagraphBuilder;
  * Description : the file description
  */
 public interface IPanel {
+    void reverse(FontParam param);
+
     void change();
 
     void reset();
@@ -37,7 +39,7 @@ public interface IPanel {
 
     IPanel setUrl(String name, String url);
 
-    IPanel setUrl(String name, String url,@ColorInt int color);
+    IPanel setUrl(String name, String url, @ColorInt int color);
 
     IPanel setRefer();
 

@@ -80,8 +80,13 @@ public class RichAdapter extends RecyclerView.Adapter {
         void onDelete(String path);
     }
 
+    public interface onEditClick {
+        void onEditClick(int pos, int index);
+    }
+
     private onScrollIndex mOnScrollIndex;
     private onPhotoDelete mOnPhotoDelete;
+    private onEditClick mOnEditClick;
 
     public void setOnScrollIndex(onScrollIndex mOnScrollIndex) {
         this.mOnScrollIndex = mOnScrollIndex;
@@ -91,6 +96,9 @@ public class RichAdapter extends RecyclerView.Adapter {
         this.mOnPhotoDelete = onPhotoDelete;
     }
 
+    public void setOnEditClick(onEditClick mOnEditClick) {
+        this.mOnEditClick = mOnEditClick;
+    }
 
     public RichAdapter(List<RichModel> mData, Context mContext, RecyclerView rcy) {
         this.mData = mData;
@@ -219,7 +227,9 @@ public class RichAdapter extends RecyclerView.Adapter {
                 v.requestFocus();
                 index = (int) v.getTag();
                 clearImgFocus(index);
-                //todo 实时更改样式，保证光标所处的样式和面板样式同步，插入就可以保证
+                if (mOnEditClick != null) {
+                    mOnEditClick.onEditClick(index, ((EditText) v).getSelectionStart());
+                }
             }
         }
     };

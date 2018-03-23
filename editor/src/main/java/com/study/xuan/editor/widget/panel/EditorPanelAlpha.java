@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.study.xuan.editor.R;
+import com.study.xuan.editor.operate.font.FontParam;
 
 /**
  * Author : xuan.
@@ -45,6 +46,7 @@ public class EditorPanelAlpha extends LinearLayout {
         mIvCenterLine.setOnClickListener(onClickListener);
         mIvUnderLine.setOnClickListener(onClickListener);
         mIvLink.setOnClickListener(onClickListener);
+        panelBuilder.setReverse(onPanelReverse);
     }
 
     private void initView(View root) {
@@ -56,6 +58,13 @@ public class EditorPanelAlpha extends LinearLayout {
         mFontPanel = root.findViewById(R.id.hs_font_panel);
         mIvLink = root.findViewById(R.id.iv_link);
     }
+
+    private onPanelReverse onPanelReverse = new onPanelReverse() {
+        @Override
+        public void onReverse(FontParam param) {
+
+        }
+    };
 
     private OnClickListener onClickListener = new OnClickListener() {
         @Override

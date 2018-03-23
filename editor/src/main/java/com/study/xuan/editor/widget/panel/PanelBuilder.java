@@ -23,6 +23,7 @@ public class PanelBuilder implements IPanel {
     private ParagraphBuilder paragraphBuilder;
 
     private onPanelStateChange mStateChange;
+    private onPanelReverse mReverse;
 
     public PanelBuilder() {
         fontParamBuilder = new FontParamBuilder();
@@ -31,6 +32,17 @@ public class PanelBuilder implements IPanel {
 
     public void setStateChange(onPanelStateChange mStateChange) {
         this.mStateChange = mStateChange;
+    }
+
+    public void setReverse(onPanelReverse mReverse) {
+        this.mReverse = mReverse;
+    }
+
+    @Override
+    public void reverse(FontParam param) {
+        if (mReverse != null) {
+            mReverse.onReverse(param);
+        }
     }
 
     @Override
@@ -118,7 +130,7 @@ public class PanelBuilder implements IPanel {
     }
 
     @Override
-    public IPanel setUrl(String name, String url,@ColorInt int color) {
+    public IPanel setUrl(String name, String url, @ColorInt int color) {
         type = TYPE_LINK;
         fontParamBuilder.fontColor(color);
         fontParamBuilder.url(name, url);

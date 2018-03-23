@@ -17,6 +17,7 @@ import com.study.xuan.editor.adapter.RichAdapter;
 import com.study.xuan.editor.model.RichModel;
 import com.study.xuan.editor.operate.IParamManger;
 import com.study.xuan.editor.operate.span.factory.IAbstractSpanFactory;
+import com.study.xuan.editor.widget.panel.PanelBuilder;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -79,6 +80,7 @@ public class RichEditor extends RecyclerView implements ViewTreeObserver.OnGloba
         mAdapter.setOnScrollIndex(onScrollIndex);
         //删除图片
         mAdapter.setOnPhotoDelete(onPhotoDelete);
+        mAdapter.setOnEditClick(onEditClick);
 
         getViewTreeObserver().addOnGlobalLayoutListener(this);
     }
@@ -94,6 +96,13 @@ public class RichEditor extends RecyclerView implements ViewTreeObserver.OnGloba
         @Override
         public void onDelete(String path) {
             photoPaths.remove(path);
+        }
+    };
+
+    RichAdapter.onEditClick onEditClick = new RichAdapter.onEditClick() {
+        @Override
+        public void onEditClick(int pos, int index) {
+            //todo 将PanelBuilder单例模式
         }
     };
 

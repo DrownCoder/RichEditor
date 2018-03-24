@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputFilter;
-import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -17,9 +16,10 @@ import android.widget.ImageView;
 import com.study.xuan.editor.R;
 import com.study.xuan.editor.model.RichModel;
 import com.study.xuan.editor.model.SpanModel;
-import com.study.xuan.editor.operate.IParamManger;
+import com.study.xuan.editor.operate.param.IParamManger;
 import com.study.xuan.editor.operate.filter.SpanStep1Filter;
 import com.study.xuan.editor.operate.filter.SpanStep2Filter;
+import com.study.xuan.editor.operate.RichBuilder;
 import com.study.xuan.editor.operate.paragraph.ParagraphHelper;
 import com.study.xuan.editor.operate.span.MultiSpannableString;
 import com.study.xuan.editor.operate.span.factory.IAbstractSpanFactory;
@@ -64,14 +64,6 @@ public class RichAdapter extends RecyclerView.Adapter {
         notifyItemInserted(0);
     }
 
-    public void setFactory(IAbstractSpanFactory factory) {
-        this.factory = factory;
-    }
-
-    public void setParamManger(IParamManger manger) {
-        this.paramManger = manger;
-    }
-
     public interface onScrollIndex {
         void scroll(int pos);
     }
@@ -108,6 +100,8 @@ public class RichAdapter extends RecyclerView.Adapter {
         mHolderShow = new LinkedList<>();
         paragraphHelper = new ParagraphHelper(mContext);
         mSpanString = new MultiSpannableString();
+        factory = RichBuilder.getInstance().getFactory();
+        paramManger = RichBuilder.getInstance().getManger();
     }
 
     @Override

@@ -30,6 +30,7 @@ public class PanelBuilder implements IPanel {
         paragraphBuilder = new ParagraphBuilder();
     }
 
+    @Override
     public void setStateChange(onPanelStateChange mStateChange) {
         this.mStateChange = mStateChange;
     }

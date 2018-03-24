@@ -17,6 +17,10 @@ public interface IPanel {
 
     void reset();
 
+    void setStateChange(onPanelStateChange mStateChange);
+
+    public void setReverse(onPanelReverse mReverse);
+
     String getType();
 
     FontParam getFontParam();

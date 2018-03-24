@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -15,16 +14,15 @@ import android.widget.EditText;
 import com.study.xuan.editor.R;
 import com.study.xuan.editor.adapter.RichAdapter;
 import com.study.xuan.editor.model.RichModel;
-import com.study.xuan.editor.operate.IParamManger;
-import com.study.xuan.editor.operate.span.factory.IAbstractSpanFactory;
-import com.study.xuan.editor.widget.panel.PanelBuilder;
+import com.study.xuan.editor.operate.RichBuilder;
+import com.study.xuan.editor.operate.search.ISearchStrategy;
+import com.study.xuan.editor.operate.search.NormalSearch;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 import static com.study.xuan.editor.adapter.RichAdapter.DEFAULT_HINT;
-import static com.study.xuan.editor.common.Const.BASE_LOG;
 import static com.study.xuan.editor.common.Const.TYPE_EDIT;
 import static com.study.xuan.editor.common.Const.TYPE_IMG;
 
@@ -102,7 +100,11 @@ public class RichEditor extends RecyclerView implements ViewTreeObserver.OnGloba
     RichAdapter.onEditClick onEditClick = new RichAdapter.onEditClick() {
         @Override
         public void onEditClick(int pos, int index) {
-            //todo 将PanelBuilder单例模式
+            //todo 策略模式，后期可以考虑优化为二分法或者其他遍历方式
+            ISearchStrategy searchStrategy = new NormalSearch();
+            RichBuilder.getInstance()
+                    .getPanelBuilder()
+                    .reverse(searchStrategy.indexParam(mDatas.get(pos).getSpanList(), index));
         }
     };
 
@@ -151,14 +153,6 @@ public class RichEditor extends RecyclerView implements ViewTreeObserver.OnGloba
 
     public RichModel getCurIndexModel() {
         return mDatas.get(mAdapter.index);
-    }
-
-    public void setFactory(IAbstractSpanFactory factory) {
-        mAdapter.setFactory(factory);
-    }
-
-    public void setParamManager(IParamManger manager) {
-        mAdapter.setParamManger(manager);
     }
 
     public void saveInfo() {

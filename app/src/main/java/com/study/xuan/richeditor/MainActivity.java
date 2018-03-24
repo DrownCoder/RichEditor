@@ -2,30 +2,18 @@ package com.study.xuan.richeditor;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.text.SpannableStringBuilder;
-import android.text.Spanned;
-import android.text.style.StrikethroughSpan;
-import android.text.style.StyleSpan;
-import android.widget.TextView;
 
 import com.study.xuan.editor.model.SpanModel;
-import com.study.xuan.editor.model.panel.state.BasePanelEvent;
-import com.study.xuan.editor.model.panel.state.FontChangeEvent;
-import com.study.xuan.editor.model.panel.state.LinkChangeEvent;
 import com.study.xuan.editor.model.panel.state.ParagraphChangeEvent;
-import com.study.xuan.editor.operate.ParamManager;
+import com.study.xuan.editor.operate.param.IParamManger;
 import com.study.xuan.editor.operate.font.FontParam;
-import com.study.xuan.editor.operate.span.factory.AbstractSpanFactory;
+import com.study.xuan.editor.operate.RichBuilder;
 import com.study.xuan.editor.operate.span.factory.IAbstractSpanFactory;
-import com.study.xuan.editor.util.KeyboardUtil;
-import com.study.xuan.editor.widget.EditorPanel;
 import com.study.xuan.editor.widget.RichEditor;
 import com.study.xuan.editor.widget.panel.EditorPanelAlpha;
-import com.study.xuan.editor.widget.panel.PanelBuilder;
+import com.study.xuan.editor.widget.panel.IPanel;
 import com.study.xuan.editor.widget.panel.onPanelStateChange;
 
-import static android.graphics.Typeface.BOLD;
-import static android.graphics.Typeface.ITALIC;
 import static com.study.xuan.editor.widget.panel.PanelBuilder.TYPE_FONT;
 import static com.study.xuan.editor.widget.panel.PanelBuilder.TYPE_LINK;
 import static com.study.xuan.editor.widget.panel.PanelBuilder.TYPE_PARAGRAPH;
@@ -34,10 +22,9 @@ import static com.study.xuan.editor.widget.panel.PanelBuilder.TYPE_PARAGRAPH;
 public class MainActivity extends AppCompatActivity {
     RichEditor mEditor;
     EditorPanelAlpha mPanel;
-    ParamManager paramManager;
+    IParamManger paramManager;
     IAbstractSpanFactory spanFactory;
-    private PanelBuilder panelBuilder;
-
+    IPanel panel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,22 +32,20 @@ public class MainActivity extends AppCompatActivity {
         mEditor = (RichEditor) findViewById(R.id.editor);
         mPanel = (EditorPanelAlpha) findViewById(R.id.panel);
 
-        paramManager = new ParamManager();
-        spanFactory = new AbstractSpanFactory();
-        mEditor.setFactory(spanFactory);
-        mEditor.setParamManager(paramManager);
-        panelBuilder = mPanel.panelBuilder;
-        panelBuilder.setStateChange(new onPanelStateChange() {
+        paramManager = RichBuilder.getInstance().getManger();
+        spanFactory = RichBuilder.getInstance().getFactory();
+        panel = RichBuilder.getInstance().getPanelBuilder();
+        panel.setStateChange(new onPanelStateChange() {
             @Override
             public void onStateChanged() {
-                switch (panelBuilder.getType()) {
+                switch (panel.getType()) {
                     case TYPE_FONT:
-                        onFontEvent(panelBuilder.getFontParam());
+                        onFontEvent(panel.getFontParam());
                         break;
                     case TYPE_LINK:
-                        onLinkEvent(panelBuilder.getFontParam());
+                        onLinkEvent(panel.getFontParam());
                     case TYPE_PARAGRAPH:
-                        onParagraphEvent(panelBuilder.getParagraph().type);
+                        onParagraphEvent(panel.getParagraph().type);
                         break;
                 }
             }
@@ -152,6 +137,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }*/
     private void onFontEvent(FontParam param) {
+        //todo 需要根据当前光标的位置和状态构造不同的样式
         mEditor.saveInfo();
         mEditor.notifyEvent();
         if (paramManager.needNewSpan(param)) {//需要新生产span样式

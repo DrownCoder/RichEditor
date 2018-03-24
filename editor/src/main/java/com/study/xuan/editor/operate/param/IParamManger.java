@@ -1,4 +1,4 @@
-package com.study.xuan.editor.operate;
+package com.study.xuan.editor.operate.param;
 
 import com.study.xuan.editor.operate.font.FontParam;
 
@@ -9,9 +9,9 @@ import com.study.xuan.editor.operate.font.FontParam;
  */
 
 public interface IParamManger {
-    public boolean needNewSpan(FontParam param);
+    boolean needNewSpan(FontParam param);
 
-    public FontParam createNewParam();
+    FontParam createNewParam();
 
-    public String getParamCode(int pType);
+    String getParamCode(int pType);
 }

@@ -1,17 +1,14 @@
 package com.study.xuan.editor.operate.filter;
 
 import android.text.InputFilter;
-import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
-import android.text.style.CharacterStyle;
 import android.util.Log;
 import android.widget.EditText;
 
 import com.study.xuan.editor.model.RichModel;
 import com.study.xuan.editor.model.SpanModel;
-import com.study.xuan.editor.operate.IParamManger;
-import com.study.xuan.editor.operate.ParamManager;
+import com.study.xuan.editor.operate.param.IParamManger;
 import com.study.xuan.editor.operate.font.FontParam;
 import com.study.xuan.editor.operate.span.MultiSpannableString;
 import com.study.xuan.editor.operate.span.factory.IAbstractSpanFactory;

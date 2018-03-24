@@ -1,4 +1,4 @@
-package com.study.xuan.editor.operate;
+package com.study.xuan.editor.operate.param;
 
 import com.study.xuan.editor.common.Const;
 import com.study.xuan.editor.operate.font.FontParam;

@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 
 import com.study.xuan.editor.R;
 import com.study.xuan.editor.operate.font.FontParam;
+import com.study.xuan.editor.operate.RichBuilder;
 
 /**
  * Author : xuan.
@@ -18,10 +19,10 @@ import com.study.xuan.editor.operate.font.FontParam;
  * Description : Alpha Editor
  */
 public class EditorPanelAlpha extends LinearLayout {
-    public PanelBuilder panelBuilder;
     private ImageView mIvFont;
     private ImageView mIvBold, mIvItalics, mIvCenterLine, mIvUnderLine, mIvLink;
     private HorizontalScrollView mFontPanel;
+    private IPanel panel;
 
     public EditorPanelAlpha(Context context) {
         this(context, null);
@@ -34,7 +35,7 @@ public class EditorPanelAlpha extends LinearLayout {
     public EditorPanelAlpha(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         View root = LayoutInflater.from(context).inflate(R.layout.editor_panel_alpha, this);
-        panelBuilder = new PanelBuilder();
+        panel = RichBuilder.getInstance().getPanelBuilder();
         initView(root);
         initEvent();
     }
@@ -46,7 +47,7 @@ public class EditorPanelAlpha extends LinearLayout {
         mIvCenterLine.setOnClickListener(onClickListener);
         mIvUnderLine.setOnClickListener(onClickListener);
         mIvLink.setOnClickListener(onClickListener);
-        panelBuilder.setReverse(onPanelReverse);
+        panel.setReverse(onPanelReverse);
     }
 
     private void initView(View root) {
@@ -62,7 +63,15 @@ public class EditorPanelAlpha extends LinearLayout {
     private onPanelReverse onPanelReverse = new onPanelReverse() {
         @Override
         public void onReverse(FontParam param) {
-
+            if (param != null) {
+                mIvBold.setSelected(param.isBold);
+                mIvItalics.setSelected(param.isItalics);
+                mIvCenterLine.setSelected(param.isCenterLine);
+                mIvUnderLine.setSelected(param.isUnderLine);
+            } else {
+                reset();
+            }
+            RichBuilder.getInstance().getManger().needNewSpan(param);
         }
     };
 
@@ -74,21 +83,30 @@ public class EditorPanelAlpha extends LinearLayout {
                 mFontPanel.setVisibility(mIvFont.isSelected() ? VISIBLE : GONE);
             } else if (v.getId() == R.id.iv_bold) {
                 mIvBold.setSelected(!mIvBold.isSelected());
-                panelBuilder.setBold(mIvBold.isSelected()).change();
+                panel.setBold(mIvBold.isSelected()).change();
             } else if (v.getId() == R.id.iv_italics) {
                 mIvItalics.setSelected(!mIvItalics.isSelected());
-                panelBuilder.setItalics(mIvItalics.isSelected()).change();
+                panel.setItalics(mIvItalics.isSelected()).change();
             } else if (v.getId() == R.id.iv_center_line) {
                 mIvCenterLine.setSelected(!mIvCenterLine.isSelected());
-                panelBuilder.setCenterLine(mIvCenterLine.isSelected()).change();
+                panel.setCenterLine(mIvCenterLine.isSelected()).change();
             } else if (v.getId() == R.id.iv_under_line) {
                 mIvUnderLine.setSelected(!mIvUnderLine.isSelected());
-                panelBuilder.setUnderLine(mIvUnderLine.isSelected()).change();
+                panel.setUnderLine(mIvUnderLine.isSelected()).change();
             } else if (v.getId() == R.id.iv_link) {
                 mIvLink.setSelected(!mIvLink.isSelected());
-                panelBuilder.setUrl("百度", "www.baidu.com").change();
+                panel.setUrl("百度", "www.baidu.com").change();
             }
         }
     };
+
+    private void reset() {
+        mFontPanel.setVisibility(View.VISIBLE);
+        mIvFont.setSelected(true);
+        mIvBold.setSelected(false);
+        mIvItalics.setSelected(false);
+        mIvCenterLine.setSelected(false);
+        mIvUnderLine.setSelected(false);
+    }
 
 }

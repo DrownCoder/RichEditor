@@ -14,7 +14,9 @@ import android.widget.EditText;
 import com.study.xuan.editor.R;
 import com.study.xuan.editor.adapter.RichAdapter;
 import com.study.xuan.editor.model.RichModel;
+import com.study.xuan.editor.model.SpanModel;
 import com.study.xuan.editor.operate.RichBuilder;
+import com.study.xuan.editor.operate.font.FontParam;
 import com.study.xuan.editor.operate.search.ISearchStrategy;
 import com.study.xuan.editor.operate.search.NormalSearch;
 
@@ -102,9 +104,11 @@ public class RichEditor extends RecyclerView implements ViewTreeObserver.OnGloba
         public void onEditClick(int pos, int index) {
             //todo 策略模式，后期可以考虑优化为二分法或者其他遍历方式
             ISearchStrategy searchStrategy = new NormalSearch();
+            FontParam param = searchStrategy.indexParam(mDatas.get(pos).getSpanList(), index);
             RichBuilder.getInstance()
                     .getPanelBuilder()
-                    .reverse(searchStrategy.indexParam(mDatas.get(pos).getSpanList(), index));
+                    .reverse(param);
+            RichBuilder.getInstance().getManger().reset().setCurrentParam(param);
         }
     };
 
@@ -160,6 +164,20 @@ public class RichEditor extends RecyclerView implements ViewTreeObserver.OnGloba
         if (child instanceof EditText) {
             getCurIndexModel().curIndex = ((EditText) child).getSelectionEnd();
         }
+        /*if (getCurIndexModel().isNewSpan) {
+            ISearchStrategy searchStrategy = new NormalSearch();
+            int pos = searchStrategy.indexPost(getCurIndexModel().getSpanList(), getCurIndexModel().curIndex);
+            if (pos != -1) {
+                RichModel model = getCurIndexModel();
+                SpanModel oldSpan = model.getSpanList().get(pos);
+                SpanModel span = new SpanModel(oldSpan.param);
+                span.mSpans.addAll(RichBuilder.getInstance().getFactory().createSpan(span.param.getCharCodes()));
+                span.start = pos;
+                span.end = oldSpan.end;
+                oldSpan.end = pos;
+                model.getSpanList().add(pos, span);
+            }
+        }*/
     }
 
     public void notifyEvent() {

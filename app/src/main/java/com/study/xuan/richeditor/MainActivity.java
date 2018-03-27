@@ -138,8 +138,6 @@ public class MainActivity extends AppCompatActivity {
     }*/
     private void onFontEvent(FontParam param) {
         //todo 需要根据当前光标的位置和状态构造不同的样式
-        mEditor.saveInfo();
-        mEditor.notifyEvent();
         if (paramManager.needNewSpan(param)) {//需要新生产span样式
             SpanModel spanModel = new SpanModel(paramManager.createNewParam());
             spanModel.code = paramManager.getParamCode(spanModel.paragraphType);
@@ -148,5 +146,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             mEditor.getCurIndexModel().setNoNewSpan();
         }
+        mEditor.saveInfo();
+        mEditor.notifyEvent();
     }
 }

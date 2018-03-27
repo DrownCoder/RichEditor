@@ -71,12 +71,19 @@ public class ParamManager implements IParamManger {
         return curParams.getCharCodes();
     }
 
-    public void reset() {
+    @Override
+    public void setCurrentParam(FontParam param) {
+        this.curParams = param;
+    }
+
+    @Override
+    public IParamManger reset() {
         if (curParams != null) {
-            curParams.reset();
+            curParams = null;
         }
         if (newParams != null) {
-            newParams.reset();
+            newParams = null;
         }
+        return this;
     }
 }

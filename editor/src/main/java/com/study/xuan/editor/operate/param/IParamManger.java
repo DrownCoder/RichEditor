@@ -14,4 +14,8 @@ public interface IParamManger {
     FontParam createNewParam();
 
     String getParamCode(int pType);
+
+    void setCurrentParam(FontParam param);
+
+    IParamManger reset();
 }

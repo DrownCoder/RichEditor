@@ -13,19 +13,27 @@ import java.util.List;
 public class NormalSearch implements ISearchStrategy {
     @Override
     public FontParam indexParam(List<SpanModel> data, int index) {
-        for (SpanModel model : data) {
+        int pos = indexPost(data, index);
+        return pos == -1 ? null : data.get(pos).param;
+    }
+
+    @Override
+    public int indexPost(List<SpanModel> data, int index) {
+        SpanModel model;
+        for (int i = 0; i < data.size(); i++) {
+            model = data.get(i);
             if (index == 0 && index == model.start) {
-                return model.param;
+                return i;
             }
             if (index > model.end) {
                 continue;
             }
             if (index > model.start && index <= model.end) {
-                return model.param;
+                return i;
             } else if (index < model.start) {
-                return null;
+                return -1;
             }
         }
-        return null;
+        return -1;
     }
 }

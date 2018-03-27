@@ -100,8 +100,7 @@ public class SpanStep1Filter implements InputFilter, ISpanFilter {
     }
 
     /**
-     *
-     * @param index 光标的位置
+     * @param index  光标的位置
      * @param length 插入字段的长度，后面的需要后移
      * @return
      */

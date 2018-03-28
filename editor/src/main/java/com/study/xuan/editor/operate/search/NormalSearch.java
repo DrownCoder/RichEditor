@@ -25,13 +25,11 @@ public class NormalSearch implements ISearchStrategy {
             if (index == 0 && index == model.start) {
                 return i;
             }
-            if (index > model.end) {
+            if (index > model.end || index < model.start) {
                 continue;
             }
             if (index > model.start && index <= model.end) {
                 return i;
-            } else if (index < model.start) {
-                return -1;
             }
         }
         return -1;

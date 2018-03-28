@@ -149,4 +149,10 @@ public class MainActivity extends AppCompatActivity {
         mEditor.saveInfo();
         mEditor.notifyEvent();
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        RichBuilder.getInstance().destroy();
+    }
 }

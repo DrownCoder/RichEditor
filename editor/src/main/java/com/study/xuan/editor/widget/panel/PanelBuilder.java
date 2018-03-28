@@ -41,6 +41,11 @@ public class PanelBuilder implements IPanel {
 
     @Override
     public void reverse(FontParam param) {
+        /*if (param != null) {
+            fontParamBuilder.setParam(param);
+        }else {
+            fontParamBuilder.reset();
+        }*/
         if (mReverse != null) {
             mReverse.onReverse(param);
         }

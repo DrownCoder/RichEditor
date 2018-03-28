@@ -1,5 +1,6 @@
 package com.study.xuan.editor.operate;
 
+import com.study.xuan.editor.operate.font.FontParam;
 import com.study.xuan.editor.operate.param.IParamManger;
 import com.study.xuan.editor.operate.param.ParamManager;
 import com.study.xuan.editor.operate.span.factory.AbstractSpanFactory;
@@ -29,7 +30,7 @@ public class RichBuilder {
         return builder;
     }
 
-    public RichBuilder() {
+    private RichBuilder() {
         panelBuilder = new PanelBuilder();
         manger = new ParamManager();
         factory = new AbstractSpanFactory();
@@ -45,5 +46,17 @@ public class RichBuilder {
 
     public IAbstractSpanFactory getFactory() {
         return factory;
+    }
+
+    public void destroy() {
+        panelBuilder = null;
+        manger = null;
+        factory = null;
+        builder = null;
+    }
+
+    public void resetParam(FontParam param) {
+        panelBuilder.reverse(param);
+        manger.reset().setCurrentParam(param);
     }
 }

@@ -105,10 +105,7 @@ public class RichEditor extends RecyclerView implements ViewTreeObserver.OnGloba
             //todo 策略模式，后期可以考虑优化为二分法或者其他遍历方式
             ISearchStrategy searchStrategy = new NormalSearch();
             FontParam param = searchStrategy.indexParam(mDatas.get(pos).getSpanList(), index);
-            RichBuilder.getInstance()
-                    .getPanelBuilder()
-                    .reverse(param);
-            RichBuilder.getInstance().getManger().reset().setCurrentParam(param);
+            RichBuilder.getInstance().resetParam(param);
         }
     };
 
@@ -164,20 +161,21 @@ public class RichEditor extends RecyclerView implements ViewTreeObserver.OnGloba
         if (child instanceof EditText) {
             getCurIndexModel().curIndex = ((EditText) child).getSelectionEnd();
         }
-        /*if (getCurIndexModel().isNewSpan) {
+        if (getCurIndexModel().isNewSpan) {
             ISearchStrategy searchStrategy = new NormalSearch();
             int pos = searchStrategy.indexPost(getCurIndexModel().getSpanList(), getCurIndexModel().curIndex);
             if (pos != -1) {
+                int curIndex = getCurIndexModel().curIndex;
                 RichModel model = getCurIndexModel();
                 SpanModel oldSpan = model.getSpanList().get(pos);
                 SpanModel span = new SpanModel(oldSpan.param);
                 span.mSpans.addAll(RichBuilder.getInstance().getFactory().createSpan(span.param.getCharCodes()));
-                span.start = pos;
+                span.start = curIndex;
                 span.end = oldSpan.end;
-                oldSpan.end = pos;
-                model.getSpanList().add(pos, span);
+                oldSpan.end = curIndex;
+                model.getSpanList().add(pos + 1, span);
             }
-        }*/
+        }
     }
 
     public void notifyEvent() {

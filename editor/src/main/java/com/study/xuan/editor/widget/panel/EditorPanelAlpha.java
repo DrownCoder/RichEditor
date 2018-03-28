@@ -65,13 +65,16 @@ public class EditorPanelAlpha extends LinearLayout {
         public void onReverse(FontParam param) {
             if (param != null) {
                 mIvBold.setSelected(param.isBold);
+                panel.setBold(param.isBold);
                 mIvItalics.setSelected(param.isItalics);
+                panel.setItalics(param.isItalics);
                 mIvCenterLine.setSelected(param.isCenterLine);
+                panel.setCenterLine(param.isCenterLine);
                 mIvUnderLine.setSelected(param.isUnderLine);
+                panel.setUnderLine(param.isUnderLine);
             } else {
                 reset();
             }
-            RichBuilder.getInstance().getManger().needNewSpan(param);
         }
     };
 
@@ -107,6 +110,7 @@ public class EditorPanelAlpha extends LinearLayout {
         mIvItalics.setSelected(false);
         mIvCenterLine.setSelected(false);
         mIvUnderLine.setSelected(false);
+        panel.reset();
     }
 
 }

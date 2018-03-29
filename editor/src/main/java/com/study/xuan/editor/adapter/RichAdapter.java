@@ -322,13 +322,11 @@ public class RichAdapter extends RecyclerView.Adapter {
                 SpanModel span = item.getSpanList().get(i);
                 if (cPos == span.start) {
                     //如果刚好在两种样式之间，将后面的样式从前一个移除，添加到后面一个样式中
-                    for (; i < item.getSpanList().size(); i++) {
-                        SpanModel model = item.getSpanList().remove(i);
-                        i--;
-                        model.start -= cPos;
-                        model.end -= cPos;
-                        newModel.getSpanList().add(model);
-                    }
+                    SpanModel model = item.getSpanList().remove(i);
+                    i--;
+                    model.start -= cPos;
+                    model.end -= cPos;
+                    newModel.getSpanList().add(model);
                 } else if (cPos > span.start && cPos < span.end) {
                     //如果在一个样式之间，则需要将这个样式分割
                     SpanModel model = new SpanModel(span.param);
@@ -336,23 +334,14 @@ public class RichAdapter extends RecyclerView.Adapter {
                     model.start = 0;
                     model.end = span.end - cPos;
                     span.end = cPos;
-                    for (++i; i < item.getSpanList().size(); i++) {
-                        SpanModel removeModel = item.getSpanList().remove(i);
-                        i--;
-                        removeModel.start -= cPos;
-                        removeModel.end -= cPos;
-                        newModel.getSpanList().add(removeModel);
-                    }
                     newModel.getSpanList().add(0, model);
                 } else if (cPos < span.start) {
                     //如果在样式的前面，则后面的样式全部搬到new里面，这种情况出现在光标定在没有样式的文字之间
-                    for (; i < item.getSpanList().size(); i++) {
-                        SpanModel removeModel = item.getSpanList().remove(i);
-                        i--;
-                        removeModel.start -= cPos;
-                        removeModel.end -= cPos;
-                        newModel.getSpanList().add(removeModel);
-                    }
+                    span.start -= cPos;
+                    span.end -= cPos;
+                    newModel.getSpanList().add(span);
+                    item.getSpanList().remove(i);
+                    i--;
                 }
             }
             mData.add(pos + 1, newModel);

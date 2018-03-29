@@ -168,6 +168,10 @@ public class RichEditor extends RecyclerView implements ViewTreeObserver.OnGloba
                 int curIndex = getCurIndexModel().curIndex;
                 RichModel model = getCurIndexModel();
                 SpanModel oldSpan = model.getSpanList().get(pos);
+                if (curIndex == oldSpan.end) {
+                    //当光标就在两个区间之间，不需要分割
+                    return;
+                }
                 SpanModel span = new SpanModel(oldSpan.param);
                 span.mSpans.addAll(RichBuilder.getInstance().getFactory().createSpan(span.param.getCharCodes()));
                 span.start = curIndex;

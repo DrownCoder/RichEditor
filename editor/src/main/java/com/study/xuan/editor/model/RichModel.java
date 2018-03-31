@@ -69,11 +69,14 @@ public class RichModel {
     /**
      * 增加链接
      */
-    public void addLink(String title, SpanModel model) {
-        model.start = source.length();
-        source += title;
-        model.end = source.length();
+    public void addSpanModel(String title, SpanModel model) {
+        model.start = curIndex;
+        StringBuilder builder = new StringBuilder(source);
+        builder.insert(curIndex, title);
+        source = builder.toString();
+        model.end = curIndex + title.length();
         mParmas.add(model);
+        curIndex += title.length();
     }
 
 }

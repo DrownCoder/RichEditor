@@ -221,6 +221,7 @@ public class RichAdapter extends RecyclerView.Adapter {
                 v.requestFocus();
                 index = (int) v.getTag();
                 clearImgFocus(index);
+                mData.get(index).curIndex = ((EditText) v).getSelectionStart();
                 if (mOnEditClick != null) {
                     mOnEditClick.onEditClick(index, ((EditText) v).getSelectionStart());
                 }

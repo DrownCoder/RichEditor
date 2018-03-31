@@ -1,4 +1,4 @@
-package com.study.xuan.editor.widget;
+package com.study.xuan.editor.widget.panel;
 
 import android.content.Context;
 import android.graphics.Color;

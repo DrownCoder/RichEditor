@@ -61,6 +61,7 @@ public class PanelBuilder implements IPanel {
     @Override
     public void reset() {
         fontParamBuilder.reset();
+        reverse(fontParamBuilder.build());
     }
 
     @Override

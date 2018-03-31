@@ -162,23 +162,44 @@ public class RichEditor extends RecyclerView implements ViewTreeObserver.OnGloba
             getCurIndexModel().curIndex = ((EditText) child).getSelectionEnd();
         }
         if (getCurIndexModel().isNewSpan) {
-            ISearchStrategy searchStrategy = new NormalSearch();
-            int pos = searchStrategy.indexPost(getCurIndexModel().getSpanList(), getCurIndexModel().curIndex);
-            if (pos != -1) {
-                int curIndex = getCurIndexModel().curIndex;
-                RichModel model = getCurIndexModel();
-                SpanModel oldSpan = model.getSpanList().get(pos);
-                if (curIndex == oldSpan.end) {
-                    //当光标就在两个区间之间，不需要分割
-                    return;
-                }
-                SpanModel span = new SpanModel(oldSpan.param);
-                span.mSpans.addAll(RichBuilder.getInstance().getFactory().createSpan(span.param.getCharCodes()));
-                span.start = curIndex;
-                span.end = oldSpan.end;
-                oldSpan.end = curIndex;
-                model.getSpanList().add(pos + 1, span);
+            assertFontStatus(0);
+        }
+    }
+
+    /**
+     * 插入一个span样式
+     *
+     * @param str       span的内容
+     * @param spanModel span的样式
+     */
+    public void insertSpan(String str, SpanModel spanModel) {
+        assertFontStatus(str.length());
+        getCurIndexModel().addSpanModel(str, spanModel);
+    }
+
+    /**
+     * 根据当前的光标的位置判断是否需要分割样式
+     *
+     * @param inStr 插入的str的length,当存在的时候分割后，需要有偏移量inStr
+     *              当不存在的时候分割后，1,4->1,2|2,4
+     */
+    private void assertFontStatus(int inStr) {
+        ISearchStrategy searchStrategy = new NormalSearch();
+        int pos = searchStrategy.indexPost(getCurIndexModel().getSpanList(), getCurIndexModel().curIndex);
+        if (pos != -1) {
+            int curIndex = getCurIndexModel().curIndex;
+            RichModel model = getCurIndexModel();
+            SpanModel oldSpan = model.getSpanList().get(pos);
+            if (curIndex == oldSpan.end) {
+                //当光标就在两个区间之间，不需要分割
+                return;
             }
+            SpanModel span = new SpanModel(oldSpan.param);
+            span.mSpans.addAll(RichBuilder.getInstance().getFactory().createSpan(span.param.getCharCodes()));
+            span.start = curIndex + inStr;
+            span.end = oldSpan.end + inStr;
+            oldSpan.end = curIndex;
+            model.getSpanList().add(pos + 1, span);
         }
     }
 

@@ -10,7 +10,7 @@
         android:id="@+id/editor"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-    <!--<com.study.xuan.editor.widget.EditorPanel
+    <!--<com.study.xuan.editor.widget.panel.EditorPanelanel
         android:id="@+id/panel"
         android:layout_gravity="bottom"
         android:layout_width="match_parent"

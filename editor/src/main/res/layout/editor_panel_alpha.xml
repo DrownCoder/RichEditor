@@ -5,7 +5,7 @@
     android:orientation="vertical">
     <HorizontalScrollView
         android:id="@+id/hs_font_panel"
-        android:visibility="gone"
+        android:visibility="visible"
         android:background="#e6e6e6"
         android:scrollbars="none"
         android:layout_width="match_parent"
@@ -53,6 +53,8 @@
                 android:layout_height="50dp"
                 android:padding="11.5dp"
                 android:scaleType="centerInside"
+                android:clickable="true"
+                android:focusable="true"
                 android:src="@drawable/refer_select"
                 />
             <TextView
@@ -96,6 +98,8 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:padding="11.5dp"
+                android:clickable="true"
+                android:focusable="true"
                 android:scaleType="centerInside"
                 android:src="@drawable/link_select"
                 />

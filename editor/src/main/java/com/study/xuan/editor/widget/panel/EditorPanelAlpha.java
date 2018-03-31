@@ -1,5 +1,6 @@
 package com.study.xuan.editor.widget.panel;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
@@ -10,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.study.xuan.editor.R;
+import com.study.xuan.editor.model.panel.LinkModel;
 import com.study.xuan.editor.operate.font.FontParam;
 import com.study.xuan.editor.operate.RichBuilder;
 
@@ -23,6 +25,7 @@ public class EditorPanelAlpha extends LinearLayout {
     private ImageView mIvBold, mIvItalics, mIvCenterLine, mIvUnderLine, mIvLink;
     private HorizontalScrollView mFontPanel;
     private IPanel panel;
+    private Context mContext;
 
     public EditorPanelAlpha(Context context) {
         this(context, null);
@@ -34,6 +37,7 @@ public class EditorPanelAlpha extends LinearLayout {
 
     public EditorPanelAlpha(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        this.mContext = context;
         View root = LayoutInflater.from(context).inflate(R.layout.editor_panel_alpha, this);
         panel = RichBuilder.getInstance().getPanelBuilder();
         initView(root);
@@ -97,8 +101,14 @@ public class EditorPanelAlpha extends LinearLayout {
                 mIvUnderLine.setSelected(!mIvUnderLine.isSelected());
                 panel.setUnderLine(mIvUnderLine.isSelected()).change();
             } else if (v.getId() == R.id.iv_link) {
-                mIvLink.setSelected(!mIvLink.isSelected());
-                panel.setUrl("百度", "www.baidu.com").change();
+                LinkDialogFragment linkDialog = LinkDialogFragment.newInstance();
+                linkDialog.show(((Activity) mContext).getFragmentManager(), "Link");
+                linkDialog.setOnSureClickListener(new LinkDialogFragment.onSureClickListener() {
+                    @Override
+                    public void onSure(LinkModel linkModel) {
+                        panel.setUrl(linkModel.name, linkModel.link).change();
+                    }
+                });
             }
         }
     };

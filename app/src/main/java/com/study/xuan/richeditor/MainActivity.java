@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     IParamManger paramManager;
     IAbstractSpanFactory spanFactory;
     IPanel panel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case TYPE_LINK:
                         onLinkEvent(panel.getFontParam());
+                        break;
                     case TYPE_PARAGRAPH:
                         onParagraphEvent(panel.getParagraph().type);
                         break;
@@ -72,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
         linkModel.code = state.linkParam.getCharCodes();
         linkModel.mSpans = spanFactory.createSpan(linkModel.code);
 
-        mEditor.getCurIndexModel().addLink(state.title, linkModel);
+        mEditor.getCurIndexModel().addSpanModel(state.title, linkModel);
         mEditor.notifyEvent();
 
         SpanModel spanModel = new SpanModel(paramManager.createNewParam());
@@ -85,13 +87,14 @@ public class MainActivity extends AppCompatActivity {
         linkModel.code = param.getCharCodes();
         linkModel.mSpans = spanFactory.createSpan(linkModel.code);
 
-        mEditor.getCurIndexModel().addLink(param.name, linkModel);
+        mEditor.insertSpan(param.name, linkModel);
         mEditor.notifyEvent();
+        RichBuilder.getInstance().clear();
 
-        SpanModel spanModel = new SpanModel(paramManager.createNewParam());
+        /*SpanModel spanModel = new SpanModel(paramManager.createNewParam());
         spanModel.code = paramManager.getParamCode(spanModel.paragraphType);
         spanModel.mSpans = spanFactory.createSpan(spanModel.code);
-        mEditor.getCurIndexModel().setNewSpan(spanModel);
+        mEditor.getCurIndexModel().setNewSpan(spanModel);*/
     }
 
     /**
@@ -137,7 +140,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }*/
     private void onFontEvent(FontParam param) {
-        //todo 需要根据当前光标的位置和状态构造不同的样式
         if (paramManager.needNewSpan(param)) {//需要新生产span样式
             SpanModel spanModel = new SpanModel(paramManager.createNewParam());
             spanModel.code = paramManager.getParamCode(spanModel.paragraphType);

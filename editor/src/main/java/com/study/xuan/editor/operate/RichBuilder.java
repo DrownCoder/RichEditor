@@ -59,4 +59,10 @@ public class RichBuilder {
         panelBuilder.reverse(param);
         manger.reset().setCurrentParam(param);
     }
+
+    public void clear() {
+        panelBuilder.reset();
+        manger.reset();
+        panelBuilder.reset();
+    }
 }

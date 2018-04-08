@@ -3,6 +3,7 @@ package com.study.xuan.richeditor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import com.study.xuan.editor.common.Const;
 import com.study.xuan.editor.model.SpanModel;
 import com.study.xuan.editor.model.panel.state.ParagraphChangeEvent;
 import com.study.xuan.editor.operate.param.IParamManger;
@@ -116,10 +117,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initParagraphSpan(int pType) {
-        SpanModel model = new SpanModel(pType);
-        model.code = paramManager.getParamCode(pType);
-        model.mSpans = spanFactory.createSpan(model.code);
-        mEditor.getCurIndexModel().setParagraphSpan(model);
+        if (pType != Const.PARAGRAPH_NONE) {
+            SpanModel model = new SpanModel(pType);
+            model.code = paramManager.getParamCode(pType);
+            model.mSpans = spanFactory.createSpan(model.code);
+            mEditor.getCurIndexModel().setParagraphSpan(model);
+        }else{
+            mEditor.getCurIndexModel().setNoParagraphSpan();
+        }
     }
 
     /**

@@ -2,6 +2,7 @@ package com.study.xuan.editor.widget.panel;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.study.xuan.editor.R;
 import com.study.xuan.editor.model.panel.LinkModel;
@@ -23,6 +25,8 @@ import com.study.xuan.editor.operate.RichBuilder;
 public class EditorPanelAlpha extends LinearLayout {
     private ImageView mIvFont;
     private ImageView mIvBold, mIvItalics, mIvCenterLine, mIvUnderLine, mIvLink;
+    private ImageView mIvRefer;
+    private TextView mTvH1, mTvH2, mTvH3, mTvH4;
     private HorizontalScrollView mFontPanel;
     private IPanel panel;
     private Context mContext;
@@ -50,7 +54,12 @@ public class EditorPanelAlpha extends LinearLayout {
         mIvItalics.setOnClickListener(onClickListener);
         mIvCenterLine.setOnClickListener(onClickListener);
         mIvUnderLine.setOnClickListener(onClickListener);
+        mIvRefer.setOnClickListener(onClickListener);
         mIvLink.setOnClickListener(onClickListener);
+        mTvH1.setOnClickListener(onClickListener);
+        mTvH2.setOnClickListener(onClickListener);
+        mTvH3.setOnClickListener(onClickListener);
+        mTvH4.setOnClickListener(onClickListener);
         panel.setReverse(onPanelReverse);
     }
 
@@ -62,6 +71,11 @@ public class EditorPanelAlpha extends LinearLayout {
         mIvUnderLine = root.findViewById(R.id.iv_under_line);
         mFontPanel = root.findViewById(R.id.hs_font_panel);
         mIvLink = root.findViewById(R.id.iv_link);
+        mIvRefer = root.findViewById(R.id.iv_refer);
+        mTvH1 = root.findViewById(R.id.tv_h1);
+        mTvH2 = root.findViewById(R.id.tv_h2);
+        mTvH3 = root.findViewById(R.id.tv_h3);
+        mTvH4 = root.findViewById(R.id.tv_h4);
     }
 
     private onPanelReverse onPanelReverse = new onPanelReverse() {
@@ -109,6 +123,25 @@ public class EditorPanelAlpha extends LinearLayout {
                         panel.setUrl(linkModel.name, linkModel.link).change();
                     }
                 });
+            } else if (v.getId() == R.id.iv_refer) {
+                mIvRefer.setSelected(!mIvRefer.isSelected());
+                panel.setRefer(mIvRefer.isSelected()).change();
+            } else if (v.getId() == R.id.tv_h1) {
+                mTvH1.setSelected(!mTvH1.isSelected());
+                mTvH1.setTextColor(v.isSelected() ? Color.parseColor("#7dc5eb") : Color.parseColor("#bfbfbf"));
+                panel.setH1(v.isSelected()).change();
+            } else if (v.getId() == R.id.tv_h2) {
+                mTvH2.setSelected(!mTvH2.isSelected());
+                mTvH2.setTextColor(v.isSelected() ? Color.parseColor("#7dc5eb") : Color.parseColor("#bfbfbf"));
+                panel.setH2(v.isSelected()).change();
+            } else if (v.getId() == R.id.tv_h3) {
+                mTvH3.setSelected(!mTvH3.isSelected());
+                mTvH3.setTextColor(v.isSelected() ? Color.parseColor("#7dc5eb") : Color.parseColor("#bfbfbf"));
+                panel.setH3(v.isSelected()).change();
+            } else if (v.getId() == R.id.tv_h4) {
+                mTvH4.setSelected(!mTvH4.isSelected());
+                mTvH4.setTextColor(v.isSelected() ? Color.parseColor("#7dc5eb") : Color.parseColor("#bfbfbf"));
+                panel.setH4(v.isSelected()).change();
             }
         }
     };

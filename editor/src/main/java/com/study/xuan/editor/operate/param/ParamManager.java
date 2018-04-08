@@ -52,19 +52,19 @@ public class ParamManager implements IParamManger {
                 return Const.CODE_FONT_SEPARATOR + Const.SPAN_TYPE_PARAGRAPH
                         + pType;
             case Const.PARAGRAPH_T1:
-                return new FontParamBuilder().fontSize(36).build().getCharCodes()
+                return new FontParamBuilder().fontSize(Const.T1_SIZE).build().getCharCodes()
                         + Const.CODE_FONT_SEPARATOR + Const.SPAN_TYPE_PARAGRAPH
                         + pType;
             case Const.PARAGRAPH_T2:
-                return new FontParamBuilder().fontSize(32).build().getCharCodes()
+                return new FontParamBuilder().fontSize(Const.T2_SIZE).build().getCharCodes()
                         + Const.CODE_FONT_SEPARATOR + Const.SPAN_TYPE_PARAGRAPH
                         + pType;
             case Const.PARAGRAPH_T3:
-                return new FontParamBuilder().fontSize(26).build().getCharCodes()
+                return new FontParamBuilder().fontSize(Const.T3_SIZE).build().getCharCodes()
                         + Const.CODE_FONT_SEPARATOR + Const.SPAN_TYPE_PARAGRAPH
                         + pType;
             case Const.PARAGRAPH_T4:
-                return new FontParamBuilder().fontSize(22).build().getCharCodes()
+                return new FontParamBuilder().fontSize(Const.T4_SIZE).build().getCharCodes()
                         + Const.CODE_FONT_SEPARATOR + Const.SPAN_TYPE_PARAGRAPH
                         + pType;
         }

@@ -1,5 +1,7 @@
 package com.study.xuan.editor.operate.paragraph;
 
+import com.study.xuan.editor.common.Const;
+
 /**
  * Author : xuan.
  * Date : 2018/1/18.
@@ -7,7 +9,7 @@ package com.study.xuan.editor.operate.paragraph;
  */
 
 public class ParagraphBuilder {
-    public int type;
+    public int type = Const.PARAGRAPH_NONE;
 
     public void setType(int type) {
         this.type = type;

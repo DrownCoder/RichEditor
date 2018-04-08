@@ -25,11 +25,20 @@ public class Const {
     /**
      * 段落类型
      */
+    public static final int PARAGRAPH_NONE = -1;
     public static final int PARAGRAPH_REFER = 0;                            //引用类型
     public static final int PARAGRAPH_T1 = 1;                               //标题1
     public static final int PARAGRAPH_T2 = 2;                               //标题2
     public static final int PARAGRAPH_T3 = 3;                               //标题3
     public static final int PARAGRAPH_T4 = 4;                               //标题4
+
+    /**
+     * 段落数值
+     */
+    public static final int T1_SIZE = 80;                                   //标题1字号
+    public static final int T2_SIZE = 70;                                   //标题2字号
+    public static final int T3_SIZE = 60;                                   //标题3字号
+    public static final int T4_SIZE = 50;                                   //标题4字号
 
     /**
      * 具体字体样式

@@ -356,7 +356,8 @@ public class RichAdapter extends RecyclerView.Adapter {
     }
 
     private void doDel(View view, int pos) {
-        if (((EditText) view).getSelectionStart() == 0) {
+        if (((EditText) view).getSelectionStart() == 0
+                && ((EditText) view).getSelectionStart() == ((EditText) view).getSelectionEnd()) {
             if (pos >= 1) {
                 if (mData.get(pos - 1).type == TYPE_EDIT) {
                     RichModel removeModel = mData.get(pos);

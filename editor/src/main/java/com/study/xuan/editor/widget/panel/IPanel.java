@@ -45,13 +45,13 @@ public interface IPanel {
 
     IPanel setUrl(String name, String url, @ColorInt int color);
 
-    IPanel setRefer();
+    IPanel setRefer(boolean isRefer);
 
-    IPanel setH1();
+    IPanel setH1(boolean isH1);
 
-    IPanel setH2();
+    IPanel setH2(boolean isH2);
 
-    IPanel setH3();
+    IPanel setH3(boolean isH3);
 
-    IPanel setH4();
+    IPanel setH4(boolean isH4);
 }

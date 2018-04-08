@@ -145,37 +145,63 @@ public class PanelBuilder implements IPanel {
     }
 
     @Override
-    public IPanel setRefer() {
-        type = TYPE_PARAGRAPH;
-        paragraphBuilder.setType(Const.PARAGRAPH_REFER);
+    public IPanel setRefer(boolean isRefer) {
+        if (isRefer) {
+            type = TYPE_PARAGRAPH;
+            paragraphBuilder.setType(Const.PARAGRAPH_REFER);
+        }else{
+            type = TYPE_PARAGRAPH;
+            paragraphBuilder.setType(Const.PARAGRAPH_NONE);
+        }
         return this;
     }
 
     @Override
-    public IPanel setH1() {
-        type = TYPE_PARAGRAPH;
-        paragraphBuilder.setType(Const.PARAGRAPH_T1);
+    public IPanel setH1(boolean isH1) {
+        if (isH1) {
+            type = TYPE_PARAGRAPH;
+            paragraphBuilder.setType(Const.PARAGRAPH_T1);
+        }else{
+            type = TYPE_PARAGRAPH;
+            paragraphBuilder.setType(Const.PARAGRAPH_NONE);
+        }
         return this;
     }
 
     @Override
-    public IPanel setH2() {
-        type = TYPE_PARAGRAPH;
-        paragraphBuilder.setType(Const.PARAGRAPH_T2);
+    public IPanel setH2(boolean isH2) {
+        if (isH2) {
+            type = TYPE_PARAGRAPH;
+            paragraphBuilder.setType(Const.PARAGRAPH_T2);
+        }else{
+            type = TYPE_PARAGRAPH;
+            paragraphBuilder.setType(Const.PARAGRAPH_NONE);
+        }
         return this;
     }
 
     @Override
-    public IPanel setH3() {
-        type = TYPE_PARAGRAPH;
-        paragraphBuilder.setType(Const.PARAGRAPH_T3);
+    public IPanel setH3(boolean isH3) {
+        if (isH3) {
+            type = TYPE_PARAGRAPH;
+            paragraphBuilder.setType(Const.PARAGRAPH_T3);
+        }else{
+            type = TYPE_PARAGRAPH;
+            paragraphBuilder.setType(Const.PARAGRAPH_NONE);
+        }
         return this;
     }
 
     @Override
-    public IPanel setH4() {
-        type = TYPE_PARAGRAPH;
-        paragraphBuilder.setType(Const.PARAGRAPH_T4);
+    public IPanel setH4(boolean isH4) {
+        if (isH4) {
+            type = TYPE_PARAGRAPH;
+            paragraphBuilder.setType(Const.PARAGRAPH_T4);
+        }else{
+            type = TYPE_PARAGRAPH;
+            paragraphBuilder.setType(Const.PARAGRAPH_NONE);
+        }
+
         return this;
     }
 }

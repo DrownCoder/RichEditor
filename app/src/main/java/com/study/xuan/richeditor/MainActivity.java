@@ -2,6 +2,8 @@ package com.study.xuan.richeditor;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.TextView;
 
 import com.study.xuan.editor.common.Const;
 import com.study.xuan.editor.model.SpanModel;
@@ -9,6 +11,7 @@ import com.study.xuan.editor.model.panel.state.ParagraphChangeEvent;
 import com.study.xuan.editor.operate.param.IParamManger;
 import com.study.xuan.editor.operate.font.FontParam;
 import com.study.xuan.editor.operate.RichBuilder;
+import com.study.xuan.editor.operate.parse.ParseAsyncTask;
 import com.study.xuan.editor.operate.span.factory.IAbstractSpanFactory;
 import com.study.xuan.editor.widget.RichEditor;
 import com.study.xuan.editor.widget.panel.EditorPanelAlpha;
@@ -21,6 +24,7 @@ import static com.study.xuan.editor.widget.panel.PanelBuilder.TYPE_PARAGRAPH;
 
 
 public class MainActivity extends AppCompatActivity {
+    TextView mTvSubmit;
     RichEditor mEditor;
     EditorPanelAlpha mPanel;
     IParamManger paramManager;
@@ -33,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mEditor = (RichEditor) findViewById(R.id.editor);
         mPanel = (EditorPanelAlpha) findViewById(R.id.panel);
+        mTvSubmit = findViewById(R.id.tv_submit);
 
         paramManager = RichBuilder.getInstance().getManger();
         spanFactory = RichBuilder.getInstance().getFactory();
@@ -65,6 +70,13 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });*/
+       mTvSubmit.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               ParseAsyncTask saveTask = new ParseAsyncTask(mEditor.getData());
+               saveTask.execute(Const.GSON_PARSE_TYPE);
+           }
+       });
     }
 
     /**

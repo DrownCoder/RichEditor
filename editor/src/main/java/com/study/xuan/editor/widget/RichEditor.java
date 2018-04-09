@@ -211,4 +211,8 @@ public class RichEditor extends RecyclerView implements ViewTreeObserver.OnGloba
     public void onGlobalLayout() {
         mAdapter.isEnter = false;
     }
+
+    public List<RichModel> getData() {
+        return mDatas;
+    }
 }

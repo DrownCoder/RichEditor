@@ -31,9 +31,9 @@ public class MultiSpannableString extends SpannableStringBuilder {
     }
 
     public void setMultiSpans(List<Object> objects, int start, int end, int flags) {
-        StringBuilder builder = new StringBuilder();
+        //StringBuilder builder = new StringBuilder();
         for (Object item : objects) {
-            builder.append(item.getClass().toString());
+            //builder.append(item.getClass().toString());
             setSpan(item, start, end, flags);
         }
     }

@@ -5,7 +5,9 @@ import android.graphics.Color;
 import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputFilter;
+import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.text.style.AbsoluteSizeSpan;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +16,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.study.xuan.editor.R;
+import com.study.xuan.editor.common.Const;
 import com.study.xuan.editor.model.RichModel;
 import com.study.xuan.editor.model.SpanModel;
 import com.study.xuan.editor.operate.param.IParamManger;
@@ -175,10 +178,16 @@ public class RichAdapter extends RecyclerView.Adapter {
             ((EditHolder) holder).textWatcher.updatePosition(pos);
             ((EditHolder) holder).filter.updatePosition(pos);
             if (item.isParagraphStyle) {
-                MultiSpannableString spannableString = new MultiSpannableString(item.source);
-                spannableString.setMultiSpans(item.paragraphSpan.mSpans, 0, item.source.length(),
-                        Spanned
-                                .SPAN_EXCLUSIVE_EXCLUSIVE);
+                SpannableStringBuilder spannableString = new SpannableStringBuilder(item.source);
+                for (Object obj : item.paragraphSpan.mSpans) {
+                    if (obj instanceof AbsoluteSizeSpan) {
+                        AbsoluteSizeSpan sizeSpan = (AbsoluteSizeSpan) obj;
+                        mEdit.setTextSize(sizeSpan.getSize());
+                        continue;
+                    }
+                    spannableString.setSpan(obj, 0, item.source.length(), Spanned
+                            .SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
                 mEdit.setText(spannableString);
                 paragraphHelper.handleTextStyle(mEdit, item.paragraphSpan.paragraphType);
             } else {
@@ -193,6 +202,7 @@ public class RichAdapter extends RecyclerView.Adapter {
                 }
                 mEdit.setText(mSpanString);
                 paragraphHelper.handleTextStyle(mEdit, -1);
+                mEdit.setTextSize(Const.DEFAULT_TEXT_SIZE);
             }
             mEdit.setSelection(item.curIndex);
             //mEdit.setSelection(item.source.length());

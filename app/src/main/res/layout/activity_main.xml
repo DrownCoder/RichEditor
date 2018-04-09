@@ -6,7 +6,23 @@
     android:layout_height="match_parent"
     android:background="@android:color/white"
     >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+        <TextView
+            android:id="@+id/tv_submit"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="保存"
+            android:gravity="center"
+            android:padding="10dp"
+            android:layout_alignParentRight="true"
+            android:background="@color/orange"
+            android:textSize="18dp"
+            />
+    </RelativeLayout>
     <com.study.xuan.editor.widget.RichEditor
+        android:layout_marginTop="50dp"
         android:id="@+id/editor"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>

@@ -35,10 +35,10 @@ public class Const {
     /**
      * 段落数值
      */
-    public static final int T1_SIZE = 80;                                   //标题1字号
-    public static final int T2_SIZE = 70;                                   //标题2字号
-    public static final int T3_SIZE = 60;                                   //标题3字号
-    public static final int T4_SIZE = 50;                                   //标题4字号
+    public static final int T1_SIZE = 32;                                   //标题1字号
+    public static final int T2_SIZE = 28;                                   //标题2字号
+    public static final int T3_SIZE = 24;                                   //标题3字号
+    public static final int T4_SIZE = 20;                                   //标题4字号
 
     /**
      * 具体字体样式
@@ -60,4 +60,15 @@ public class Const {
     public static final String CODE_CHAR_SEPARATOR = "%";                    //char类型的code的分隔符
     public static final String CODE_FONT_SEPARATOR = "|";                    //param的分隔符
 
+    /**
+     * 默认文字大小
+     */
+    public static final int DEFAULT_TEXT_SIZE = 18;
+
+    /**
+     * 解析类型
+     */
+    public static final int GSON_PARSE_TYPE = 0;
+    public static final int MARKDOWN_PARSE_TYPE = 1;
+    public static final int HTML_PARSE_TYPE = 2;
 }

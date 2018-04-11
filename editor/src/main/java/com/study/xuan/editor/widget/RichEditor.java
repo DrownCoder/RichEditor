@@ -17,8 +17,8 @@ import com.study.xuan.editor.model.RichModel;
 import com.study.xuan.editor.model.SpanModel;
 import com.study.xuan.editor.operate.RichBuilder;
 import com.study.xuan.editor.operate.font.FontParam;
-import com.study.xuan.editor.operate.search.ISearchStrategy;
-import com.study.xuan.editor.operate.search.NormalSearch;
+import com.study.xuan.editor.operate.sort.ISearchStrategy;
+import com.study.xuan.editor.operate.sort.NormalSearch;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

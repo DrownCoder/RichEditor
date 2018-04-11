@@ -1,4 +1,4 @@
-package com.study.xuan.editor.operate.search;
+package com.study.xuan.editor.operate.sort;
 
 import com.study.xuan.editor.model.SpanModel;
 import com.study.xuan.editor.operate.font.FontParam;

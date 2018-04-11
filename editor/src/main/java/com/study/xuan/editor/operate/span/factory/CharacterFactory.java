@@ -10,6 +10,7 @@ import android.text.style.UnderlineSpan;
 import android.util.Log;
 
 import com.study.xuan.editor.common.Const;
+import com.study.xuan.editor.operate.span.RichStyleSpan;
 import com.study.xuan.editor.operate.span.URLSpanNoUnderline;
 import com.study.xuan.editor.util.EditorUtil;
 
@@ -111,11 +112,11 @@ public class CharacterFactory implements ICharacterStyleFactory {
             }
             switch (i) {
                 case 0://bold
-                    cSpan = new StyleSpan(BOLD);
+                    cSpan = new RichStyleSpan(BOLD);
                     characterStyles.add(cSpan);
                     break;
                 case 1://isItalics
-                    cSpan = new StyleSpan(ITALIC);
+                    cSpan = new RichStyleSpan(ITALIC);
                     characterStyles.add(cSpan);
                     break;
                 case 2://isUnderLine

@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Author : xuan.
  * Date : 18-4-9.
- * Description : the file description
+ * Description : 异步转换markdown或者html
  */
 public class ParseAsyncTask extends AsyncTask<Integer, Integer, String> {
     private List<RichModel> data;
@@ -25,7 +25,7 @@ public class ParseAsyncTask extends AsyncTask<Integer, Integer, String> {
         int parseType = integers[0];
         Parser parser;
         switch (parseType) {
-            case Const.GSON_PARSE_TYPE:
+            case Const.MARKDOWN_PARSE_TYPE:
                 parser = new MarkDownParser();
                 break;
             default:

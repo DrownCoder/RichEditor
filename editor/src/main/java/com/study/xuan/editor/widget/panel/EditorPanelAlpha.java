@@ -102,6 +102,7 @@ public class EditorPanelAlpha extends LinearLayout {
             if (v.getId() == R.id.iv_font) {
                 mIvFont.setSelected(!mIvFont.isSelected());
                 mFontPanel.setVisibility(mIvFont.isSelected() ? VISIBLE : GONE);
+                panel.showPanel(mIvFont.isSelected()).change();
             } else if (v.getId() == R.id.iv_bold) {
                 mIvBold.setSelected(!mIvBold.isSelected());
                 panel.setBold(mIvBold.isSelected()).change();

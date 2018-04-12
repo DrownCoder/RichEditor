@@ -1,8 +1,10 @@
 package com.study.xuan.richeditor;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.study.xuan.editor.common.Const;
@@ -13,6 +15,7 @@ import com.study.xuan.editor.operate.font.FontParam;
 import com.study.xuan.editor.operate.RichBuilder;
 import com.study.xuan.editor.operate.parse.ParseAsyncTask;
 import com.study.xuan.editor.operate.span.factory.IAbstractSpanFactory;
+import com.study.xuan.editor.util.DensityUtil;
 import com.study.xuan.editor.widget.RichEditor;
 import com.study.xuan.editor.widget.panel.EditorPanelAlpha;
 import com.study.xuan.editor.widget.panel.IPanel;
@@ -20,10 +23,11 @@ import com.study.xuan.editor.widget.panel.onPanelStateChange;
 
 import static com.study.xuan.editor.widget.panel.PanelBuilder.TYPE_FONT;
 import static com.study.xuan.editor.widget.panel.PanelBuilder.TYPE_LINK;
+import static com.study.xuan.editor.widget.panel.PanelBuilder.TYPE_PANEL;
 import static com.study.xuan.editor.widget.panel.PanelBuilder.TYPE_PARAGRAPH;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity {
     TextView mTvSubmit;
     RichEditor mEditor;
     EditorPanelAlpha mPanel;
@@ -55,6 +59,9 @@ public class MainActivity extends AppCompatActivity {
                     case TYPE_PARAGRAPH:
                         onParagraphEvent(panel.getParagraph().type);
                         break;
+                    case TYPE_PANEL:
+                        onPanelEvent(panel.isShow());
+                        break;
                 }
             }
         });
@@ -70,13 +77,22 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });*/
-       mTvSubmit.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-               ParseAsyncTask saveTask = new ParseAsyncTask(mEditor.getData());
-               saveTask.execute(Const.GSON_PARSE_TYPE);
-           }
-       });
+        mTvSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ParseAsyncTask saveTask = new ParseAsyncTask(mEditor.getData());
+                saveTask.execute(Const.MARKDOWN_PARSE_TYPE);
+            }
+        });
+    }
+
+    private void onPanelEvent(boolean show) {
+        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) mEditor.getLayoutParams();
+        if (show) {
+            params.bottomMargin = DensityUtil.dp2px(this, 100);
+        } else {
+            params.bottomMargin = DensityUtil.dp2px(this, 50);
+        }
     }
 
     /**
@@ -134,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
             model.code = paramManager.getParamCode(pType);
             model.mSpans = spanFactory.createSpan(model.code);
             mEditor.getCurIndexModel().setParagraphSpan(model);
-        }else{
+        } else {
             mEditor.getCurIndexModel().setNoParagraphSpan();
         }
     }

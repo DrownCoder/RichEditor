@@ -23,4 +23,8 @@ public interface Formater {
     String formatH3(String h3);
 
     String formatH4(String h4);
+
+    String formatRefer(String refer);
+
+    String formatCenter(String str);
 }

@@ -54,4 +54,8 @@ public interface IPanel {
     IPanel setH3(boolean isH3);
 
     IPanel setH4(boolean isH4);
+
+    IPanel showPanel(boolean show);
+
+    boolean isShow();
 }

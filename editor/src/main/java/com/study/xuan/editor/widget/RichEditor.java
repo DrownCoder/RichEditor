@@ -88,7 +88,9 @@ public class RichEditor extends RecyclerView implements ViewTreeObserver.OnGloba
     RichAdapter.onScrollIndex onScrollIndex = new RichAdapter.onScrollIndex() {
         @Override
         public void scroll(int pos) {
-            scrollToPosition(pos);
+            if (pos >= 3) {
+                scrollToPosition(pos);
+            }
         }
     };
 

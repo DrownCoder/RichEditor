@@ -26,6 +26,7 @@ import com.study.xuan.editor.operate.RichBuilder;
 import com.study.xuan.editor.operate.paragraph.ParagraphHelper;
 import com.study.xuan.editor.operate.span.MultiSpannableString;
 import com.study.xuan.editor.operate.span.factory.IAbstractSpanFactory;
+import com.study.xuan.editor.util.DensityUtil;
 import com.study.xuan.shapebuilder.shape.ShapeBuilder;
 
 import java.util.HashSet;
@@ -208,6 +209,11 @@ public class RichAdapter extends RecyclerView.Adapter {
             //mEdit.setSelection(item.source.length());
             mEdit.setHint(item.hint);
             mEdit.setTag(pos);
+            if (index == pos && index < 3 && index == mData.size() - 1) {
+                mEdit.setMinHeight(DensityUtil.dp2px(mContext, 500));
+            } else {
+                mEdit.setMinHeight(DensityUtil.dp2px(mContext, 0));
+            }
         }
 
     }

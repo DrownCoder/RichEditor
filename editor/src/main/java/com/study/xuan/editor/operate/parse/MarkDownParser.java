@@ -1,14 +1,19 @@
 package com.study.xuan.editor.operate.parse;
 
 import android.graphics.Typeface;
+import android.text.style.AbsoluteSizeSpan;
+import android.text.style.AlignmentSpan;
 import android.text.style.StrikethroughSpan;
 import android.text.style.StyleSpan;
 import android.text.style.UnderlineSpan;
 import android.util.SparseArray;
 
+import com.study.xuan.editor.common.Const;
 import com.study.xuan.editor.model.RichModel;
 import com.study.xuan.editor.model.SpanModel;
 import com.study.xuan.editor.operate.helper.RichModelHelper;
+import com.study.xuan.editor.operate.span.ReferSpan;
+import com.study.xuan.editor.operate.span.URLSpanNoUnderline;
 
 import java.util.List;
 
@@ -22,7 +27,7 @@ public class MarkDownParser extends Parser {
     private SparseArray<String> pool;
     private int priority = 0;
 
-    public MarkDownParser() {
+    MarkDownParser() {
         formater = new MarkDownFormater();
         pool = new SparseArray<>();
     }
@@ -37,6 +42,8 @@ public class MarkDownParser extends Parser {
             RichModelHelper.formatSpan(model.getSpanList());
             //规整区间结束后，将字符串按照区间分割并重新拼接,按照优先级将字符串分割成一小段
             // ，（因为可能存在顺序不是递增的，所以需要用优先级），最后再按照优先级将拼接成整体。
+
+            //拼接字符级别markdown
             if (model.getSpanList() == null || model.getSpanList().size() == 0) {
                 str.append(model.source).append("\n");
             } else {
@@ -62,11 +69,47 @@ public class MarkDownParser extends Parser {
                 for (int t = 0; t < pool.size(); t++) {
                     str.append(pool.valueAt(t));
                 }
-                str.append("\n");
                 pool.clear();
             }
+            //拼接段落级别markdown语法
+            if (model.isParagraphStyle) {
+                str.replace(0, str.length(), paragraphToMarkDown(model.paragraphSpan.mSpans, str));
+            }
+            str.append("\n");
         }
         return str.toString();
+    }
+
+    private String paragraphToMarkDown(List<Object> mSpans, StringBuilder source) {
+        if (mSpans == null || mSpans.size() == 0) {
+            return source.toString();
+        }
+        String str = source.toString();
+        for (Object obj : mSpans) {
+            if (obj instanceof ReferSpan) {
+                str = formater.formatRefer(str);
+            } else if (obj instanceof AlignmentSpan) {
+                //markdown是不支持居中的！！！，后期考虑注释掉
+               // str = formater.formatCenter(str);
+            } else if (obj instanceof AbsoluteSizeSpan) {
+                AbsoluteSizeSpan sizeSpan = (AbsoluteSizeSpan) obj;
+                switch (sizeSpan.getSize()) {
+                    case Const.T1_SIZE:
+                        str = formater.formatH1(str);
+                        break;
+                    case Const.T2_SIZE:
+                        str = formater.formatH2(str);
+                        break;
+                    case Const.T3_SIZE:
+                        str = formater.formatH3(str);
+                        break;
+                    case Const.T4_SIZE:
+                        str = formater.formatH4(str);
+                        break;
+                }
+            }
+        }
+        return str;
     }
 
     @Override
@@ -92,9 +135,13 @@ public class MarkDownParser extends Parser {
                         break;
                 }
             } else if (obj instanceof UnderlineSpan) {
+                //markdown是不支持下划线的！！！，后期考虑注释掉
                 str = formater.formatUnderLine(str);
             } else if (obj instanceof StrikethroughSpan) {
                 str = formater.formatCenterLine(str);
+            } else if (obj instanceof URLSpanNoUnderline) {
+                URLSpanNoUnderline url = (URLSpanNoUnderline) obj;
+                str = formater.formatLink(str, url.getURL());
             }
         }
         return str;

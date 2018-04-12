@@ -5,7 +5,7 @@
     android:orientation="vertical">
     <HorizontalScrollView
         android:id="@+id/hs_font_panel"
-        android:visibility="visible"
+        android:visibility="gone"
         android:background="#e6e6e6"
         android:scrollbars="none"
         android:layout_width="match_parent"

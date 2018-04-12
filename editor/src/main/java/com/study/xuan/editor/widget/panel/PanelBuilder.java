@@ -14,10 +14,12 @@ import com.study.xuan.editor.operate.paragraph.ParagraphBuilder;
  * Description : 操作面板
  */
 public class PanelBuilder implements IPanel {
+    public static final String TYPE_PANEL = "PANEL";
     public static final String TYPE_FONT = "FONT";
     public static final String TYPE_LINK = "LINK";
     public static final String TYPE_PARAGRAPH = "PARAGRAPH";
     private String type;
+    private boolean show;
 
     private FontParamBuilder fontParamBuilder;
     private ParagraphBuilder paragraphBuilder;
@@ -149,7 +151,7 @@ public class PanelBuilder implements IPanel {
         if (isRefer) {
             type = TYPE_PARAGRAPH;
             paragraphBuilder.setType(Const.PARAGRAPH_REFER);
-        }else{
+        } else {
             type = TYPE_PARAGRAPH;
             paragraphBuilder.setType(Const.PARAGRAPH_NONE);
         }
@@ -161,7 +163,7 @@ public class PanelBuilder implements IPanel {
         if (isH1) {
             type = TYPE_PARAGRAPH;
             paragraphBuilder.setType(Const.PARAGRAPH_T1);
-        }else{
+        } else {
             type = TYPE_PARAGRAPH;
             paragraphBuilder.setType(Const.PARAGRAPH_NONE);
         }
@@ -173,7 +175,7 @@ public class PanelBuilder implements IPanel {
         if (isH2) {
             type = TYPE_PARAGRAPH;
             paragraphBuilder.setType(Const.PARAGRAPH_T2);
-        }else{
+        } else {
             type = TYPE_PARAGRAPH;
             paragraphBuilder.setType(Const.PARAGRAPH_NONE);
         }
@@ -185,7 +187,7 @@ public class PanelBuilder implements IPanel {
         if (isH3) {
             type = TYPE_PARAGRAPH;
             paragraphBuilder.setType(Const.PARAGRAPH_T3);
-        }else{
+        } else {
             type = TYPE_PARAGRAPH;
             paragraphBuilder.setType(Const.PARAGRAPH_NONE);
         }
@@ -197,11 +199,23 @@ public class PanelBuilder implements IPanel {
         if (isH4) {
             type = TYPE_PARAGRAPH;
             paragraphBuilder.setType(Const.PARAGRAPH_T4);
-        }else{
+        } else {
             type = TYPE_PARAGRAPH;
             paragraphBuilder.setType(Const.PARAGRAPH_NONE);
         }
 
         return this;
+    }
+
+    @Override
+    public IPanel showPanel(boolean show) {
+        type = TYPE_PANEL;
+        this.show = show;
+        return this;
+    }
+
+    @Override
+    public boolean isShow() {
+        return show;
     }
 }

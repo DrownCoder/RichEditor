@@ -1,5 +1,7 @@
 package com.study.xuan.editor.operate.parse;
 
+import android.text.TextUtils;
+
 /**
  * Author : xuan.
  * Date : 18-4-10.
@@ -58,12 +60,26 @@ public class MarkDownFormater implements Formater {
         return appendStr("####", h4, null);
     }
 
+    @Override
+    public String formatRefer(String refer) {
+        return appendStr(">", refer, null);
+    }
+
+    @Override
+    public String formatCenter(String str) {
+        return appendStr("<center>", str, "</center>");
+    }
+
     private String appendStr(String left, String center, String right) {
         return appendStringBuilder(left, center, right).toString();
     }
 
     private StringBuilder appendStringBuilder(String left, String center, String right) {
         strBuilder.setLength(0);
-        return strBuilder.append(left).append(center).append(right);
+        if (TextUtils.isEmpty(right)) {
+            return strBuilder.append(left).append(center);
+        } else {
+            return strBuilder.append(left).append(center).append(right);
+        }
     }
 }

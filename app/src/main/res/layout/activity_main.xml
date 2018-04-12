@@ -1,52 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
-    >
+    android:background="@android:color/white">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp">
+
         <TextView
             android:id="@+id/tv_submit"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="保存"
-            android:gravity="center"
-            android:padding="10dp"
             android:layout_alignParentRight="true"
             android:background="@color/orange"
-            android:textSize="18dp"
-            />
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="保存"
+            android:textSize="18dp" />
     </RelativeLayout>
+
+    <com.study.xuan.editor.widget.panel.EditorPanelAlpha
+        android:id="@+id/panel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom" />
+
     <com.study.xuan.editor.widget.RichEditor
-        android:layout_marginTop="50dp"
+        android:layout_marginBottom="50dp"
         android:id="@+id/editor"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:layout_marginTop="50dp" />
     <!--<com.study.xuan.editor.widget.panel.EditorPanelanel
         android:id="@+id/panel"
         android:layout_gravity="bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>-->
-
-    <com.study.xuan.editor.widget.panel.EditorPanelAlpha
-        android:layout_gravity="bottom"
-        android:id="@+id/panel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
     <TextView
         android:id="@+id/tv_test"
-        android:gravity="center"
-        android:textSize="18sp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/black"
-        android:textColor="@android:color/white"
-        android:visibility="gone"
+        android:gravity="center"
         android:text="测试"
-        />
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        android:visibility="gone" />
 
 </FrameLayout>

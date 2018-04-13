@@ -36,8 +36,8 @@ public class MarkDownFormater implements Formater {
 
     @Override
     public String formatLink(String name, String str) {
-        return appendStringBuilder("[", str, "]")
-                .append(appendStr("(", str, ")")).toString();
+        return appendStringBuilder("[", name, "]")
+                + appendStr("(", str, ")");
     }
 
     @Override

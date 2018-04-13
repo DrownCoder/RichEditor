@@ -129,32 +129,34 @@ public class EditorPanelAlpha extends LinearLayout {
                 panel.setRefer(mIvRefer.isSelected()).change();
             } else if (v.getId() == R.id.tv_h1) {
                 mTvH1.setSelected(!mTvH1.isSelected());
-                mTvH1.setTextColor(v.isSelected() ? Color.parseColor("#7dc5eb") : Color.parseColor("#bfbfbf"));
                 panel.setH1(v.isSelected()).change();
             } else if (v.getId() == R.id.tv_h2) {
                 mTvH2.setSelected(!mTvH2.isSelected());
-                mTvH2.setTextColor(v.isSelected() ? Color.parseColor("#7dc5eb") : Color.parseColor("#bfbfbf"));
                 panel.setH2(v.isSelected()).change();
             } else if (v.getId() == R.id.tv_h3) {
                 mTvH3.setSelected(!mTvH3.isSelected());
-                mTvH3.setTextColor(v.isSelected() ? Color.parseColor("#7dc5eb") : Color.parseColor("#bfbfbf"));
                 panel.setH3(v.isSelected()).change();
             } else if (v.getId() == R.id.tv_h4) {
                 mTvH4.setSelected(!mTvH4.isSelected());
-                mTvH4.setTextColor(v.isSelected() ? Color.parseColor("#7dc5eb") : Color.parseColor("#bfbfbf"));
                 panel.setH4(v.isSelected()).change();
             }
         }
     };
 
     private void reset() {
-        mFontPanel.setVisibility(View.VISIBLE);
-        mIvFont.setSelected(true);
         mIvBold.setSelected(false);
         mIvItalics.setSelected(false);
         mIvCenterLine.setSelected(false);
         mIvUnderLine.setSelected(false);
         panel.reset();
+    }
+
+    private void resetParagraph() {
+        mTvH1.setSelected(false);
+        mTvH2.setSelected(false);
+        mTvH3.setSelected(false);
+        mTvH4.setSelected(false);
+        mIvRefer.setSelected(false);
     }
 
 }

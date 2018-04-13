@@ -209,7 +209,8 @@ public class RichAdapter extends RecyclerView.Adapter {
             //mEdit.setSelection(item.source.length());
             mEdit.setHint(item.hint);
             mEdit.setTag(pos);
-            if (index == pos && index < 3 && index == mData.size() - 1) {
+            //只存在一个EditText的时候，点击区域太小，所以只有一个的时候，将MinHeight设为500
+            if (index == pos && index < 2 && index == mData.size() - 1) {
                 mEdit.setMinHeight(DensityUtil.dp2px(mContext, 500));
             } else {
                 mEdit.setMinHeight(DensityUtil.dp2px(mContext, 0));

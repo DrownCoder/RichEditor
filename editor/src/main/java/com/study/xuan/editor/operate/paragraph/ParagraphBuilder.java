@@ -14,4 +14,8 @@ public class ParagraphBuilder {
     public void setType(int type) {
         this.type = type;
     }
+
+    public void reset() {
+        type = Const.PARAGRAPH_NONE;
+    }
 }

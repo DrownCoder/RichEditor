@@ -77,6 +77,7 @@ public class RichAdapter extends RecyclerView.Adapter {
     }
 
     public interface onEditClick {
+        //pos对应光标所在行数，index对应光标所在位置
         void onEditClick(int pos, int index);
     }
 
@@ -370,6 +371,7 @@ public class RichAdapter extends RecyclerView.Adapter {
         if (mOnScrollIndex != null) {
             mOnScrollIndex.scroll(index + 1);//header需要+1
         }
+        RichBuilder.getInstance().clear();
     }
 
     private void doDel(View view, int pos) {

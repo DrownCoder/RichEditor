@@ -2,7 +2,6 @@ package com.study.xuan.editor.widget.panel;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -13,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.study.xuan.editor.R;
+import com.study.xuan.editor.common.Const;
 import com.study.xuan.editor.model.panel.LinkModel;
 import com.study.xuan.editor.operate.font.FontParam;
 import com.study.xuan.editor.operate.RichBuilder;
@@ -80,21 +80,47 @@ public class EditorPanelAlpha extends LinearLayout {
 
     private onPanelReverse onPanelReverse = new onPanelReverse() {
         @Override
-        public void onReverse(FontParam param) {
-            if (param != null) {
-                mIvBold.setSelected(param.isBold);
-                panel.setBold(param.isBold);
-                mIvItalics.setSelected(param.isItalics);
-                panel.setItalics(param.isItalics);
-                mIvCenterLine.setSelected(param.isCenterLine);
-                panel.setCenterLine(param.isCenterLine);
-                mIvUnderLine.setSelected(param.isUnderLine);
-                panel.setUnderLine(param.isUnderLine);
-            } else {
-                reset();
-            }
+        public void onReverse(FontParam param, int paragraphType) {
+            setParagraphStyle(paragraphType);
+            setFontStyle(param);
         }
     };
+
+    private void setFontStyle(FontParam param) {
+        if (param != null) {
+            mIvBold.setSelected(param.isBold);
+            panel.setBold(param.isBold);
+            mIvItalics.setSelected(param.isItalics);
+            panel.setItalics(param.isItalics);
+            mIvCenterLine.setSelected(param.isCenterLine);
+            panel.setCenterLine(param.isCenterLine);
+            mIvUnderLine.setSelected(param.isUnderLine);
+            panel.setUnderLine(param.isUnderLine);
+        } else {
+            resetFont();
+        }
+    }
+
+    private void setParagraphStyle(int paragraphType) {
+        resetParagraph();
+        switch (paragraphType) {
+            case Const.PARAGRAPH_REFER:
+                mIvRefer.setSelected(true);
+                break;
+            case Const.PARAGRAPH_T1:
+                mTvH1.setSelected(true);
+                break;
+            case Const.PARAGRAPH_T2:
+                mTvH2.setSelected(true);
+                break;
+            case Const.PARAGRAPH_T3:
+                mTvH3.setSelected(true);
+                break;
+            case Const.PARAGRAPH_T4:
+                mTvH4.setSelected(true);
+                break;
+        }
+    }
 
     private OnClickListener onClickListener = new OnClickListener() {
         @Override
@@ -125,38 +151,54 @@ public class EditorPanelAlpha extends LinearLayout {
                     }
                 });
             } else if (v.getId() == R.id.iv_refer) {
+                resetParagraph(v);
                 mIvRefer.setSelected(!mIvRefer.isSelected());
                 panel.setRefer(mIvRefer.isSelected()).change();
             } else if (v.getId() == R.id.tv_h1) {
+                resetParagraph(v);
                 mTvH1.setSelected(!mTvH1.isSelected());
                 panel.setH1(v.isSelected()).change();
             } else if (v.getId() == R.id.tv_h2) {
+                resetParagraph(v);
                 mTvH2.setSelected(!mTvH2.isSelected());
                 panel.setH2(v.isSelected()).change();
             } else if (v.getId() == R.id.tv_h3) {
+                resetParagraph(v);
                 mTvH3.setSelected(!mTvH3.isSelected());
                 panel.setH3(v.isSelected()).change();
             } else if (v.getId() == R.id.tv_h4) {
+                resetParagraph(v);
                 mTvH4.setSelected(!mTvH4.isSelected());
                 panel.setH4(v.isSelected()).change();
             }
         }
     };
 
-    private void reset() {
+    private void resetFont() {
         mIvBold.setSelected(false);
         mIvItalics.setSelected(false);
         mIvCenterLine.setSelected(false);
         mIvUnderLine.setSelected(false);
-        panel.reset();
+        panel.resetFont();
     }
 
-    private void resetParagraph() {
+    private void resetParagraph(View view) {
+        boolean isSelect = false;
+        if (view != null) {
+            isSelect = view.isSelected();
+        }
         mTvH1.setSelected(false);
         mTvH2.setSelected(false);
         mTvH3.setSelected(false);
         mTvH4.setSelected(false);
         mIvRefer.setSelected(false);
+        if (view != null) {
+            view.setSelected(isSelect);
+        }
+    }
+
+    private void resetParagraph() {
+        resetParagraph(null);
     }
 
 }

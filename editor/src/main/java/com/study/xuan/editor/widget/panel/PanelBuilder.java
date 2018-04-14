@@ -42,14 +42,15 @@ public class PanelBuilder implements IPanel {
     }
 
     @Override
-    public void reverse(FontParam param) {
+    public void reverse(FontParam param, int paragraphType) {
         /*if (param != null) {
             fontParamBuilder.setParam(param);
         }else {
             fontParamBuilder.reset();
         }*/
+        paragraphBuilder.setType(paragraphType);
         if (mReverse != null) {
-            mReverse.onReverse(param);
+            mReverse.onReverse(param, paragraphType);
         }
     }
 
@@ -61,9 +62,22 @@ public class PanelBuilder implements IPanel {
     }
 
     @Override
-    public void reset() {
+    public void resetFont() {
         fontParamBuilder.reset();
-        reverse(fontParamBuilder.build());
+        reverse(fontParamBuilder.build(), paragraphBuilder.type);
+    }
+
+    @Override
+    public void resetParagraph() {
+        fontParamBuilder.reset();
+        reverse(fontParamBuilder.build(), paragraphBuilder.type);
+    }
+
+    @Override
+    public void reset() {
+        paragraphBuilder.reset();
+        fontParamBuilder.reset();
+        reverse(fontParamBuilder.build(), paragraphBuilder.type);
     }
 
     @Override

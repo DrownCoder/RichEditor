@@ -55,14 +55,13 @@ public class RichBuilder {
         builder = null;
     }
 
-    public void resetParam(FontParam param) {
-        panelBuilder.reverse(param);
+    public void resetParam(FontParam param, int paragraphType) {
+        panelBuilder.reverse(param, paragraphType);
         manger.reset().setCurrentParam(param);
     }
 
     public void clear() {
         panelBuilder.reset();
         manger.reset();
-        panelBuilder.reset();
     }
 }

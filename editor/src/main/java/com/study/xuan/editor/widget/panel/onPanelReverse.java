@@ -8,5 +8,5 @@ import com.study.xuan.editor.operate.font.FontParam;
  * Description : 逆向展示当前panel状态
  */
 public interface onPanelReverse {
-    void onReverse(FontParam param);
+    void onReverse(FontParam param, int paragraphType);
 }

@@ -13,6 +13,7 @@ import android.widget.EditText;
 
 import com.study.xuan.editor.R;
 import com.study.xuan.editor.adapter.RichAdapter;
+import com.study.xuan.editor.common.Const;
 import com.study.xuan.editor.model.RichModel;
 import com.study.xuan.editor.model.SpanModel;
 import com.study.xuan.editor.operate.RichBuilder;
@@ -105,9 +106,15 @@ public class RichEditor extends RecyclerView implements ViewTreeObserver.OnGloba
         @Override
         public void onEditClick(int pos, int index) {
             //todo 策略模式，后期可以考虑优化为二分法或者其他遍历方式
+            RichModel model = mDatas.get(pos);
+            if (index == model.source.length()) {
+                //当光标在一行的末尾，查找光标-1位置的样式
+                index--;
+            }
             ISearchStrategy searchStrategy = new NormalSearch();
-            FontParam param = searchStrategy.indexParam(mDatas.get(pos).getSpanList(), index);
-            RichBuilder.getInstance().resetParam(param);
+            FontParam param = searchStrategy.indexParam(model.getSpanList(), index);
+            int type = model.paragraphSpan != null ? model.paragraphSpan.paragraphType : Const.PARAGRAPH_NONE;
+            RichBuilder.getInstance().resetParam(param, type);
         }
     };
 

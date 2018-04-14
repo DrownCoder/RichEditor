@@ -11,9 +11,13 @@ import com.study.xuan.editor.operate.paragraph.ParagraphBuilder;
  * Description : the file description
  */
 public interface IPanel {
-    void reverse(FontParam param);
+    void reverse(FontParam param, int paragraphType);
 
     void change();
+
+    void resetFont();
+
+    void resetParagraph();
 
     void reset();
 

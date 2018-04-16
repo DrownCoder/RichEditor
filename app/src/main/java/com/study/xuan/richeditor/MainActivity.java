@@ -2,8 +2,8 @@ package com.study.xuan.richeditor;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
@@ -173,6 +173,9 @@ public class MainActivity extends Activity {
         }
     }*/
     private void onFontEvent(FontParam param) {
+        if (checkEditorSelectStatus()) {
+            return;
+        }
         if (paramManager.needNewSpan(param)) {//需要新生产span样式
             SpanModel spanModel = new SpanModel(paramManager.createNewParam());
             spanModel.code = paramManager.getParamCode(spanModel.paragraphType);
@@ -183,6 +186,17 @@ public class MainActivity extends Activity {
         }
         mEditor.saveInfo();
         mEditor.notifyEvent();
+    }
+
+    /**
+     * 编辑器处于选中状态
+     */
+    private boolean checkEditorSelectStatus() {
+        EditText etCur = mEditor.getCurEditText();
+        if (etCur.getSelectionStart() != etCur.getSelectionEnd()) {
+            return true;
+        }
+        return false;
     }
 
     @Override

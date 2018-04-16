@@ -8,6 +8,8 @@ import android.text.InputFilter;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.AbsoluteSizeSpan;
+import android.util.Log;
+import android.view.ContextMenu;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +29,7 @@ import com.study.xuan.editor.operate.paragraph.ParagraphHelper;
 import com.study.xuan.editor.operate.span.MultiSpannableString;
 import com.study.xuan.editor.operate.span.factory.IAbstractSpanFactory;
 import com.study.xuan.editor.util.DensityUtil;
+import com.study.xuan.editor.widget.RichEditText;
 import com.study.xuan.shapebuilder.shape.ShapeBuilder;
 
 import java.util.HashSet;
@@ -52,6 +55,7 @@ public class RichAdapter extends RecyclerView.Adapter {
     private List<RichModel> mData;
     private Context mContext;
     public int index = 0;
+    public EditText mCurEdit;
     private MultiSpannableString mSpanString;
 
     private View mHeader;
@@ -171,6 +175,7 @@ public class RichAdapter extends RecyclerView.Adapter {
             final EditText mEdit = ((EditHolder) holder).mEt;
             mEtHolder.add(mEdit);
             if (index == pos) {
+                mCurEdit = ((EditHolder) holder).mEt;
                 mEdit.setFocusable(true);
                 mEdit.setFocusableInTouchMode(true);
                 mEdit.requestFocus();
@@ -179,6 +184,7 @@ public class RichAdapter extends RecyclerView.Adapter {
             }
             ((EditHolder) holder).textWatcher.updatePosition(pos);
             ((EditHolder) holder).filter.updatePosition(pos);
+            mEdit.setTextSize(Const.DEFAULT_TEXT_SIZE);
             if (item.isParagraphStyle) {
                 SpannableStringBuilder spannableString = new SpannableStringBuilder(item.source);
                 for (Object obj : item.paragraphSpan.mSpans) {
@@ -204,7 +210,6 @@ public class RichAdapter extends RecyclerView.Adapter {
                 }
                 mEdit.setText(mSpanString);
                 paragraphHelper.handleTextStyle(mEdit, -1);
-                mEdit.setTextSize(Const.DEFAULT_TEXT_SIZE);
             }
             mEdit.setSelection(item.curIndex);
             //mEdit.setSelection(item.source.length());
@@ -263,6 +268,13 @@ public class RichAdapter extends RecyclerView.Adapter {
                 }
             }
             return false;
+        }
+    };
+
+    private RichEditText.onSelectionChangedListener onSelectionChangedListener = new RichEditText.onSelectionChangedListener() {
+        @Override
+        public void onSelectionChanged(int start, int end) {
+            //todo 选中后回调，实时更新样式
         }
     };
 
@@ -419,17 +431,18 @@ public class RichAdapter extends RecyclerView.Adapter {
 
     private class EditHolder extends RecyclerView.ViewHolder {
         private SpanStep2Filter textWatcher;
-        private EditText mEt;
+        private RichEditText mEt;
         private SpanStep1Filter filter;
 
         EditHolder(View itemView) {
             super(itemView);
-            mEt = (EditText) itemView;
+            mEt = (RichEditText) itemView;
             mEt.setOnClickListener(onClickListener);
             textWatcher = new SpanStep2Filter(mEt, mData);
             filter = new SpanStep1Filter(mEt, mData, paramManger, factory);
             mEt.addTextChangedListener(textWatcher);
             mEt.setOnKeyListener(onKeyListener);
+            mEt.setOnSelectionChangedListener(onSelectionChangedListener);
             mEt.setFilters(new InputFilter[]{filter});
         }
     }

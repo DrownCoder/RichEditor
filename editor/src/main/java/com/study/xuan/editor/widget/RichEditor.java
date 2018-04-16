@@ -165,6 +165,10 @@ public class RichEditor extends RecyclerView implements ViewTreeObserver.OnGloba
         return mDatas.get(mAdapter.index);
     }
 
+    public EditText getCurEditText() {
+        return mAdapter.mCurEdit;
+    }
+
     public void saveInfo() {
         View child = getFocusedChild();
         if (child instanceof EditText) {

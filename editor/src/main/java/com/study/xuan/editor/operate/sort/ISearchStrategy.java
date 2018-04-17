@@ -13,6 +13,7 @@ import java.util.List;
 public interface ISearchStrategy {
     FontParam indexParam(List<SpanModel> data, int index);
 
-    int indexPost(List<SpanModel> data, int index);
+    SearchResult indexPost(List<SpanModel> data, int index);
+
 }
 

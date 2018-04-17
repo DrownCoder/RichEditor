@@ -118,7 +118,7 @@ public class MainActivity extends Activity {
 
         mEditor.insertSpan(param.name, linkModel);
         mEditor.notifyEvent();
-        RichBuilder.getInstance().clear();
+        RichBuilder.getInstance().reset();
 
         /*SpanModel spanModel = new SpanModel(paramManager.createNewParam());
         spanModel.code = paramManager.getParamCode(spanModel.paragraphType);
@@ -174,6 +174,7 @@ public class MainActivity extends Activity {
     }*/
     private void onFontEvent(FontParam param) {
         if (checkEditorSelectStatus()) {
+            //todo 分割样式，后添加样式
             return;
         }
         if (paramManager.needNewSpan(param)) {//需要新生产span样式

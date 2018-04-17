@@ -8,8 +8,6 @@ import android.text.InputFilter;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.AbsoluteSizeSpan;
-import android.util.Log;
-import android.view.ContextMenu;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -80,14 +78,16 @@ public class RichAdapter extends RecyclerView.Adapter {
         void onDelete(String path);
     }
 
-    public interface onEditClick {
+    public interface onEditEvent {
         //pos对应光标所在行数，index对应光标所在位置
         void onEditClick(int pos, int index);
+
+        void onEditSelect(int pos, int start, int end);
     }
 
     private onScrollIndex mOnScrollIndex;
     private onPhotoDelete mOnPhotoDelete;
-    private onEditClick mOnEditClick;
+    private onEditEvent mOnEditEvent;
 
     public void setOnScrollIndex(onScrollIndex mOnScrollIndex) {
         this.mOnScrollIndex = mOnScrollIndex;
@@ -97,8 +97,8 @@ public class RichAdapter extends RecyclerView.Adapter {
         this.mOnPhotoDelete = onPhotoDelete;
     }
 
-    public void setOnEditClick(onEditClick mOnEditClick) {
-        this.mOnEditClick = mOnEditClick;
+    public void setOnEditClick(onEditEvent mOnEditEvent) {
+        this.mOnEditEvent = mOnEditEvent;
     }
 
     public RichAdapter(List<RichModel> mData, Context mContext, RecyclerView rcy) {
@@ -245,8 +245,8 @@ public class RichAdapter extends RecyclerView.Adapter {
                 index = (int) v.getTag();
                 clearImgFocus(index);
                 mData.get(index).curIndex = ((EditText) v).getSelectionStart();
-                if (mOnEditClick != null) {
-                    mOnEditClick.onEditClick(index, ((EditText) v).getSelectionStart());
+                if (mOnEditEvent != null) {
+                    mOnEditEvent.onEditClick(index, ((EditText) v).getSelectionStart());
                 }
             }
         }
@@ -275,6 +275,12 @@ public class RichAdapter extends RecyclerView.Adapter {
         @Override
         public void onSelectionChanged(int start, int end) {
             //todo 选中后回调，实时更新样式
+            if (start == end) {
+                return;
+            }
+            if (mOnEditEvent != null) {
+                mOnEditEvent.onEditSelect(index, start, end);
+            }
         }
     };
 
@@ -383,7 +389,7 @@ public class RichAdapter extends RecyclerView.Adapter {
         if (mOnScrollIndex != null) {
             mOnScrollIndex.scroll(index + 1);//header需要+1
         }
-        RichBuilder.getInstance().clear();
+        RichBuilder.getInstance().reset();
     }
 
     private void doDel(View view, int pos) {

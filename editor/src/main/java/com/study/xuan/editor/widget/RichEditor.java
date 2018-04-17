@@ -18,8 +18,10 @@ import com.study.xuan.editor.model.RichModel;
 import com.study.xuan.editor.model.SpanModel;
 import com.study.xuan.editor.operate.RichBuilder;
 import com.study.xuan.editor.operate.font.FontParam;
+import com.study.xuan.editor.operate.helper.RichModelHelper;
 import com.study.xuan.editor.operate.sort.ISearchStrategy;
 import com.study.xuan.editor.operate.sort.NormalSearch;
+import com.study.xuan.editor.operate.sort.SearchResult;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -81,7 +83,7 @@ public class RichEditor extends RecyclerView implements ViewTreeObserver.OnGloba
         mAdapter.setOnScrollIndex(onScrollIndex);
         //删除图片
         mAdapter.setOnPhotoDelete(onPhotoDelete);
-        mAdapter.setOnEditClick(onEditClick);
+        mAdapter.setOnEditClick(onEditEvent);
 
         getViewTreeObserver().addOnGlobalLayoutListener(this);
     }
@@ -102,19 +104,47 @@ public class RichEditor extends RecyclerView implements ViewTreeObserver.OnGloba
         }
     };
 
-    RichAdapter.onEditClick onEditClick = new RichAdapter.onEditClick() {
+    RichAdapter.onEditEvent onEditEvent = new RichAdapter.onEditEvent() {
         @Override
         public void onEditClick(int pos, int index) {
             //todo 策略模式，后期可以考虑优化为二分法或者其他遍历方式
             RichModel model = mDatas.get(pos);
+            if (model.source.length() == 0) {
+                return;
+            }
             if (index == model.source.length()) {
                 //当光标在一行的末尾，查找光标-1位置的样式
                 index--;
             }
+            if (index == 0) {
+                index++;
+            }
+            RichBuilder.getInstance().setStatus(RichBuilder.CLICK_STATUS);
             ISearchStrategy searchStrategy = new NormalSearch();
             FontParam param = searchStrategy.indexParam(model.getSpanList(), index);
             int type = model.paragraphSpan != null ? model.paragraphSpan.paragraphType : Const.PARAGRAPH_NONE;
             RichBuilder.getInstance().resetParam(param, type);
+        }
+
+        @Override
+        public void onEditSelect(int pos, int start, int end) {
+            RichModel model = mDatas.get(pos);
+            if (start == 0) {
+                start++;
+            }
+            if (end == model.source.length()) {
+                end--;
+            }
+            NormalSearch searchStrategy = new NormalSearch();
+            SearchResult startResult = searchStrategy.indexPost(model.getSpanList(), start, true);
+            SearchResult endResult = searchStrategy.indexPost(model.getSpanList(), end, false);
+            RichBuilder.getInstance().setStatus(RichBuilder.SELECT_STATUS);
+            if (startResult.resultIndex == endResult.resultIndex) {
+                RichBuilder.getInstance()
+                        .resetParam(model.getSpanList().get(startResult.resultIndex).param);
+            } else {
+                RichBuilder.getInstance().reset();
+            }
         }
     };
 
@@ -198,8 +228,9 @@ public class RichEditor extends RecyclerView implements ViewTreeObserver.OnGloba
      */
     private void assertFontStatus(int inStr) {
         ISearchStrategy searchStrategy = new NormalSearch();
-        int pos = searchStrategy.indexPost(getCurIndexModel().getSpanList(), getCurIndexModel().curIndex);
-        if (pos != -1) {
+        int pos = searchStrategy.indexPost(getCurIndexModel().getSpanList(),
+                getCurIndexModel().curIndex).resultCode;
+        if (pos >= 0) {
             int curIndex = getCurIndexModel().curIndex;
             RichModel model = getCurIndexModel();
             SpanModel oldSpan = model.getSpanList().get(pos);

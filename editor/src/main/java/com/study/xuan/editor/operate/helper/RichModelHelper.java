@@ -1,6 +1,7 @@
 package com.study.xuan.editor.operate.helper;
 
 import com.study.xuan.editor.model.SpanModel;
+import com.study.xuan.editor.operate.font.FontParam;
 import com.study.xuan.editor.operate.sort.QuickSort;
 import com.study.xuan.editor.operate.span.RichStyleSpan;
 
@@ -69,5 +70,21 @@ public class RichModelHelper {
             }
         }
         return true;
+    }
+
+
+    public static boolean isParamSimilar(FontParam param1, FontParam param2) {
+        if (param1 == null) {
+            if (param2 == null) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            if (param2 == null) {
+                return false;
+            }
+        }
+        return param1.toString().equals(param2.toString());
     }
 }

@@ -1,5 +1,6 @@
 package com.study.xuan.editor.operate;
 
+import com.study.xuan.editor.common.Const;
 import com.study.xuan.editor.operate.font.FontParam;
 import com.study.xuan.editor.operate.param.IParamManger;
 import com.study.xuan.editor.operate.param.ParamManager;
@@ -14,7 +15,11 @@ import com.study.xuan.editor.widget.panel.PanelBuilder;
  * Description : RichEditor的构造者
  */
 public class RichBuilder {
+    public static final int SELECT_STATUS = 1000;
+    public static final int CLICK_STATUS = 1001;
+    public static final int NORMAL_STATUS = 1002;
     private volatile static RichBuilder builder;
+    private int status;
     private IPanel panelBuilder;
     private IParamManger manger;
     private IAbstractSpanFactory factory;
@@ -60,8 +65,18 @@ public class RichBuilder {
         manger.reset().setCurrentParam(param);
     }
 
-    public void clear() {
+    public void resetParam(FontParam param) {
+        panelBuilder.reverse(param, Const.PARAGRAPH_NONE);
+        manger.reset().setCurrentParam(param);
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public void reset() {
         panelBuilder.reset();
         manger.reset();
+        status = NORMAL_STATUS;
     }
 }

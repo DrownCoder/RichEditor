@@ -26,5 +26,10 @@ public class SearchResult {
 
     public SearchResult() {
         resultCode = CODE_NONE;
+        resultIndex = -1;
+    }
+
+    public boolean isValid() {
+        return resultCode != CODE_NONE;
     }
 }

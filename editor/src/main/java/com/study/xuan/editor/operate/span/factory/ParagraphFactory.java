@@ -6,7 +6,7 @@ import android.text.style.AlignmentSpan;
 import android.text.style.ParagraphStyle;
 
 import com.study.xuan.editor.common.Const;
-import com.study.xuan.editor.operate.span.ReferSpan;
+import com.study.xuan.editor.operate.span.richspan.ReferSpan;
 
 /**
  * Author : xuan.

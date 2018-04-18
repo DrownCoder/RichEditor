@@ -40,6 +40,7 @@ public class NormalSearch implements ISearchStrategy {
         return new SearchResult();
     }
 
+    @Override
     public SearchResult indexPost(List<SpanModel> data, int index,boolean isStart) {
         SpanModel model;
         for (int i = 0; i < data.size(); i++) {

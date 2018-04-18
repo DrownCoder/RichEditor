@@ -1,9 +1,9 @@
 package com.study.xuan.editor.operate.helper;
 
 import com.study.xuan.editor.model.SpanModel;
+import com.study.xuan.editor.operate.RichBuilder;
 import com.study.xuan.editor.operate.font.FontParam;
-import com.study.xuan.editor.operate.sort.QuickSort;
-import com.study.xuan.editor.operate.span.RichStyleSpan;
+import com.study.xuan.editor.operate.span.richspan.RichStyleSpan;
 
 import java.util.List;
 
@@ -73,6 +73,9 @@ public class RichModelHelper {
     }
 
 
+    /**
+     * 判断两个Param是否相同
+     */
     public static boolean isParamSimilar(FontParam param1, FontParam param2) {
         if (param1 == null) {
             if (param2 == null) {
@@ -86,5 +89,58 @@ public class RichModelHelper {
             }
         }
         return param1.toString().equals(param2.toString());
+    }
+
+    /**
+     * 在start-end区间内的样式移除并分割
+     */
+    public static int cleanBetweenArea(List<SpanModel> data, int start, int end) {
+        if (data == null || start == end) {
+            return 0;
+        }
+        SpanModel model;
+        for (int i = 0; i < data.size(); i++) {
+            model = data.get(i);
+            if (model.end <= start) {
+                continue;
+            }
+            if (model.start >= end) {
+                continue;
+            }
+            if (model.start == start && model.end == end) {
+                data.remove(model);
+                return i;
+            }
+            if (model.start > start && model.end < end) {
+                data.remove(model);
+                continue;
+            }
+            if (model.start <= start && start < model.end) {
+                if (end < model.end) {
+                    //区间在大区间内
+                    SpanModel newSpan = cloneParam(model, end, model.end);
+                    model.end = start;
+                    data.add(i + 1, newSpan);
+                    continue;
+                } else {
+                    model.end = start;
+                }
+            }
+            if (model.start > end && model.end >= end) {
+                model.start = end;
+            }
+            if (model.start == model.end) {
+                data.remove(model);
+            }
+        }
+        return data.size();
+    }
+
+    public static SpanModel cloneParam(SpanModel oldSpan, int start, int end) {
+        SpanModel span = new SpanModel(oldSpan.param);
+        span.mSpans.addAll(RichBuilder.getInstance().getFactory().createSpan(span.param.getCharCodes()));
+        span.start = start;
+        span.end = end;
+        return span;
     }
 }

@@ -13,6 +13,8 @@ public interface IParamManger {
 
     FontParam createNewParam();
 
+    FontParam cloneParam(FontParam param);
+
     String getParamCode(int pType);
 
     void setCurrentParam(FontParam param);

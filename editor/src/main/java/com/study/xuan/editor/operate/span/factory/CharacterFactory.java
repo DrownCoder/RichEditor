@@ -5,13 +5,12 @@ import android.text.style.AbsoluteSizeSpan;
 import android.text.style.CharacterStyle;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StrikethroughSpan;
-import android.text.style.StyleSpan;
 import android.text.style.UnderlineSpan;
 import android.util.Log;
 
 import com.study.xuan.editor.common.Const;
-import com.study.xuan.editor.operate.span.RichStyleSpan;
-import com.study.xuan.editor.operate.span.URLSpanNoUnderline;
+import com.study.xuan.editor.operate.span.richspan.RichStyleSpan;
+import com.study.xuan.editor.operate.span.richspan.URLSpanNoUnderline;
 import com.study.xuan.editor.util.EditorUtil;
 
 import java.util.ArrayList;

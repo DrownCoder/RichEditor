@@ -4,6 +4,8 @@ import com.study.xuan.editor.common.Const;
 import com.study.xuan.editor.operate.font.FontParam;
 import com.study.xuan.editor.operate.param.IParamManger;
 import com.study.xuan.editor.operate.param.ParamManager;
+import com.study.xuan.editor.operate.sort.ISearchStrategy;
+import com.study.xuan.editor.operate.sort.NormalSearch;
 import com.study.xuan.editor.operate.span.factory.AbstractSpanFactory;
 import com.study.xuan.editor.operate.span.factory.IAbstractSpanFactory;
 import com.study.xuan.editor.widget.panel.IPanel;
@@ -23,6 +25,7 @@ public class RichBuilder {
     private IPanel panelBuilder;
     private IParamManger manger;
     private IAbstractSpanFactory factory;
+    private ISearchStrategy searchEngine;
 
     public static synchronized RichBuilder getInstance() {
         if (builder == null) {
@@ -39,6 +42,7 @@ public class RichBuilder {
         panelBuilder = new PanelBuilder();
         manger = new ParamManager();
         factory = new AbstractSpanFactory();
+        searchEngine = new NormalSearch();
     }
 
     public IPanel getPanelBuilder() {
@@ -51,6 +55,10 @@ public class RichBuilder {
 
     public IAbstractSpanFactory getFactory() {
         return factory;
+    }
+
+    public ISearchStrategy getSearchEngine() {
+        return searchEngine;
     }
 
     public void destroy() {

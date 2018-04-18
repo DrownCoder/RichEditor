@@ -24,7 +24,7 @@ import com.study.xuan.editor.operate.filter.SpanStep1Filter;
 import com.study.xuan.editor.operate.filter.SpanStep2Filter;
 import com.study.xuan.editor.operate.RichBuilder;
 import com.study.xuan.editor.operate.paragraph.ParagraphHelper;
-import com.study.xuan.editor.operate.span.MultiSpannableString;
+import com.study.xuan.editor.operate.span.richspan.MultiSpannableString;
 import com.study.xuan.editor.operate.span.factory.IAbstractSpanFactory;
 import com.study.xuan.editor.util.DensityUtil;
 import com.study.xuan.editor.widget.RichEditText;

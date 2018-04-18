@@ -12,8 +12,8 @@ import com.study.xuan.editor.common.Const;
 import com.study.xuan.editor.model.RichModel;
 import com.study.xuan.editor.model.SpanModel;
 import com.study.xuan.editor.operate.helper.RichModelHelper;
-import com.study.xuan.editor.operate.span.ReferSpan;
-import com.study.xuan.editor.operate.span.URLSpanNoUnderline;
+import com.study.xuan.editor.operate.span.richspan.ReferSpan;
+import com.study.xuan.editor.operate.span.richspan.URLSpanNoUnderline;
 
 import java.util.List;
 

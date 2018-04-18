@@ -1,4 +1,4 @@
-package com.study.xuan.editor.operate.span;
+package com.study.xuan.editor.operate.span.richspan;
 
 import android.text.SpannableStringBuilder;
 import android.util.Log;

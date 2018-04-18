@@ -10,7 +10,7 @@ import com.study.xuan.editor.model.RichModel;
 import com.study.xuan.editor.model.SpanModel;
 import com.study.xuan.editor.operate.param.IParamManger;
 import com.study.xuan.editor.operate.font.FontParam;
-import com.study.xuan.editor.operate.span.MultiSpannableString;
+import com.study.xuan.editor.operate.span.richspan.MultiSpannableString;
 import com.study.xuan.editor.operate.span.factory.IAbstractSpanFactory;
 
 import java.util.List;

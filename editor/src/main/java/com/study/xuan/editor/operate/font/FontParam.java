@@ -72,4 +72,8 @@ public class FontParam implements Cloneable {
         url = "";
         name = "";
     }
+
+    public boolean isFontParamValid() {
+        return isBold || isCenterLine || isItalics || isUnderLine;
+    }
 }

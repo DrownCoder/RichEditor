@@ -27,7 +27,7 @@ public class ParamManager implements IParamManger {
         }
         if (curParams.toString().equals(param.toString())) {
             return false;
-        }else{
+        } else {
             this.newParams = param;
             return true;
         }
@@ -36,9 +36,19 @@ public class ParamManager implements IParamManger {
     /**
      * 返回新的参数，利用clone复制
      */
-    public FontParam createNewParam(){
+    public FontParam createNewParam() {
         try {
             curParams = (FontParam) newParams.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        return curParams;
+    }
+
+    @Override
+    public FontParam cloneParam(FontParam param) {
+        try {
+            curParams = (FontParam) param.clone();
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
         }

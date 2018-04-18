@@ -15,6 +15,7 @@ import com.study.xuan.editor.R;
 import com.study.xuan.editor.adapter.RichAdapter;
 import com.study.xuan.editor.common.Const;
 import com.study.xuan.editor.model.RichModel;
+import com.study.xuan.editor.model.SelectionInfo;
 import com.study.xuan.editor.model.SpanModel;
 import com.study.xuan.editor.operate.RichBuilder;
 import com.study.xuan.editor.operate.font.FontParam;
@@ -42,6 +43,7 @@ public class RichEditor extends RecyclerView implements ViewTreeObserver.OnGloba
     private RichAdapter mAdapter;
     private List<RichModel> mDatas;
     private List<String> photoPaths;
+    private SelectionInfo selectionInfo;
 
     public RichEditor(Context context) {
         this(context, null);
@@ -120,7 +122,7 @@ public class RichEditor extends RecyclerView implements ViewTreeObserver.OnGloba
                 index++;
             }
             RichBuilder.getInstance().setStatus(RichBuilder.CLICK_STATUS);
-            ISearchStrategy searchStrategy = new NormalSearch();
+            ISearchStrategy searchStrategy = RichBuilder.getInstance().getSearchEngine();
             FontParam param = searchStrategy.indexParam(model.getSpanList(), index);
             int type = model.paragraphSpan != null ? model.paragraphSpan.paragraphType : Const.PARAGRAPH_NONE;
             RichBuilder.getInstance().resetParam(param, type);
@@ -135,11 +137,24 @@ public class RichEditor extends RecyclerView implements ViewTreeObserver.OnGloba
             if (end == model.source.length()) {
                 end--;
             }
-            NormalSearch searchStrategy = new NormalSearch();
+            ISearchStrategy searchStrategy = RichBuilder.getInstance().getSearchEngine();
             SearchResult startResult = searchStrategy.indexPost(model.getSpanList(), start, true);
             SearchResult endResult = searchStrategy.indexPost(model.getSpanList(), end, false);
             RichBuilder.getInstance().setStatus(RichBuilder.SELECT_STATUS);
-            if (startResult.resultIndex == endResult.resultIndex) {
+            if (selectionInfo == null) {
+                selectionInfo = new SelectionInfo();
+            }
+            selectionInfo.reset();
+            selectionInfo.startIndex = start;
+            selectionInfo.endIndex = end;
+            if (startResult.isValid()) {
+                selectionInfo.startSpan = model.getSpanList().get(startResult.resultIndex);
+            }
+            if (endResult.isValid()) {
+                selectionInfo.endSpan = model.getSpanList().get(endResult.resultIndex);
+            }
+
+            if (startResult.resultIndex == endResult.resultIndex && startResult.isValid()) {
                 RichBuilder.getInstance()
                         .resetParam(model.getSpanList().get(startResult.resultIndex).param);
             } else {
@@ -199,6 +214,10 @@ public class RichEditor extends RecyclerView implements ViewTreeObserver.OnGloba
         return mAdapter.mCurEdit;
     }
 
+    public SelectionInfo getSelectionInfo() {
+        return selectionInfo;
+    }
+
     public void saveInfo() {
         View child = getFocusedChild();
         if (child instanceof EditText) {
@@ -227,7 +246,7 @@ public class RichEditor extends RecyclerView implements ViewTreeObserver.OnGloba
      *              当不存在的时候分割后，1,4->1,2|2,4
      */
     private void assertFontStatus(int inStr) {
-        ISearchStrategy searchStrategy = new NormalSearch();
+        ISearchStrategy searchStrategy = RichBuilder.getInstance().getSearchEngine();
         int pos = searchStrategy.indexPost(getCurIndexModel().getSpanList(),
                 getCurIndexModel().curIndex).resultCode;
         if (pos >= 0) {
@@ -238,10 +257,11 @@ public class RichEditor extends RecyclerView implements ViewTreeObserver.OnGloba
                 //当光标就在两个区间之间，不需要分割
                 return;
             }
-            SpanModel span = new SpanModel(oldSpan.param);
+            /*SpanModel span = new SpanModel(oldSpan.param);
             span.mSpans.addAll(RichBuilder.getInstance().getFactory().createSpan(span.param.getCharCodes()));
             span.start = curIndex + inStr;
-            span.end = oldSpan.end + inStr;
+            span.end = oldSpan.end + inStr;*/
+            SpanModel span = RichModelHelper.cloneParam(oldSpan, curIndex + inStr, oldSpan.end + inStr);
             oldSpan.end = curIndex;
             model.getSpanList().add(pos + 1, span);
         }

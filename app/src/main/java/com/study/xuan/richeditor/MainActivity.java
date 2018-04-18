@@ -8,8 +8,11 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.study.xuan.editor.common.Const;
+import com.study.xuan.editor.model.RichModel;
+import com.study.xuan.editor.model.SelectionInfo;
 import com.study.xuan.editor.model.SpanModel;
 import com.study.xuan.editor.model.panel.state.ParagraphChangeEvent;
+import com.study.xuan.editor.operate.helper.RichModelHelper;
 import com.study.xuan.editor.operate.param.IParamManger;
 import com.study.xuan.editor.operate.font.FontParam;
 import com.study.xuan.editor.operate.RichBuilder;
@@ -174,7 +177,28 @@ public class MainActivity extends Activity {
     }*/
     private void onFontEvent(FontParam param) {
         if (checkEditorSelectStatus()) {
-            //todo 分割样式，后添加样式
+            //当前是选中状态
+            final SelectionInfo info = mEditor.getSelectionInfo();
+            if (info == null) {
+                return;
+            }
+            int index = RichModelHelper.cleanBetweenArea(mEditor.getCurIndexModel().getSpanList(), info.startIndex, info.endIndex);
+            if (param.isFontParamValid()) {
+                SpanModel spanModel = new SpanModel(paramManager.cloneParam(param));
+                spanModel.code = paramManager.getParamCode(spanModel.paragraphType);
+                spanModel.mSpans = spanFactory.createSpan(spanModel.code);
+                spanModel.start = info.startIndex;
+                spanModel.end = info.endIndex;
+                mEditor.getCurIndexModel().setNewSpan(spanModel);
+                mEditor.getCurIndexModel().getSpanList().add(index, spanModel);
+            }
+            mEditor.notifyEvent();
+            mEditor.getCurEditText().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mEditor.getCurEditText().setSelection(info.startIndex, info.endIndex);
+                }
+            }, 100);
             return;
         }
         if (paramManager.needNewSpan(param)) {//需要新生产span样式

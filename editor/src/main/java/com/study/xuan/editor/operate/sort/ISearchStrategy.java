@@ -15,5 +15,7 @@ public interface ISearchStrategy {
 
     SearchResult indexPost(List<SpanModel> data, int index);
 
+    SearchResult indexPost(List<SpanModel> data, int index, boolean isStart);
+
 }
 

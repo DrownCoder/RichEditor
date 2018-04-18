@@ -1,4 +1,4 @@
-package com.study.xuan.editor.operate.span;
+package com.study.xuan.editor.operate.span.richspan;
 
 import android.os.Parcel;
 import android.text.style.StyleSpan;

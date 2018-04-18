@@ -1,4 +1,4 @@
-package com.study.xuan.editor.operate.span;
+package com.study.xuan.editor.operate.span.richspan;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;

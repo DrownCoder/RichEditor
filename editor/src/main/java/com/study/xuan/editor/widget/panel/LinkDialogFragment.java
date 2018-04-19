@@ -1,18 +1,25 @@
 package com.study.xuan.editor.widget.panel;
 
 import android.app.DialogFragment;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.study.xuan.editor.R;
 import com.study.xuan.editor.model.panel.LinkModel;
+
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 /**
  * Author : xuan.
@@ -35,11 +42,27 @@ public class LinkDialogFragment extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View root = LayoutInflater.from(getActivity()).inflate(R.layout.link_dialog, container);
+        Window window = getDialog().getWindow();
+        View root = LayoutInflater.from(getActivity()).inflate(R.layout.link_dialog, container, false);
+        getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
+        if (window != null) {
+            window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            //window.setLayout(MATCH_PARENT, WRAP_CONTENT);
+        }
         initView(root);
         initEvent();
         return root;
     }
+
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        super.onActivityCreated(savedInstanceState);
+        getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(0x00000000));
+        getDialog().getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+    }
+
 
     private void initEvent() {
         tvCancel.setOnClickListener(new View.OnClickListener() {

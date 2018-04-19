@@ -1,0 +1,8 @@
+<resources>
+
+    <style name="TextLinkStyle" parent="Base.TextAppearance.AppCompat.Light.Widget.PopupMenu.Small">
+        <item name="android:textColor">@android:color/holo_blue_light</item>
+        <item name="android:textSize">16dp</item>
+    </style>
+
+</resources>

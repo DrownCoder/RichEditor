@@ -2,13 +2,13 @@ package com.study.xuan.richeditor;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.study.xuan.editor.common.Const;
-import com.study.xuan.editor.model.RichModel;
 import com.study.xuan.editor.model.SelectionInfo;
 import com.study.xuan.editor.model.SpanModel;
 import com.study.xuan.editor.model.panel.state.ParagraphChangeEvent;
@@ -30,7 +30,7 @@ import static com.study.xuan.editor.widget.panel.PanelBuilder.TYPE_PANEL;
 import static com.study.xuan.editor.widget.panel.PanelBuilder.TYPE_PARAGRAPH;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends AppCompatActivity {
     TextView mTvSubmit;
     RichEditor mEditor;
     EditorPanelAlpha mPanel;
@@ -182,8 +182,10 @@ public class MainActivity extends Activity {
             if (info == null) {
                 return;
             }
+            //清楚选中状态样式
             int index = RichModelHelper.cleanBetweenArea(mEditor.getCurIndexModel().getSpanList(), info.startIndex, info.endIndex);
             if (param.isFontParamValid()) {
+                //插入新样式
                 SpanModel spanModel = new SpanModel(paramManager.cloneParam(param));
                 spanModel.code = paramManager.getParamCode(spanModel.paragraphType);
                 spanModel.mSpans = spanFactory.createSpan(spanModel.code);

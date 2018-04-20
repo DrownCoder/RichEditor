@@ -1,8 +1,14 @@
 <resources>
 
     <style name="TextLinkStyle" parent="Base.TextAppearance.AppCompat.Light.Widget.PopupMenu.Small">
-        <item name="android:textColor">@android:color/holo_blue_light</item>
-        <item name="android:textSize">16dp</item>
+        <item name="android:textColor">@color/bohegreen</item>
+        <item name="android:textSize">14dp</item>
+    </style>
+
+    <style name="TextInputStyle" parent="Base.TextAppearance.AppCompat.Light.Widget.PopupMenu.Small">
+        <item name="android:textSize">17dp</item>
+        <item name="colorControlNormal">@color/bohegreen</item>
+        <item name="colorControlActivated">@color/my_wonderful_blue_color</item>
     </style>
 
 </resources>

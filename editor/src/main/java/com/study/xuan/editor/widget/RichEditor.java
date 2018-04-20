@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +22,6 @@ import com.study.xuan.editor.operate.RichBuilder;
 import com.study.xuan.editor.operate.font.FontParam;
 import com.study.xuan.editor.operate.helper.RichModelHelper;
 import com.study.xuan.editor.operate.sort.ISearchStrategy;
-import com.study.xuan.editor.operate.sort.NormalSearch;
 import com.study.xuan.editor.operate.sort.SearchResult;
 
 import java.util.ArrayList;

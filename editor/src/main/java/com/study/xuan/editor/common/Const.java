@@ -64,6 +64,10 @@ public class Const {
      * 默认文字大小
      */
     public static final int DEFAULT_TEXT_SIZE = 18;
+    /**
+     * 默认超链接颜色
+     */
+    public static final String DEFAULT_LINK_COLOR = "#3194D0";
 
     /**
      * 解析类型

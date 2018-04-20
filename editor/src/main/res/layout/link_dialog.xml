@@ -8,7 +8,7 @@
     <LinearLayout
         android:layout_gravity="center"
         android:layout_width="300dp"
-        android:background="@android:color/white"
+        android:background="@drawable/dialog_shape_bac"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
@@ -26,8 +26,9 @@
                 android:id="@+id/et_link_name"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_margin="10dp"
-                android:textSize="18dp" />
+                style="@style/TextInputStyle"
+                android:layout_margin="15dp"
+                 />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -44,8 +45,9 @@
                 android:id="@+id/et_link"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_margin="10dp"
-                android:textSize="18dp" />
+                android:layout_margin="15dp"
+                style="@style/TextInputStyle"
+                />
         </android.support.design.widget.TextInputLayout>
 
         <LinearLayout
@@ -80,7 +82,7 @@
                 android:paddingRight="20dp"
                 android:paddingTop="5dp"
                 android:text="确认"
-                android:textColor="@android:color/holo_blue_dark"
+                android:textColor="@color/bohegreen"
                 android:textSize="18dp"
                 android:textStyle="bold" />
         </LinearLayout>

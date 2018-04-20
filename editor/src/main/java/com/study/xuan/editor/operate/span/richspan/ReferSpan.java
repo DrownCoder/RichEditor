@@ -50,15 +50,15 @@ public class ReferSpan implements LeadingMarginSpan {
                                   int top, int baseline, int bottom,
                                   CharSequence text, int start, int end,
                                   boolean first, Layout layout) {
-        Paint.Style style = p.getStyle();
-        int color = p.getColor();
-
-        p.setStyle(Paint.Style.FILL);
-        p.setColor(mColor);
-
-        c.drawRect(x, top, x + dir * STRIPE_WIDTH, bottom, p);
-
-        p.setStyle(style);
-        p.setColor(color);
+//        Paint.Style style = p.getStyle();
+//        int color = p.getColor();
+//
+//        p.setStyle(Paint.Style.FILL);
+//        p.setColor(mColor);
+//
+//        c.drawRect(x, top, x + dir * STRIPE_WIDTH, bottom, p);
+//
+//        p.setStyle(style);
+//        p.setColor(color);
     }
 }

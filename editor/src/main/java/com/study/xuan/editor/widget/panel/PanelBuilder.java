@@ -147,7 +147,7 @@ public class PanelBuilder implements IPanel {
     @Override
     public IPanel setUrl(String name, String url) {
         type = TYPE_LINK;
-        fontParamBuilder.fontColor(Color.parseColor("#3194D0"));
+        fontParamBuilder.fontColor(Color.parseColor(Const.DEFAULT_LINK_COLOR));
         fontParamBuilder.url(name, url);
         return this;
     }

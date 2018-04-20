@@ -98,6 +98,11 @@ public class LinkDialogFragment extends DialogFragment {
         tvSure = root.findViewById(R.id.tv_link_sure);
     }
 
+    public void setData(String name, String url) {
+        etName.setText(name);
+        etLink.setText(url);
+    }
+
     public interface onSureClickListener {
         void onSure(LinkModel linkModel);
     }

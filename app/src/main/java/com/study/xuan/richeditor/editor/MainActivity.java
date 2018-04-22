@@ -1,5 +1,6 @@
-package com.study.xuan.richeditor;
+package com.study.xuan.richeditor.editor;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -7,7 +8,9 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.study.xuan.editor.callback.onEditorEvent;
 import com.study.xuan.editor.common.Const;
+import com.study.xuan.editor.model.RichModel;
 import com.study.xuan.editor.model.SelectionInfo;
 import com.study.xuan.editor.model.SpanModel;
 import com.study.xuan.editor.model.panel.state.ParagraphChangeEvent;
@@ -22,20 +25,34 @@ import com.study.xuan.editor.widget.RichEditor;
 import com.study.xuan.editor.widget.panel.EditorPanelAlpha;
 import com.study.xuan.editor.widget.panel.IPanel;
 import com.study.xuan.editor.widget.panel.onPanelStateChange;
+import com.study.xuan.richeditor.R;
+import com.study.xuan.richeditor.directory.DirectoryFragment;
+import com.study.xuan.richeditor.directory.DirectoryPresenter;
+import com.study.xuan.richeditor.directory.IDirectoryContract;
+import com.study.xuan.richeditor.utils.ActivityUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import me.iwf.photopicker.PhotoPicker;
 
 import static com.study.xuan.editor.widget.panel.PanelBuilder.TYPE_FONT;
 import static com.study.xuan.editor.widget.panel.PanelBuilder.TYPE_LINK;
 import static com.study.xuan.editor.widget.panel.PanelBuilder.TYPE_PANEL;
 import static com.study.xuan.editor.widget.panel.PanelBuilder.TYPE_PARAGRAPH;
+import static com.study.xuan.editor.widget.panel.PanelBuilder.TYPE_PHOTOPICKER;
 
 
 public class MainActivity extends AppCompatActivity {
     TextView mTvSubmit;
     RichEditor mEditor;
     EditorPanelAlpha mPanel;
+    FrameLayout mLeftContainer;
     IParamManger paramManager;
     IAbstractSpanFactory spanFactory;
     IPanel panel;
+
+    private DirectoryFragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +60,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mEditor = (RichEditor) findViewById(R.id.editor);
         mPanel = (EditorPanelAlpha) findViewById(R.id.panel);
-        mTvSubmit = findViewById(R.id.tv_submit);
+        mLeftContainer = findViewById(R.id.fl_left);
+        //mTvSubmit = findViewById(R.id.tv_submit);
+
+        fragment = DirectoryFragment.newInstance();
+        ActivityUtils.addFragmentToActivity(getFragmentManager(), fragment, R.id.fl_left);
 
         paramManager = RichBuilder.getInstance().getManger();
         spanFactory = RichBuilder.getInstance().getFactory();
@@ -64,9 +85,14 @@ public class MainActivity extends AppCompatActivity {
                     case TYPE_PANEL:
                         onPanelEvent(panel.isShow());
                         break;
+                    case TYPE_PHOTOPICKER:
+                        onPhotoEvent();
+                        break;
                 }
             }
         });
+        initEvent();
+
        /* mPanel.setStateChange(new EditorPanel.onPanelStateChange() {
             @Override
             public void onStateChanged(BasePanelEvent state) {
@@ -79,13 +105,34 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });*/
-        mTvSubmit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ParseAsyncTask saveTask = new ParseAsyncTask(mEditor.getData());
-                saveTask.execute(Const.MARKDOWN_PARSE_TYPE);
-            }
-        });
+//        mTvSubmit.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                ParseAsyncTask saveTask = new ParseAsyncTask(mEditor.getData());
+//                saveTask.execute(Const.MARKDOWN_PARSE_TYPE);
+//            }
+//        });
+    }
+
+    private void initEvent() {
+        mEditor.setOnEditorEvent(onEditorEvent);
+    }
+
+    private onEditorEvent onEditorEvent = new onEditorEvent() {
+        @Override
+        public void onChange(List<RichModel> data) {
+            IDirectoryContract.IDirectoryPresent directoryPresent = new DirectoryPresenter(fragment);
+            directoryPresent.updateDirectory(data);
+        }
+    };
+
+    private void onPhotoEvent() {
+        PhotoPicker.builder()
+                .setPhotoCount(9)
+                .setShowCamera(true)
+                .setShowGif(true)
+                .setPreviewEnabled(false)
+                .start(this, PhotoPicker.REQUEST_CODE);
     }
 
     private void onPanelEvent(boolean show) {
@@ -223,6 +270,18 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         return false;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && requestCode == PhotoPicker.REQUEST_CODE) {
+            if (data != null) {
+                ArrayList<String> photos =
+                        data.getStringArrayListExtra(PhotoPicker.KEY_SELECTED_PHOTOS);
+                mEditor.addPhoto(photos);
+            }
+        }
     }
 
     @Override

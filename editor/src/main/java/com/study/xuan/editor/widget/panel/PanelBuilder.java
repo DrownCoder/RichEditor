@@ -18,6 +18,7 @@ public class PanelBuilder implements IPanel {
     public static final String TYPE_FONT = "FONT";
     public static final String TYPE_LINK = "LINK";
     public static final String TYPE_PARAGRAPH = "PARAGRAPH";
+    public static final String TYPE_PHOTOPICKER = "PHOTO";
     private String type;
     private boolean show;
 
@@ -225,6 +226,13 @@ public class PanelBuilder implements IPanel {
     public IPanel showPanel(boolean show) {
         type = TYPE_PANEL;
         this.show = show;
+        return this;
+    }
+
+    @Override
+    public IPanel showPhotoPicker() {
+        type = TYPE_PHOTOPICKER;
+        change();
         return this;
     }
 

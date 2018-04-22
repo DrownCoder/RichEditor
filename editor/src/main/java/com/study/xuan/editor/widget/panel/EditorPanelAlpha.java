@@ -23,6 +23,7 @@ import com.study.xuan.editor.operate.RichBuilder;
  * Description : Alpha Editor
  */
 public class EditorPanelAlpha extends LinearLayout {
+    private ImageView mIvImg;
     private ImageView mIvFont;
     private ImageView mIvBold, mIvItalics, mIvCenterLine, mIvUnderLine, mIvLink;
     private ImageView mIvRefer;
@@ -49,6 +50,7 @@ public class EditorPanelAlpha extends LinearLayout {
     }
 
     private void initEvent() {
+        mIvImg.setOnClickListener(onClickListener);
         mIvFont.setOnClickListener(onClickListener);
         mIvBold.setOnClickListener(onClickListener);
         mIvItalics.setOnClickListener(onClickListener);
@@ -64,6 +66,7 @@ public class EditorPanelAlpha extends LinearLayout {
     }
 
     private void initView(View root) {
+        mIvImg = root.findViewById(R.id.iv_pic);
         mIvFont = root.findViewById(R.id.iv_font);
         mIvBold = root.findViewById(R.id.iv_bold);
         mIvItalics = root.findViewById(R.id.iv_italics);
@@ -170,6 +173,8 @@ public class EditorPanelAlpha extends LinearLayout {
                 resetParagraph(v);
                 mTvH4.setSelected(!mTvH4.isSelected());
                 panel.setH4(v.isSelected()).change();
+            } else if (v.getId() == R.id.iv_pic) {
+                panel.showPhotoPicker();
             }
         }
     };

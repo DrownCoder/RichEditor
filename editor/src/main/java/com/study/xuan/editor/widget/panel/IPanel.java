@@ -61,5 +61,7 @@ public interface IPanel {
 
     IPanel showPanel(boolean show);
 
+    IPanel showPhotoPicker();
+
     boolean isShow();
 }

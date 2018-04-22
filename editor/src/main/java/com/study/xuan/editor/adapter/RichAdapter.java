@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.study.xuan.editor.R;
 import com.study.xuan.editor.common.Const;
 import com.study.xuan.editor.model.RichModel;
@@ -83,6 +84,8 @@ public class RichAdapter extends RecyclerView.Adapter {
         void onEditClick(int pos, int index);
 
         void onEditSelect(int pos, int start, int end);
+
+        void onChange();
     }
 
     private onScrollIndex mOnScrollIndex;
@@ -152,6 +155,7 @@ public class RichAdapter extends RecyclerView.Adapter {
             } else {
                 showImageBacSelected(imageHolder, STYLE_IMG_FOCUS);
             }
+            Glide.with(mContext).load(item.source).into(imageHolder.mIv);
             imageHolder.mIvDelete.setTag(pos);
             imageHolder.mIv.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -159,7 +163,7 @@ public class RichAdapter extends RecyclerView.Adapter {
                     clearEditFocus();
                     index = (int) imageHolder.mIvDelete.getTag();
                     clearImgFocus(index);
-                    showImageBacSelected(imageHolder, (Integer) v.getTag());
+                    showImageBacSelected(imageHolder, (Integer) v.getTag(Integer.MAX_VALUE));
                 }
             });
             imageHolder.mIvDelete.setOnClickListener(onClickListener);
@@ -298,16 +302,16 @@ public class RichAdapter extends RecyclerView.Adapter {
                 } else {
                     holder.mIv.setBackgroundDrawable(null);
                 }
-                holder.mIv.setTag(STYLE_IMG_NORMAL);
+                holder.mIv.setTag(Integer.MAX_VALUE, STYLE_IMG_NORMAL);
                 break;
             case STYLE_IMG_NORMAL:
                 mHolderShow.add(holder);
                 holder.mIvDelete.setVisibility(View.VISIBLE);
                 holder.mIv.requestFocus();
                 ShapeBuilder.create()
-                        .Stroke(5, Color.parseColor("#000000"))
+                        .Stroke(5, R.color.bohegreen)
                         .build(holder.mIv);
-                holder.mIv.setTag(STYLE_IMG_FOCUS);
+                holder.mIv.setTag(Integer.MAX_VALUE, STYLE_IMG_FOCUS);
                 break;
         }
     }
@@ -329,7 +333,7 @@ public class RichAdapter extends RecyclerView.Adapter {
                 } else {
                     holder.mIv.setBackgroundDrawable(null);
                 }
-                holder.mIv.setTag(STYLE_IMG_NORMAL);
+                holder.mIv.setTag(Integer.MAX_VALUE, STYLE_IMG_NORMAL);
             }
         }
     }
@@ -390,6 +394,9 @@ public class RichAdapter extends RecyclerView.Adapter {
             mOnScrollIndex.scroll(index + 1);//header需要+1
         }
         RichBuilder.getInstance().reset();
+        if (mOnEditEvent != null) {
+            mOnEditEvent.onChange();
+        }
     }
 
     private void doDel(View view, int pos) {
@@ -411,6 +418,9 @@ public class RichAdapter extends RecyclerView.Adapter {
                 }
                 index--;
                 notifyDataChanged();
+                if (mOnEditEvent != null) {
+                    mOnEditEvent.onChange();
+                }
             }
         }
     }

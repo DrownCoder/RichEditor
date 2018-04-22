@@ -14,6 +14,7 @@ import android.widget.EditText;
 
 import com.study.xuan.editor.R;
 import com.study.xuan.editor.adapter.RichAdapter;
+import com.study.xuan.editor.callback.onEditorEvent;
 import com.study.xuan.editor.common.Const;
 import com.study.xuan.editor.model.RichModel;
 import com.study.xuan.editor.model.SelectionInfo;
@@ -44,6 +45,8 @@ public class RichEditor extends RecyclerView implements ViewTreeObserver.OnGloba
     private List<RichModel> mDatas;
     private List<String> photoPaths;
     private SelectionInfo selectionInfo;
+
+    private onEditorEvent onEditorEvent;
 
     public RichEditor(Context context) {
         this(context, null);
@@ -161,36 +164,14 @@ public class RichEditor extends RecyclerView implements ViewTreeObserver.OnGloba
                 RichBuilder.getInstance().reset();
             }
         }
-    };
 
-    private void addPhoto(ArrayList<String> photos) {
-        if (mDatas != null && mAdapter != null) {
-            //首行空行删除，直接增加图片+行
-            if (mDatas.size() == 1) {
-                mDatas.get(0).hint = "";
-                if (mDatas.get(0).source.length() == 0) {
-                    mDatas.remove(0);
-                    mAdapter.index = 0;
-                }
+        @Override
+        public void onChange() {
+            if (onEditorEvent != null) {
+                onEditorEvent.onChange(mDatas);
             }
-            removeEmptyLine();
-            BitmapFactory.Options options;
-            if (mDatas.size() == 0 || mAdapter.index == (mDatas.size() - 1)) {//无文本或者图片在末尾添加
-                for (String newFile : photos) {
-                    mDatas.add(new RichModel(TYPE_IMG, newFile));
-                }
-                mDatas.add(new RichModel(TYPE_EDIT, "", ""));
-                mAdapter.index = mDatas.size() - 2;
-            } else {//图片在文中添加
-                for (String newFile : photos) {
-                    mDatas.add(mAdapter.index + 1, new RichModel(TYPE_IMG, newFile));
-                }
-                mAdapter.index++;
-            }
-            mAdapter.notifyDataChanged();
-            scrollToPosition(mAdapter.index + 2);
         }
-    }
+    };
 
     /**
      * 如果光标在文本行，判断是否为空行，是则，移除一行
@@ -278,5 +259,52 @@ public class RichEditor extends RecyclerView implements ViewTreeObserver.OnGloba
 
     public List<RichModel> getData() {
         return mDatas;
+    }
+
+
+    /**
+     * 添加图片
+     * 统一在选中位下面加一张图片，光标在文字，则在文字下方加，图片被选中，则在选中图片下方加一张图片
+     * 处理规则：
+     * ---首行增加图片-----------------------------
+     * 1.什么都不写，插入图片->增加一个图片+文本写入框
+     * ---图片位置增加情况-------------------------
+     * 2.在文字和文字中间，插入图片->增加一个图片
+     * 3.在文字末尾插入图片->增加一个图片+文本写入框
+     * ---空行的处理------------------------------
+     * 若当前选中行是一个空行，则移除当前空行，增加一张图片
+     */
+    public void addPhoto(ArrayList<String> photos) {
+        if (mDatas != null && mAdapter != null) {
+            //首行空行删除，直接增加图片+行
+            if (mDatas.size() == 1) {
+                mDatas.get(0).hint = "";
+                if (mDatas.get(0).source.length() == 0) {
+                    mDatas.remove(0);
+                    mAdapter.index = 0;
+                }
+            }
+            removeEmptyLine();
+            BitmapFactory.Options options;
+            if (mDatas.size() == 0 || mAdapter.index == (mDatas.size() - 1)) {//无文本或者图片在末尾添加
+                for (String newFile : photos) {
+                    mDatas.add(new RichModel(TYPE_IMG, newFile));
+                }
+                mDatas.add(new RichModel(TYPE_EDIT, "", ""));
+                mAdapter.index = mDatas.size() - 2;
+            } else {//图片在文中添加
+                for (String newFile : photos) {
+                    mDatas.add(mAdapter.index + 1,
+                            new RichModel(TYPE_IMG, newFile));
+                }
+                mAdapter.index++;
+            }
+            mAdapter.notifyDataChanged();
+            scrollToPosition(mAdapter.index + 1);
+        }
+    }
+
+    public void setOnEditorEvent(onEditorEvent onEditorEvent) {
+        this.onEditorEvent = onEditorEvent;
     }
 }

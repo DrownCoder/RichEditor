@@ -19,6 +19,7 @@ public class PanelBuilder implements IPanel {
     public static final String TYPE_LINK = "LINK";
     public static final String TYPE_PARAGRAPH = "PARAGRAPH";
     public static final String TYPE_PHOTOPICKER = "PHOTO";
+    public static final String TYPE_SAVE = "SAVE";
     private String type;
     private boolean show;
 
@@ -232,6 +233,13 @@ public class PanelBuilder implements IPanel {
     @Override
     public IPanel showPhotoPicker() {
         type = TYPE_PHOTOPICKER;
+        change();
+        return this;
+    }
+
+    @Override
+    public IPanel save() {
+        type = TYPE_SAVE;
         change();
         return this;
     }

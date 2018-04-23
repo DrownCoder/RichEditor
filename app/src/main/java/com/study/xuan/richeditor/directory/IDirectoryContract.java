@@ -1,6 +1,7 @@
 package com.study.xuan.richeditor.directory;
 
 import com.study.xuan.editor.model.RichModel;
+import com.study.xuan.richeditor.BasePresenter;
 import com.study.xuan.richeditor.BaseView;
 
 import java.util.List;
@@ -16,7 +17,7 @@ public interface IDirectoryContract {
         void updateView(List<IndexRoot> source);
     }
 
-    public interface IDirectoryPresent{
+    public interface IDirectoryPresent extends BasePresenter{
         public void updateDirectory(List<RichModel> source);
     }
 }

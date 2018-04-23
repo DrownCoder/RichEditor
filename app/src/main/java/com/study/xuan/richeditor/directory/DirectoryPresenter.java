@@ -44,4 +44,9 @@ public class DirectoryPresenter implements IDirectoryContract.IDirectoryPresent 
         }
         return data;
     }
+
+    @Override
+    public void start() {
+        
+    }
 }

@@ -75,4 +75,11 @@ public class Const {
     public static final int GSON_PARSE_TYPE = 0;
     public static final int MARKDOWN_PARSE_TYPE = 1;
     public static final int HTML_PARSE_TYPE = 2;
+
+    /**
+     * 数据库
+     */
+    public static final String DB_NAME = "RichNote.db";
+    public static final int DB_VERSION = 1;
+
 }

@@ -9,8 +9,8 @@ import java.util.List;
  * Date : 18-4-9.
  * Description : the file description
  */
-abstract class Parser {
-    abstract String toString(List<RichModel> data);
+public abstract class Parser {
+    public abstract String toString(List<RichModel> data);
 
-    abstract List<RichModel> fromString(String t);
+    public abstract List<RichModel> fromString(String t);
 }

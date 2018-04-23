@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:windowSoftInputMode="adjustPan|stateHidden"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".editor.MainActivity">
+        <activity android:name=".editor.EditActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

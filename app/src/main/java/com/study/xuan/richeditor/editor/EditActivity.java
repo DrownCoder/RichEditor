@@ -3,7 +3,6 @@ package com.study.xuan.richeditor.editor;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -18,7 +17,6 @@ import com.study.xuan.editor.operate.helper.RichModelHelper;
 import com.study.xuan.editor.operate.param.IParamManger;
 import com.study.xuan.editor.operate.font.FontParam;
 import com.study.xuan.editor.operate.RichBuilder;
-import com.study.xuan.editor.operate.parse.ParseAsyncTask;
 import com.study.xuan.editor.operate.span.factory.IAbstractSpanFactory;
 import com.study.xuan.editor.util.DensityUtil;
 import com.study.xuan.editor.widget.RichEditor;
@@ -26,10 +24,16 @@ import com.study.xuan.editor.widget.panel.EditorPanelAlpha;
 import com.study.xuan.editor.widget.panel.IPanel;
 import com.study.xuan.editor.widget.panel.onPanelStateChange;
 import com.study.xuan.richeditor.R;
+import com.study.xuan.richeditor.db.ParseAsyncTask;
 import com.study.xuan.richeditor.directory.DirectoryFragment;
 import com.study.xuan.richeditor.directory.DirectoryPresenter;
 import com.study.xuan.richeditor.directory.IDirectoryContract;
+import com.study.xuan.richeditor.home.MainActivity;
+import com.study.xuan.richeditor.model.RichEvent;
 import com.study.xuan.richeditor.utils.ActivityUtils;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,9 +45,10 @@ import static com.study.xuan.editor.widget.panel.PanelBuilder.TYPE_LINK;
 import static com.study.xuan.editor.widget.panel.PanelBuilder.TYPE_PANEL;
 import static com.study.xuan.editor.widget.panel.PanelBuilder.TYPE_PARAGRAPH;
 import static com.study.xuan.editor.widget.panel.PanelBuilder.TYPE_PHOTOPICKER;
+import static com.study.xuan.editor.widget.panel.PanelBuilder.TYPE_SAVE;
 
 
-public class MainActivity extends AppCompatActivity {
+public class EditActivity extends AppCompatActivity {
     TextView mTvSubmit;
     RichEditor mEditor;
     EditorPanelAlpha mPanel;
@@ -51,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
     IParamManger paramManager;
     IAbstractSpanFactory spanFactory;
     IPanel panel;
+    ParseAsyncTask mTask;
 
     private DirectoryFragment fragment;
 
@@ -88,6 +94,9 @@ public class MainActivity extends AppCompatActivity {
                     case TYPE_PHOTOPICKER:
                         onPhotoEvent();
                         break;
+                    case TYPE_SAVE:
+                        onSaveEvent();
+                        break;
                 }
             }
         });
@@ -112,6 +121,14 @@ public class MainActivity extends AppCompatActivity {
 //                saveTask.execute(Const.MARKDOWN_PARSE_TYPE);
 //            }
 //        });
+    }
+
+    private void onSaveEvent() {
+        if (mTask == null) {
+            mTask = new ParseAsyncTask(EditActivity.this);
+        }
+        mTask.setParseType(Const.MARKDOWN_PARSE_TYPE);
+        mTask.execute(mEditor.getData());
     }
 
     private void initEvent() {
@@ -288,5 +305,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         RichBuilder.getInstance().destroy();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMainEvent(RichEvent event) {
+        switch (event.status) {
+            case RichEvent.SAVE_SUCCESS:
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+                break;
+        }
     }
 }

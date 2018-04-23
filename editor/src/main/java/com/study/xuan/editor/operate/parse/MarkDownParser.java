@@ -27,7 +27,7 @@ public class MarkDownParser extends Parser {
     private SparseArray<String> pool;
     private int priority = 0;
 
-    MarkDownParser() {
+    public MarkDownParser() {
         formater = new MarkDownFormater();
         pool = new SparseArray<>();
     }
@@ -113,7 +113,7 @@ public class MarkDownParser extends Parser {
     }
 
     @Override
-    List<RichModel> fromString(String t) {
+    public List<RichModel> fromString(String t) {
         return null;
     }
 

@@ -27,6 +27,8 @@ public interface IPanel {
 
     String getType();
 
+    int getParagraphType();
+
     FontParam getFontParam();
 
     ParagraphBuilder getParagraph();

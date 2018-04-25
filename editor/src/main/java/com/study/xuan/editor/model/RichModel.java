@@ -3,6 +3,9 @@ package com.study.xuan.editor.model;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.study.xuan.editor.common.Const.TYPE_EDIT;
+import static com.study.xuan.editor.common.Const.TYPE_IMG;
+
 /**
  * Author : xuan.
  * Date : 2017/11/3.
@@ -33,6 +36,10 @@ public class RichModel {
         this.source = url;
     }
 
+    public RichModel(String source) {
+        this.source = source;
+    }
+
 
     public void append(String s) {
         source += s;
@@ -44,6 +51,13 @@ public class RichModel {
 
     public List<SpanModel> getSpanList() {
         return mParmas;
+    }
+
+    public void addSpanModel(SpanModel model) {
+        if (mParmas == null) {
+            mParmas = new LinkedList<>();
+        }
+        mParmas.add(model);
     }
 
     public void setNewSpan(SpanModel model) {
@@ -64,6 +78,16 @@ public class RichModel {
     public void setNoParagraphSpan() {
         this.isParagraphStyle = false;
         this.paragraphSpan = null;
+    }
+
+    public RichModel isText() {
+        this.type = TYPE_EDIT;
+        return this;
+    }
+
+    public RichModel isImg() {
+        this.type = TYPE_IMG;
+        return this;
     }
 
     /**

@@ -86,7 +86,7 @@ public class EditActivity extends AppCompatActivity {
                         onLinkEvent(panel.getFontParam());
                         break;
                     case TYPE_PARAGRAPH:
-                        onParagraphEvent(panel.getParagraph().type);
+                        onParagraphEvent(panel.getParagraphType());
                         break;
                     case TYPE_PANEL:
                         onPanelEvent(panel.isShow());

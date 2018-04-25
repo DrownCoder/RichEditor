@@ -88,6 +88,11 @@ public class PanelBuilder implements IPanel {
     }
 
     @Override
+    public int getParagraphType() {
+        return paragraphBuilder.type;
+    }
+
+    @Override
     public FontParam getFontParam() {
         return fontParamBuilder.build();
     }

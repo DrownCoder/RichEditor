@@ -1,6 +1,7 @@
 package com.study.xuan.editor.operate.parse;
 
 import android.graphics.Typeface;
+import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.AlignmentSpan;
 import android.text.style.StrikethroughSpan;
@@ -11,11 +12,21 @@ import android.util.SparseArray;
 import com.study.xuan.editor.common.Const;
 import com.study.xuan.editor.model.RichModel;
 import com.study.xuan.editor.model.SpanModel;
+import com.study.xuan.editor.operate.RichBuilder;
 import com.study.xuan.editor.operate.helper.RichModelHelper;
+import com.study.xuan.editor.operate.param.IParamManger;
+import com.study.xuan.editor.operate.span.factory.IAbstractSpanFactory;
 import com.study.xuan.editor.operate.span.richspan.ReferSpan;
 import com.study.xuan.editor.operate.span.richspan.URLSpanNoUnderline;
+import com.study.xuan.editor.widget.panel.IPanel;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Author : xuan.
@@ -24,11 +35,16 @@ import java.util.List;
  */
 public class MarkDownParser extends Parser {
     private Formater formater;
+    private Transformer transformer;
     private SparseArray<String> pool;
+    private IParamManger paramManager;
+    private IAbstractSpanFactory factory;
+    private IPanel panel;
     private int priority = 0;
 
     public MarkDownParser() {
         formater = new MarkDownFormater();
+        transformer = new MarkDownTransformer();
         pool = new SparseArray<>();
     }
 
@@ -90,7 +106,7 @@ public class MarkDownParser extends Parser {
                 str = formater.formatRefer(str);
             } else if (obj instanceof AlignmentSpan) {
                 //markdown是不支持居中的！！！，后期考虑注释掉
-               // str = formater.formatCenter(str);
+                // str = formater.formatCenter(str);
             } else if (obj instanceof AbsoluteSizeSpan) {
                 AbsoluteSizeSpan sizeSpan = (AbsoluteSizeSpan) obj;
                 switch (sizeSpan.getSize()) {
@@ -113,8 +129,111 @@ public class MarkDownParser extends Parser {
     }
 
     @Override
-    public List<RichModel> fromString(String t) {
-        return null;
+    public List<RichModel> fromString(String result) {
+        if (TextUtils.isEmpty(result)) {
+            return null;
+        }
+        RichBuilder.getInstance().reset();
+        reset();
+        factory = RichBuilder.getInstance().getFactory();
+        paramManager = RichBuilder.getInstance().getManger();
+        panel = RichBuilder.getInstance().getPanelBuilder();
+
+        List<String> lineArr = splitLine(result);
+        List<RichModel> data = new ArrayList<>();
+        for (String line : lineArr) {
+            RichModel model = MarkDownToSpan(line);
+            data.add(model);
+        }
+        return data;
+    }
+
+    /**
+     *
+     */
+    private RichModel MarkDownToSpan(String line) {
+        RichModel model = new RichModel(line);
+        if (Pattern.matches(transformer.imageRegex(), line)) {
+            model.isImg().setSource(transformer.imageUrl(line));
+        } else {
+            model.isText();
+        }
+        Pattern pattern = Pattern.compile(transformer.paragraphRegex());
+        Matcher matcher = pattern.matcher(line);
+        if (matcher.find()) {
+            //是段落样式
+            int start = matcher.start();
+            initParagraph(line, start);
+            line = line.substring(start);
+            SpanModel span = new SpanModel(panel.getParagraphType());
+            span.code = paramManager.getParamCode(panel.getParagraphType());
+            span.mSpans = factory.createSpan(span.code);
+            model.setParagraphSpan(span);
+        }else{
+            model.setNoParagraphSpan();
+        }
+        pattern = Pattern.compile(transformer.fontRegex());
+        matcher = pattern.matcher(line);
+        for (int i = 0; i < matcher.groupCount(); i++) {
+            String itemStr = matcher.group(i);
+            initFont(itemStr);
+            SpanModel span = new SpanModel(paramManager.cloneParam(panel.getFontParam()));
+            span.code = paramManager.getParamCode(Const.PARAGRAPH_NONE);
+            span.mSpans = factory.createSpan(span.code);
+            span.start = matcher.start();
+            span.end = matcher.end();
+            model.addSpanModel(span);
+        }
+        return model;
+    }
+
+    private boolean initFont(String itemStr) {
+        if (Pattern.matches(transformer.boldRegex(), itemStr)) {
+            panel.setBold(true);
+            return initFont(itemStr.substring(2, itemStr.length() - 2));
+        } else if (Pattern.matches(transformer.italicsRegex(), itemStr)) {
+            panel.setItalics(true);
+            return initFont(itemStr.substring(1, itemStr.length() - 1));
+        } else if (Pattern.matches(transformer.centerRegex(), itemStr)) {
+            panel.setCenterLine(true);
+            return initFont(itemStr.substring(2, itemStr.length() - 2));
+        }
+        return false;
+    }
+
+    private void initParagraph(String line, int start) {
+        String startStr = line.substring(0, start);
+        switch (startStr) {
+            case "#":
+                panel.setH1(true);
+                break;
+            case "##":
+                panel.setH2(true);
+                break;
+            case "###":
+                panel.setH3(true);
+                break;
+            case "####":
+                panel.setH4(true);
+                break;
+            case ">":
+                panel.setRefer(true);
+                break;
+        }
+    }
+
+    private List<String> splitLine(String result) {
+        BufferedReader rdr = new BufferedReader(new StringReader(result));
+        List<String> lines = new ArrayList<String>();
+        try {
+            for (String line = rdr.readLine(); line != null; line = rdr.readLine()) {
+                lines.add(line);
+            }
+            rdr.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return lines;
     }
 
 
@@ -145,6 +264,15 @@ public class MarkDownParser extends Parser {
             }
         }
         return str;
+    }
+
+    private void reset() {
+        if (pool != null) {
+            pool.clear();
+        } else {
+            pool = new SparseArray<>();
+        }
+        priority = 0;
     }
 
 }

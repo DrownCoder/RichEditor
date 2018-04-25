@@ -45,7 +45,7 @@ import static com.study.xuan.editor.common.Const.TYPE_IMG;
  */
 
 public class RichAdapter extends RecyclerView.Adapter {
-    private static final int TYPE_HEADER = -1;
+    public static final int TYPE_HEADER = -1;
     public static final String DEFAULT_HINT = "文字输入区域";
     private final int STYLE_IMG_FOCUS = 1;
     private final int STYLE_IMG_NORMAL = 0;

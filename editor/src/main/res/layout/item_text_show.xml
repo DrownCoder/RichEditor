@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.study.xuan.editor.widget.RichEditText xmlns:android="http://schemas.android.com/apk/res/android"
-          android:id="@+id/et_rich_edit"
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+          android:id="@+id/tv_rich"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:background="#00000000"
@@ -11,5 +11,6 @@
           android:paddingBottom="12dp"
           android:paddingTop="12dp"
           android:textColor="#646464"
+          android:textColorHint="#969696"
           android:textSize="13dp"
     />

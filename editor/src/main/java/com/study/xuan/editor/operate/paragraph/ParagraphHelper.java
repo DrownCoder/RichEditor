@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.study.xuan.editor.common.Const;
 import com.study.xuan.editor.common.DPVALUE;
@@ -28,7 +29,7 @@ public class ParagraphHelper {
         DPValue = new DPVALUE(mContext);
     }
 
-    public void handleTextStyle(EditText tv, int type) {
+    public void handleTextStyle(TextView tv, int type) {
         switch (type) {
             case Const.PARAGRAPH_REFER:
                 tv.setBackgroundColor(Color.parseColor("#f7f7f7"));

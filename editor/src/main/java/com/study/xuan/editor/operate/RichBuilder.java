@@ -17,11 +17,7 @@ import com.study.xuan.editor.widget.panel.PanelBuilder;
  * Description : RichEditor的构造者
  */
 public class RichBuilder {
-    public static final int SELECT_STATUS = 1000;
-    public static final int CLICK_STATUS = 1001;
-    public static final int NORMAL_STATUS = 1002;
     private volatile static RichBuilder builder;
-    private int status;
     private IPanel panelBuilder;
     private IParamManger manger;
     private IAbstractSpanFactory factory;
@@ -78,13 +74,16 @@ public class RichBuilder {
         manger.reset().setCurrentParam(param);
     }
 
-    public void setStatus(int status) {
-        this.status = status;
+    public void reset() {
+        reset(true);
     }
 
-    public void reset() {
-        panelBuilder.reset();
+    public void reset(boolean isReverse) {
+        if (isReverse) {
+            panelBuilder.reset(true);
+        } else {
+            panelBuilder.reset(false);
+        }
         manger.reset();
-        status = NORMAL_STATUS;
     }
 }

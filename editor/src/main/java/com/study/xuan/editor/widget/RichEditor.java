@@ -124,7 +124,6 @@ public class RichEditor extends RecyclerView implements ViewTreeObserver.OnGloba
             if (index == 0) {
                 index++;
             }
-            RichBuilder.getInstance().setStatus(RichBuilder.CLICK_STATUS);
             ISearchStrategy searchStrategy = RichBuilder.getInstance().getSearchEngine();
             FontParam param = searchStrategy.indexParam(model.getSpanList(), index);
             int type = model.paragraphSpan != null ? model.paragraphSpan.paragraphType : Const.PARAGRAPH_NONE;
@@ -143,7 +142,6 @@ public class RichEditor extends RecyclerView implements ViewTreeObserver.OnGloba
             ISearchStrategy searchStrategy = RichBuilder.getInstance().getSearchEngine();
             SearchResult startResult = searchStrategy.indexPost(model.getSpanList(), start, true);
             SearchResult endResult = searchStrategy.indexPost(model.getSpanList(), end, false);
-            RichBuilder.getInstance().setStatus(RichBuilder.SELECT_STATUS);
             if (selectionInfo == null) {
                 selectionInfo = new SelectionInfo();
             }

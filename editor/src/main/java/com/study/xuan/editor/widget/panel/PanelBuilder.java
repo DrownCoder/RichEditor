@@ -76,10 +76,12 @@ public class PanelBuilder implements IPanel {
     }
 
     @Override
-    public void reset() {
+    public void reset(boolean isReverse) {
         paragraphBuilder.reset();
         fontParamBuilder.reset();
-        reverse(fontParamBuilder.build(), paragraphBuilder.type);
+        if (isReverse) {
+            reverse(fontParamBuilder.build(), paragraphBuilder.type);
+        }
     }
 
     @Override

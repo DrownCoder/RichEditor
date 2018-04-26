@@ -2,7 +2,7 @@ package com.study.xuan.richeditor.editor;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -24,14 +24,16 @@ import com.study.xuan.editor.widget.panel.EditorPanelAlpha;
 import com.study.xuan.editor.widget.panel.IPanel;
 import com.study.xuan.editor.widget.panel.onPanelStateChange;
 import com.study.xuan.richeditor.R;
-import com.study.xuan.richeditor.db.ParseAsyncTask;
+import com.study.xuan.richeditor.app.BaseActivity;
+import com.study.xuan.richeditor.task.ParseAsyncTask;
 import com.study.xuan.richeditor.directory.DirectoryFragment;
 import com.study.xuan.richeditor.directory.DirectoryPresenter;
 import com.study.xuan.richeditor.directory.IDirectoryContract;
-import com.study.xuan.richeditor.home.MainActivity;
+import com.study.xuan.richeditor.detail.DetailActivity;
 import com.study.xuan.richeditor.model.RichEvent;
 import com.study.xuan.richeditor.utils.ActivityUtils;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -48,7 +50,7 @@ import static com.study.xuan.editor.widget.panel.PanelBuilder.TYPE_PHOTOPICKER;
 import static com.study.xuan.editor.widget.panel.PanelBuilder.TYPE_SAVE;
 
 
-public class EditActivity extends AppCompatActivity {
+public class EditActivity extends BaseActivity {
     TextView mTvSubmit;
     RichEditor mEditor;
     EditorPanelAlpha mPanel;
@@ -63,7 +65,9 @@ public class EditActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_edit);
+        long i = System.currentTimeMillis();
+        Log.i("-------", (int) (i + 1000000000) + "");
         mEditor = (RichEditor) findViewById(R.id.editor);
         mPanel = (EditorPanelAlpha) findViewById(R.id.panel);
         mLeftContainer = findViewById(R.id.fl_left);
@@ -124,9 +128,7 @@ public class EditActivity extends AppCompatActivity {
     }
 
     private void onSaveEvent() {
-        if (mTask == null) {
-            mTask = new ParseAsyncTask(EditActivity.this);
-        }
+        mTask = new ParseAsyncTask(EditActivity.this);
         mTask.setParseType(Const.MARKDOWN_PARSE_TYPE);
         mTask.execute(mEditor.getData());
     }
@@ -311,7 +313,9 @@ public class EditActivity extends AppCompatActivity {
     public void onMainEvent(RichEvent event) {
         switch (event.status) {
             case RichEvent.SAVE_SUCCESS:
-                Intent intent = new Intent(this, MainActivity.class);
+                event.setStatus(RichEvent.JUMP_DETAIL);
+                EventBus.getDefault().postSticky(event);
+                Intent intent = new Intent(this, DetailActivity.class);
                 startActivity(intent);
                 break;
         }

@@ -19,7 +19,7 @@ public interface IPanel {
 
     void resetParagraph();
 
-    void reset();
+    void reset(boolean isReverse);
 
     void setStateChange(onPanelStateChange mStateChange);
 

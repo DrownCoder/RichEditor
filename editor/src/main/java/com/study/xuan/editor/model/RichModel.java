@@ -36,10 +36,9 @@ public class RichModel {
         this.source = url;
     }
 
-    public RichModel(String source) {
-        this.source = source;
+    public RichModel() {
+        mParmas = new LinkedList<>();
     }
-
 
     public void append(String s) {
         source += s;

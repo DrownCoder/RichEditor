@@ -82,6 +82,12 @@ public class ParamManager implements IParamManger {
     }
 
     @Override
+    public String getParamCode(FontParam param, int pType) {
+        setCurrentParam(param);
+        return getParamCode(pType);
+    }
+
+    @Override
     public void setCurrentParam(FontParam param) {
         this.curParams = param;
     }

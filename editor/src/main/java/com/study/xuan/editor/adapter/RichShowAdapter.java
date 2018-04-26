@@ -41,7 +41,7 @@ public class RichShowAdapter extends RecyclerView.Adapter {
         this.mContext = mContext;
         this.mData = mData;
         if (mData == null) {
-            mData = new ArrayList<>();
+            this.mData = new ArrayList<>();
         }
         mSpanString = new MultiSpannableString();
         paragraphHelper = new ParagraphHelper(mContext);
@@ -65,10 +65,10 @@ public class RichShowAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         switch (getItemViewType(position)) {
             case TYPE_EDIT://编辑框
-                bindTextComponent(holder, position - 1, mData.get(position - 1));
+                bindTextComponent(holder, position, mData.get(position));
                 break;
             case TYPE_IMG://图片
-                bindImgComponent(holder, position - 1, mData.get(position - 1));
+                bindImgComponent(holder, position, mData.get(position));
                 break;
         }
     }
@@ -103,9 +103,11 @@ public class RichShowAdapter extends RecyclerView.Adapter {
                 mSpanString.clear();
                 mSpanString.clearSpans();
                 mSpanString.append(item.source);
-                for (SpanModel span : item.getSpanList()) {
-                    mSpanString.setMultiSpans(span.mSpans, span.start, span.end, Spanned
-                            .SPAN_EXCLUSIVE_EXCLUSIVE);
+                if (item.getSpanList() != null) {
+                    for (SpanModel span : item.getSpanList()) {
+                        mSpanString.setMultiSpans(span.mSpans, span.start, span.end, Spanned
+                                .SPAN_EXCLUSIVE_EXCLUSIVE);
+                    }
                 }
                 tv.setText(mSpanString);
                 paragraphHelper.handleTextStyle(tv, -1);
@@ -118,15 +120,12 @@ public class RichShowAdapter extends RecyclerView.Adapter {
         if (mData.size() == 0) {
             return 0;
         }
-        return mData.size() + 1;
+        return mData.size();
     }
 
     @Override
     public int getItemViewType(int position) {
-        if (position == 0) {
-            return TYPE_HEADER;
-        }
-        return mData.get(position - 1).type;
+        return mData.get(position).type;
     }
 
     class TextViewHolder extends RecyclerView.ViewHolder {

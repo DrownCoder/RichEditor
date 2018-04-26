@@ -41,6 +41,7 @@ public class MarkDownParser extends Parser {
     private IAbstractSpanFactory factory;
     private IPanel panel;
     private int priority = 0;
+    private int index = 0;
 
     public MarkDownParser() {
         formater = new MarkDownFormater();
@@ -133,8 +134,7 @@ public class MarkDownParser extends Parser {
         if (TextUtils.isEmpty(result)) {
             return null;
         }
-        RichBuilder.getInstance().reset();
-        reset();
+        RichBuilder.getInstance().reset(false);
         factory = RichBuilder.getInstance().getFactory();
         paramManager = RichBuilder.getInstance().getManger();
         panel = RichBuilder.getInstance().getPanelBuilder();
@@ -142,6 +142,11 @@ public class MarkDownParser extends Parser {
         List<String> lineArr = splitLine(result);
         List<RichModel> data = new ArrayList<>();
         for (String line : lineArr) {
+            //空行
+            if (TextUtils.isEmpty(line)) {
+                continue;
+            }
+            reset();
             RichModel model = MarkDownToSpan(line);
             data.add(model);
         }
@@ -152,7 +157,7 @@ public class MarkDownParser extends Parser {
      *
      */
     private RichModel MarkDownToSpan(String line) {
-        RichModel model = new RichModel(line);
+        RichModel model = new RichModel();
         if (Pattern.matches(transformer.imageRegex(), line)) {
             model.isImg().setSource(transformer.imageUrl(line));
         } else {
@@ -162,28 +167,30 @@ public class MarkDownParser extends Parser {
         Matcher matcher = pattern.matcher(line);
         if (matcher.find()) {
             //是段落样式
-            int start = matcher.start();
-            initParagraph(line, start);
-            line = line.substring(start);
+            int end = matcher.end();
+            initParagraph(line, end);
+            line = line.substring(end);
             SpanModel span = new SpanModel(panel.getParagraphType());
-            span.code = paramManager.getParamCode(panel.getParagraphType());
+            span.code = paramManager.getParamCode(panel.getFontParam(), panel.getParagraphType());
             span.mSpans = factory.createSpan(span.code);
             model.setParagraphSpan(span);
-        }else{
+        } else {
             model.setNoParagraphSpan();
         }
         pattern = Pattern.compile(transformer.fontRegex());
         matcher = pattern.matcher(line);
-        for (int i = 0; i < matcher.groupCount(); i++) {
-            String itemStr = matcher.group(i);
+        while (matcher.find()) {
+            String itemStr = matcher.group();
+            SpanModel span = new SpanModel();
+            span.start = index;
             initFont(itemStr);
-            SpanModel span = new SpanModel(paramManager.cloneParam(panel.getFontParam()));
-            span.code = paramManager.getParamCode(Const.PARAGRAPH_NONE);
+            span.param = paramManager.cloneParam(panel.getFontParam());
+            span.code = paramManager.getParamCode(panel.getFontParam(), Const.PARAGRAPH_NONE);
             span.mSpans = factory.createSpan(span.code);
-            span.start = matcher.start();
-            span.end = matcher.end();
+            span.end = index;
             model.addSpanModel(span);
         }
+        model.setSource(obtainStr());
         return model;
     }
 
@@ -198,6 +205,7 @@ public class MarkDownParser extends Parser {
             panel.setCenterLine(true);
             return initFont(itemStr.substring(2, itemStr.length() - 2));
         }
+        putStr(itemStr);
         return false;
     }
 
@@ -206,18 +214,23 @@ public class MarkDownParser extends Parser {
         switch (startStr) {
             case "#":
                 panel.setH1(true);
+                putStr(line.substring(1));
                 break;
             case "##":
                 panel.setH2(true);
+                putStr(line.substring(2));
                 break;
             case "###":
                 panel.setH3(true);
+                putStr(line.substring(3));
                 break;
             case "####":
                 panel.setH4(true);
+                putStr(line.substring(4));
                 break;
             case ">":
                 panel.setRefer(true);
+                putStr(line.substring(1));
                 break;
         }
     }
@@ -273,6 +286,20 @@ public class MarkDownParser extends Parser {
             pool = new SparseArray<>();
         }
         priority = 0;
+        index = 0;
+    }
+
+    private void putStr(String str) {
+        index += str.length();
+        pool.put(priority++, str);
+    }
+
+    public String obtainStr() {
+        StringBuilder str = new StringBuilder();
+        for (int t = 0; t < pool.size(); t++) {
+            str.append(pool.valueAt(t));
+        }
+        return str.toString();
     }
 
 }

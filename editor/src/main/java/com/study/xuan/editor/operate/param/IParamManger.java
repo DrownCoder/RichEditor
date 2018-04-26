@@ -17,6 +17,8 @@ public interface IParamManger {
 
     String getParamCode(int pType);
 
+    String getParamCode(FontParam param, int pType);
+
     void setCurrentParam(FontParam param);
 
     IParamManger reset();

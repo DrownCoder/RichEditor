@@ -41,7 +41,6 @@ public class MarkDownParser extends Parser {
     private IAbstractSpanFactory factory;
     private IPanel panel;
     private int priority = 0;
-    private int index = 0;
 
     public MarkDownParser() {
         formater = new MarkDownFormater();
@@ -179,22 +178,28 @@ public class MarkDownParser extends Parser {
         }
         pattern = Pattern.compile(transformer.fontRegex());
         matcher = pattern.matcher(line);
+        int index;
+        int lastIndex = 0;
         while (matcher.find()) {
             String itemStr = matcher.group();
             SpanModel span = new SpanModel();
+            index = matcher.start();
+            putStr(line.substring(lastIndex, index));
             span.start = index;
-            initFont(itemStr);
+            itemStr = initFont(itemStr);
             span.param = paramManager.cloneParam(panel.getFontParam());
             span.code = paramManager.getParamCode(panel.getFontParam(), Const.PARAGRAPH_NONE);
             span.mSpans = factory.createSpan(span.code);
-            span.end = index;
+            span.end = span.start + itemStr.length();
+            lastIndex = matcher.end();
             model.addSpanModel(span);
         }
+        putStr(line.substring(lastIndex, line.length()));
         model.setSource(obtainStr());
         return model;
     }
 
-    private boolean initFont(String itemStr) {
+    private String initFont(String itemStr) {
         if (Pattern.matches(transformer.boldRegex(), itemStr)) {
             panel.setBold(true);
             return initFont(itemStr.substring(2, itemStr.length() - 2));
@@ -206,7 +211,7 @@ public class MarkDownParser extends Parser {
             return initFont(itemStr.substring(2, itemStr.length() - 2));
         }
         putStr(itemStr);
-        return false;
+        return itemStr;
     }
 
     private void initParagraph(String line, int start) {
@@ -286,11 +291,9 @@ public class MarkDownParser extends Parser {
             pool = new SparseArray<>();
         }
         priority = 0;
-        index = 0;
     }
 
     private void putStr(String str) {
-        index += str.length();
         pool.put(priority++, str);
     }
 

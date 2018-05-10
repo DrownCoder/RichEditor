@@ -58,16 +58,19 @@ public class RichAdapter extends RecyclerView.Adapter {
     private MultiSpannableString mSpanString;
 
     private View mHeader;
-    private RecyclerView mRcy;
 
     private ParagraphHelper paragraphHelper;
     private IAbstractSpanFactory factory;
     private IParamManger paramManger;
 
     public boolean isEnter;
+    private boolean hasHeader;
 
     public void addHeaderView(View header) {
         this.mHeader = header;
+        if (mHeader != null) {
+            hasHeader = true;
+        }
         notifyItemInserted(0);
     }
 
@@ -104,10 +107,9 @@ public class RichAdapter extends RecyclerView.Adapter {
         this.mOnEditEvent = mOnEditEvent;
     }
 
-    public RichAdapter(List<RichModel> mData, Context mContext, RecyclerView rcy) {
+    public RichAdapter(List<RichModel> mData, Context mContext) {
         this.mData = mData;
         this.mContext = mContext;
-        this.mRcy = rcy;
         mEtHolder = new HashSet<>();
         mHolderShow = new LinkedList<>();
         paragraphHelper = new ParagraphHelper(mContext);
@@ -132,12 +134,13 @@ public class RichAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        position = hasHeader ? (position - 1) : position;
         switch (getItemViewType(position)) {
             case TYPE_EDIT://编辑框
-                bindEditComponent(holder, position - 1, mData.get(position - 1));
+                bindEditComponent(holder, position, mData.get(position));
                 break;
             case TYPE_IMG://图片
-                bindImgComponent(holder, position - 1, mData.get(position - 1));
+                bindImgComponent(holder, position, mData.get(position));
                 break;
             case TYPE_HEADER://SingleText
                 break;
@@ -427,15 +430,17 @@ public class RichAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        return mData.size() + 1;
+        return hasHeader ? mData.size() + 1 : mData.size();
     }
 
     @Override
     public int getItemViewType(int position) {
-        if (position == 0) {
-            return TYPE_HEADER;
+        if (hasHeader) {
+            if (position == 0) {
+                return TYPE_HEADER;
+            }
         }
-        return mData.get(position - 1).type;
+        return mData.get(hasHeader ? position - 1 : position).type;
     }
 
     public void notifyDataChanged() {

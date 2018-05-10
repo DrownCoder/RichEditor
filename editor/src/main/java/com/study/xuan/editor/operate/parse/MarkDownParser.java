@@ -185,7 +185,7 @@ public class MarkDownParser extends Parser {
             SpanModel span = new SpanModel();
             index = matcher.start();
             putStr(line.substring(lastIndex, index));
-            span.start = index;
+            span.start = obtainStr().length();
             itemStr = initFont(itemStr);
             span.param = paramManager.cloneParam(panel.getFontParam());
             span.code = paramManager.getParamCode(panel.getFontParam(), Const.PARAGRAPH_NONE);

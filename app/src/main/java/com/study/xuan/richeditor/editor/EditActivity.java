@@ -66,8 +66,6 @@ public class EditActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
-        long i = System.currentTimeMillis();
-        Log.i("-------", (int) (i + 1000000000) + "");
         mEditor = (RichEditor) findViewById(R.id.editor);
         mPanel = (EditorPanelAlpha) findViewById(R.id.panel);
         mLeftContainer = findViewById(R.id.fl_left);

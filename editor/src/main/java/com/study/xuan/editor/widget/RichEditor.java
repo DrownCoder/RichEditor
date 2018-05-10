@@ -72,8 +72,8 @@ public class RichEditor extends RecyclerView implements ViewTreeObserver.OnGloba
     private void initAdapter() {
         setLayoutManager(new LinearLayoutManager(mContext));
         mDatas.add(new RichModel(TYPE_EDIT, "", DEFAULT_HINT));
-        mAdapter = new RichAdapter(mDatas, mContext, this);
-        mAdapter.addHeaderView(LayoutInflater.from(mContext).inflate(R.layout.head_item, null));
+        mAdapter = new RichAdapter(mDatas, mContext);
+        //mAdapter.addHeaderView(LayoutInflater.from(mContext).inflate(R.layout.head_item, null));
         setAdapter(mAdapter);
     }
 

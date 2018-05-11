@@ -5,14 +5,11 @@ import android.graphics.BitmapFactory;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.EditText;
 
-import com.study.xuan.editor.R;
 import com.study.xuan.editor.adapter.RichAdapter;
 import com.study.xuan.editor.callback.onEditorEvent;
 import com.study.xuan.editor.common.Const;
@@ -166,7 +163,7 @@ public class RichEditor extends RecyclerView implements ViewTreeObserver.OnGloba
         @Override
         public void onChange() {
             if (onEditorEvent != null) {
-                onEditorEvent.onChange(mDatas);
+                onEditorEvent.onLineCountChange(mDatas);
             }
         }
     };

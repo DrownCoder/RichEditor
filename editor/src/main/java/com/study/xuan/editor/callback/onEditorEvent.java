@@ -11,5 +11,5 @@ import java.util.List;
  */
 
 public interface onEditorEvent {
-    void onChange(List<RichModel> data);
+    void onLineCountChange(List<RichModel> data);
 }

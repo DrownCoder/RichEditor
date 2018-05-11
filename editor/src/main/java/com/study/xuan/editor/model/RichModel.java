@@ -95,7 +95,7 @@ public class RichModel {
     public void addSpanModel(String title, SpanModel model) {
         model.start = curIndex;
         StringBuilder builder = new StringBuilder(source);
-        builder.insert(curIndex, title);
+        builder.insert(curIndex, title+" ");
         source = builder.toString();
         model.end = curIndex + title.length();
         mParmas.add(model);

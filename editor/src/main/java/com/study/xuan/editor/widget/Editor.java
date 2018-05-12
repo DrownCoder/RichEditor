@@ -4,6 +4,8 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.view.Gravity;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -22,10 +24,12 @@ import com.study.xuan.editor.operate.param.IParamManger;
 import com.study.xuan.editor.operate.span.factory.IAbstractSpanFactory;
 import com.study.xuan.editor.operate.task.ParseAsyncTask;
 import com.study.xuan.editor.util.DensityUtil;
+import com.study.xuan.editor.util.RichLog;
 import com.study.xuan.editor.widget.panel.EditorPanelAlpha;
 import com.study.xuan.editor.widget.panel.IPanel;
 import com.study.xuan.editor.widget.panel.onPanelStateChange;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.study.xuan.editor.widget.panel.PanelBuilder.TYPE_FONT;
@@ -33,12 +37,11 @@ import static com.study.xuan.editor.widget.panel.PanelBuilder.TYPE_LINK;
 import static com.study.xuan.editor.widget.panel.PanelBuilder.TYPE_PANEL;
 import static com.study.xuan.editor.widget.panel.PanelBuilder.TYPE_PARAGRAPH;
 import static com.study.xuan.editor.widget.panel.PanelBuilder.TYPE_PHOTOPICKER;
-import static com.study.xuan.editor.widget.panel.PanelBuilder.TYPE_SAVE;
 
 /**
  * Author : xuan.
  * Date : 2018/5/11.
- * Description :the description of this file
+ * Description :richEditor+panel
  */
 
 public class Editor extends FrameLayout {
@@ -71,7 +74,8 @@ public class Editor extends FrameLayout {
     private void init() {
         panel = new EditorPanelAlpha(context);
         richEditor = new RichEditor(context);
-        addView(panel);
+        LayoutParams panelParams = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.BOTTOM);
+        addView(panel, panelParams);
         LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         params.setMargins(0, DensityUtil.dp2px(context, 50), 0, DensityUtil.dp2px(context, 50));
         richEditor.setLayoutParams(params);
@@ -103,15 +107,11 @@ public class Editor extends FrameLayout {
                     case TYPE_PHOTOPICKER:
                         onPhotoEvent();
                         break;
-                    case TYPE_SAVE:
-                        onSaveEvent();
-                        break;
                 }
             }
         });
     }
 
-    
 
     private onEditorEvent onEditorEvent = new onEditorEvent() {
         @Override
@@ -230,13 +230,31 @@ public class Editor extends FrameLayout {
         return false;
     }
 
-    private void onSaveEvent() {
-        mTask = new ParseAsyncTask();
+    public void startMarkDownTask() {
+        mTask = new ParseAsyncTask(callback);
         mTask.setParseType(Const.MARKDOWN_PARSE_TYPE);
         mTask.execute(richEditor.getData());
     }
 
     public void setCallback(onEditorCallback callback) {
         this.callback = callback;
+    }
+
+    public void insertMore(View view) {
+        panel.insertMore(view);
+    }
+
+    public void addPhoto(ArrayList<String> photos) {
+        if (photos == null || photos.isEmpty()) {
+            RichLog.error("this photo list is null or empty !!!");
+            return;
+        }
+        richEditor.addPhoto(photos);
+    }
+
+    public void destroy() {
+        if (mTask != null) {
+            mTask.cancel(true);
+        }
     }
 }

@@ -1,5 +1,7 @@
 package com.study.xuan.editor.operate;
 
+import android.content.Context;
+
 import com.study.xuan.editor.common.Const;
 import com.study.xuan.editor.operate.font.FontParam;
 import com.study.xuan.editor.operate.param.IParamManger;
@@ -8,6 +10,7 @@ import com.study.xuan.editor.operate.sort.ISearchStrategy;
 import com.study.xuan.editor.operate.sort.NormalSearch;
 import com.study.xuan.editor.operate.span.factory.AbstractSpanFactory;
 import com.study.xuan.editor.operate.span.factory.IAbstractSpanFactory;
+import com.study.xuan.editor.widget.Editor;
 import com.study.xuan.editor.widget.panel.IPanel;
 import com.study.xuan.editor.widget.panel.PanelBuilder;
 

@@ -5,7 +5,12 @@
     android:layout_height="match_parent"
     android:background="@android:color/white">
 
-    <FrameLayout
+    <com.study.xuan.editor.widget.Editor
+        android:id="@+id/editor"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <!--<FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <com.study.xuan.editor.widget.panel.EditorPanelAlpha
@@ -20,7 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="50dp" />
-    </FrameLayout>
+    </FrameLayout>-->
     <!--<com.study.xuan.editor.widget.panel.EditorPanelanel
         android:id="@+id/panel"
         android:layout_gravity="bottom"

@@ -9,6 +9,7 @@ import android.text.style.StyleSpan;
 import android.text.style.UnderlineSpan;
 import android.util.SparseArray;
 
+import com.study.xuan.editor.callback.onFormatCallback;
 import com.study.xuan.editor.common.Const;
 import com.study.xuan.editor.model.RichModel;
 import com.study.xuan.editor.model.SpanModel;
@@ -42,6 +43,8 @@ public class MarkDownParser extends Parser {
     private IPanel panel;
     private int priority = 0;
 
+    private onFormatCallback callback;
+
     public MarkDownParser() {
         formater = new MarkDownFormater();
         transformer = new MarkDownTransformer();
@@ -53,8 +56,13 @@ public class MarkDownParser extends Parser {
         if (data == null) {
             return null;
         }
+        int count = data.size();
         StringBuilder str = new StringBuilder();
+        int line = 0;
         for (RichModel model : data) {
+            if (callback != null) {
+                callback.onFormat(line++, count);
+            }
             RichModelHelper.formatSpan(model.getSpanList());
             //规整区间结束后，将字符串按照区间分割并重新拼接,按照优先级将字符串分割成一小段
             // ，（因为可能存在顺序不是递增的，所以需要用优先级），最后再按照优先级将拼接成整体。
@@ -305,4 +313,7 @@ public class MarkDownParser extends Parser {
         return str.toString();
     }
 
+    public void setCallback(onFormatCallback callback) {
+        this.callback = callback;
+    }
 }

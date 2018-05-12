@@ -13,4 +13,8 @@ public class RichLog {
     public static void log(String log) {
         Log.i(BASE_LOG, log);
     }
+
+    public static void error(String log) {
+        Log.e(BASE_LOG, log);
+    }
 }

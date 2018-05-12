@@ -5,12 +5,8 @@ import android.os.Bundle;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import com.study.xuan.editor.operate.param.IParamManger;
-import com.study.xuan.editor.operate.RichBuilder;
-import com.study.xuan.editor.operate.span.factory.IAbstractSpanFactory;
-import com.study.xuan.editor.widget.RichEditor;
-import com.study.xuan.editor.widget.panel.EditorPanelAlpha;
-import com.study.xuan.editor.widget.panel.IPanel;
+import com.study.xuan.editor.operate.RichHelper;
+import com.study.xuan.editor.widget.Editor;
 import com.study.xuan.richeditor.R;
 import com.study.xuan.richeditor.app.BaseActivity;
 import com.study.xuan.richeditor.directory.DirectoryFragment;
@@ -29,9 +25,8 @@ import me.iwf.photopicker.PhotoPicker;
 
 public class EditActivity extends BaseActivity {
     TextView mTvSubmit;
-    RichEditor mEditor;
-    EditorPanelAlpha mPanel;
     FrameLayout mLeftContainer;
+    Editor editor;
 
     private DirectoryFragment fragment;
 
@@ -39,11 +34,10 @@ public class EditActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
-        mEditor = (RichEditor) findViewById(R.id.editor);
-        mPanel = (EditorPanelAlpha) findViewById(R.id.panel);
         mLeftContainer = findViewById(R.id.fl_left);
         //mTvSubmit = findViewById(R.id.tv_submit);
-
+        editor = findViewById(R.id.editor);
+        RichHelper.getInstance().attach(editor);
         fragment = DirectoryFragment.newInstance();
         ActivityUtils.addFragmentToActivity(getFragmentManager(), fragment, R.id.fl_left);
 
@@ -57,7 +51,7 @@ public class EditActivity extends BaseActivity {
             if (data != null) {
                 ArrayList<String> photos =
                         data.getStringArrayListExtra(PhotoPicker.KEY_SELECTED_PHOTOS);
-                mEditor.addPhoto(photos);
+                editor.addPhoto(photos);
             }
         }
     }
@@ -65,7 +59,7 @@ public class EditActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        RichBuilder.getInstance().destroy();
+        RichHelper.getInstance().onDestory();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

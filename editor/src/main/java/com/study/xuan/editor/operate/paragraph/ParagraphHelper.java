@@ -3,7 +3,6 @@ package com.study.xuan.editor.operate.paragraph;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.study.xuan.editor.common.Const;

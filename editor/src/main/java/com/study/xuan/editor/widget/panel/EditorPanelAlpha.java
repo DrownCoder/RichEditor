@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -23,7 +24,7 @@ import com.study.xuan.editor.operate.RichBuilder;
  * Description : Alpha Editor
  */
 public class EditorPanelAlpha extends LinearLayout {
-    private ImageView mIvMore;
+    private FrameLayout mLayoutMore;
     private ImageView mIvImg;
     private ImageView mIvFont;
     private ImageView mIvBold, mIvItalics, mIvCenterLine, mIvUnderLine, mIvLink;
@@ -51,7 +52,6 @@ public class EditorPanelAlpha extends LinearLayout {
     }
 
     private void initEvent() {
-        mIvMore.setOnClickListener(onClickListener);
         mIvImg.setOnClickListener(onClickListener);
         mIvFont.setOnClickListener(onClickListener);
         mIvBold.setOnClickListener(onClickListener);
@@ -68,7 +68,7 @@ public class EditorPanelAlpha extends LinearLayout {
     }
 
     private void initView(View root) {
-        mIvMore = root.findViewById(R.id.iv_more);
+        mLayoutMore = root.findViewById(R.id.layout_more);
         mIvImg = root.findViewById(R.id.iv_pic);
         mIvFont = root.findViewById(R.id.iv_font);
         mIvBold = root.findViewById(R.id.iv_bold);
@@ -178,8 +178,6 @@ public class EditorPanelAlpha extends LinearLayout {
                 panel.setH4(v.isSelected()).change();
             } else if (v.getId() == R.id.iv_pic) {
                 panel.showPhotoPicker();
-            } else if (v.getId() == R.id.iv_more) {
-                panel.save();
             }
         }
     };
@@ -209,6 +207,12 @@ public class EditorPanelAlpha extends LinearLayout {
 
     private void resetParagraph() {
         resetParagraph(null);
+    }
+
+    public void insertMore(View more) {
+        if (more != null) {
+            mLayoutMore.addView(more);
+        }
     }
 
 }

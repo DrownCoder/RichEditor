@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.study.xuan.editor.callback.onEditorEventListener;
 import com.study.xuan.editor.operate.RichHelper;
 import com.study.xuan.editor.widget.Editor;
 import com.study.xuan.richeditor.R;
@@ -40,7 +41,17 @@ public class EditActivity extends BaseActivity {
         RichHelper.getInstance().attach(editor);
         fragment = DirectoryFragment.newInstance();
         ActivityUtils.addFragmentToActivity(getFragmentManager(), fragment, R.id.fl_left);
-
+        RichHelper.getInstance().setCallBack(new onEditorEventListener() {
+            @Override
+            public void onPhotoEvent() {
+                PhotoPicker.builder()
+                        .setPhotoCount(9)
+                        .setShowCamera(true)
+                        .setShowGif(true)
+                        .setPreviewEnabled(false)
+                        .start(EditActivity.this, PhotoPicker.REQUEST_CODE);
+            }
+        });
 
     }
     

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:orientation="vertical"
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
     <ImageView
         android:padding="2dp"
         android:layout_marginTop="13dp"
@@ -13,14 +14,17 @@
         android:maxWidth="500dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@drawable/pic_selected"
         />
-    <ImageView
+    <com.study.xuan.library.widget.EasyTextView
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:src="@drawable/delete"
+        android:textSize="30dp"
+        android:text="&#xe658;"
+        app:soildBac="@color/lightred"
+        app:shapeType="1"
         android:layout_gravity="right|top"
-        android:id="@+id/iv_rich_delete"
+        android:id="@+id/etv_rich_delete"
         android:visibility="visible"
+        android:textColor="@color/yellow"
         />
 </FrameLayout>

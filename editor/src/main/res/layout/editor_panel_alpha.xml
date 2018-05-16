@@ -122,7 +122,7 @@
                 android:layout_height="50dp"
                 android:padding="8dp"
                 android:scaleType="centerInside"
-                android:src="@drawable/pic_select"
+                android:src="@drawable/pic_unselected"
                 />
 
             <ImageView

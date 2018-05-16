@@ -25,7 +25,6 @@ dependencies {
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     testImplementation 'junit:junit:4.12'
     implementation 'com.android.support:recyclerview-v7:26.1.0'
-    implementation 'com.github.DrownCoder:EasyTextView:v1.0'
     api project(':editor')
     api 'me.iwf.photopicker:PhotoPicker:0.9.12@aar'
     api 'org.greenrobot:eventbus:3.1.1'

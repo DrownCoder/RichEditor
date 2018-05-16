@@ -10,5 +10,5 @@
     android:maxWidth="500dp"
     android:orientation="vertical"
     android:padding="2dp"
-    android:src="@drawable/pic_selected">
+    >
 </ImageView>

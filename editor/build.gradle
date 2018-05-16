@@ -26,6 +26,6 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     implementation 'com.android.support:recyclerview-v7:26.1.0'
     api 'com.android.support:design:26.1.0'
-    implementation 'com.github.sdfdzx:SupperShape:v1.0.0'
     api 'com.github.bumptech.glide:glide:4.1.1'
+    implementation 'com.github.DrownCoder:EasyTextView:v1.0'
 }

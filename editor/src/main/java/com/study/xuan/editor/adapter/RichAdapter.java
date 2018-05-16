@@ -29,6 +29,7 @@ import com.study.xuan.editor.operate.span.richspan.MultiSpannableString;
 import com.study.xuan.editor.operate.span.factory.IAbstractSpanFactory;
 import com.study.xuan.editor.util.DensityUtil;
 import com.study.xuan.editor.widget.RichEditText;
+import com.study.xuan.library.widget.EasyTextView;
 import com.study.xuan.shapebuilder.shape.ShapeBuilder;
 
 import java.util.HashSet;
@@ -236,7 +237,7 @@ public class RichAdapter extends RecyclerView.Adapter {
         @Override
         public void onClick(View v) {
             int i = v.getId();
-            if (i == R.id.iv_rich_delete) {
+            if (i == R.id.etv_rich_delete) {
                 int pos = (int) v.getTag();
                 if (mOnPhotoDelete != null) {
                     mOnPhotoDelete.onDelete(mData.get(pos).source);
@@ -312,7 +313,7 @@ public class RichAdapter extends RecyclerView.Adapter {
                 holder.mIvDelete.setVisibility(View.VISIBLE);
                 holder.mIv.requestFocus();
                 ShapeBuilder.create()
-                        .Stroke(5, R.color.bohegreen)
+                        .Stroke(5, Color.parseColor("#FE6568"))
                         .build(holder.mIv);
                 holder.mIv.setTag(Integer.MAX_VALUE, STYLE_IMG_FOCUS);
                 break;
@@ -470,12 +471,12 @@ public class RichAdapter extends RecyclerView.Adapter {
 
     private class ImageHolder extends RecyclerView.ViewHolder {
         private ImageView mIv;
-        private ImageView mIvDelete;
+        private EasyTextView mIvDelete;
 
         ImageHolder(View itemView) {
             super(itemView);
             mIv = (ImageView) itemView.findViewById(R.id.iv_rich_img);
-            mIvDelete = (ImageView) itemView.findViewById(R.id.iv_rich_delete);
+            mIvDelete = (EasyTextView) itemView.findViewById(R.id.etv_rich_delete);
         }
     }
 

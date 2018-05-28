@@ -20,6 +20,7 @@ import com.study.xuan.editor.R;
 import com.study.xuan.editor.common.Const;
 import com.study.xuan.editor.model.RichModel;
 import com.study.xuan.editor.model.SpanModel;
+import com.study.xuan.editor.operate.helper.RichModelHelper;
 import com.study.xuan.editor.operate.param.IParamManger;
 import com.study.xuan.editor.operate.filter.SpanStep1Filter;
 import com.study.xuan.editor.operate.filter.SpanStep2Filter;
@@ -415,6 +416,7 @@ public class RichAdapter extends RecyclerView.Adapter {
                         mData.get(pos - 1).getSpanList().add(spanModel);
                     }
                     mData.get(pos - 1).append(mData.get(pos).source);
+                    RichModelHelper.formatSpan(mData.get(pos - 1).getSpanList());
                     mData.remove(pos);
                     mEtHolder.remove(view);
                 } else {
